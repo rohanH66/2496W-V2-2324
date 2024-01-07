@@ -18,17 +18,29 @@ void drive()
     double left = abs(con.get_analog(E_CONTROLLER_ANALOG_LEFT_Y)) > 10 ? con.get_analog(E_CONTROLLER_ANALOG_LEFT_Y) : 0;
     double right = abs(con.get_analog(E_CONTROLLER_ANALOG_RIGHT_X)) > 10 ? con.get_analog(E_CONTROLLER_ANALOG_RIGHT_X) : 0;
     
-    //right = ((127.0 / pow(127, TURN_K)) * pow(abs(right), TURN_K) * (right/127));
-    // right /= 1.2275;
+    // int power = con.get_analog(ANALOG_LEFT_Y); // left joystick y axis is power
+    // int turn = con.get_analog(ANALOG_RIGHT_X); // right joystick x axis controls turn
 
+
+    // double turn = (abs(valForTurn) * valForTurn / 75);
+    // double turn = valForTurn; 
     if(left || right)
     {
-        chas.spin_left(left + right);
-        chas.spin_right(left - right);
+        RF.move(left - right);
+        RM.move(left - right); //hii
+        RB.move(left - right); // hi
+        LF.move(left + right);
+        LM.move(left + right);
+        LB.move(left + right);
     }
-    else
-        chas.stop();
-
+    else{
+        RF.move(0);
+        RM.move(0); //hii
+        RB.move(0); // hi
+        LF.move(0);
+        LM.move(0);
+        LB.move(0);
+    }
 }
 
 void intakeCon()
@@ -53,7 +65,7 @@ void print_info(int time, bool chassis_on)
 {
 
     if(time % 50 == 0 && time % 100 != 0 && time % 150 != 0)
-        con.print(0, 0, !chassis_on ? "CHASSIS OFF (right)            " : "%.1lf | %.1lf", chas.temp(), intake.get_temperature());
+        con.print(0, 0, !chassis_on ? "CHASSIS OFF (right)            " : "%.1lf | %.1lf", intake.get_temperature());
     if(time % 100 == 0 && time % 150 != 0) 
         con.print(1, 0, "%.2f", imu.get_heading());
   //if(time % 150 == 0)
@@ -65,7 +77,7 @@ void print_info_auton(int time, double error, double speed)
     if(time % 50 == 0 && time%2000 != 0) 
         con.print(0, 0, "Error: %.2f : %.2f    ", error, speed);
     if(time % 100 == 0 && time % 150 != 0 && time%2000 != 0) 
-        con.print(1, 0, "%.2f : %.2f          ", imu.get_heading(), chas.pos());
+        con.print(1, 0, "%.2f : %.2f          ", imu.get_heading());
     if(time % 150 == 0 && time % 100 != 0 && time % 150 != 0 && time%2000 != 0) 
         con.print(2, 0, "%.2f | %.0f       ", error, time);
 }

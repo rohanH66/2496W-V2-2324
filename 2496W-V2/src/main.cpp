@@ -36,17 +36,13 @@ void opcontrol()
 	glb::con.clear();
 	long long time = 0;
 	bool chassis_on = true;
-	chas.set_brake();
-	chas.reset();
 	// cata.tare_position();
 	
 	// if ((*auton).get_name() == "V1 skills" || (*auton).get_name() == "V2 skills") pid::global_heading = 337;
 
 	while(true)
 	{
-		if(chassis_on) drive();
-		else chas.stop();
-
+		drive();
 		intakeCon();
 		
 		piston_cont();
@@ -54,8 +50,8 @@ void opcontrol()
 		// 	print_info(time, chassis_on);
 		// }
 		
-		if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_LEFT)) chassis_on = !chassis_on;
-		if(con.get_digital(E_CONTROLLER_DIGITAL_UP) && chassis_on) autonomous();
+		// if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_LEFT)) chassis_on = !chassis_on;
+		// if(con.get_digital(E_CONTROLLER_DIGITAL_UP) && chassis_on) autonomous();
 
 		delay(2);
 		time += 2;

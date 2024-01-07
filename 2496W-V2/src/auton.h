@@ -68,38 +68,35 @@ void test_mode()
         if(glb::con.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN))
             selected++;
 
-        if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_A))
-        {
-            drive(1000, 10000, 1.0, 127, 50, temp_kp, temp_ki, temp_kd, temp_imuk);
-        }
+        if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_A)) {}
         pros::delay(1);
         timer++;
     }
 }
 
 void test(){
-    turn(180);
-    delay(200);
+    // turn(180);
+    // delay(200);
 
-    turn(-90);
-    delay(200);
+    // turn(-90);
+    // delay(200);
 
-    turn(45);
-    delay(200);
+    // turn(45);
+    // delay(200);
 
-    turn(-22.5);
-    delay(200);
+    // turn(-22.5);
+    // delay(200);
 
-    turn(12.25);
-    delay(200);
+    // turn(12.25);
+    // delay(200);
 
-    turn(-6);
-    delay(200);
+    // turn(-6);
+    // delay(200);
 
-    turn(3);
-    delay(200);
+    // turn(3);
+    // delay(200);
 
-    turn(-1);
+    // turn(-1);
 }
 
 std::vector<Auton> autons
