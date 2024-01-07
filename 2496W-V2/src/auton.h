@@ -35,15 +35,8 @@ void rush_right_straight(){}
 
 void right_safe_bar(){}
 
-void old_safe_right(){}
+void skills(){}
 
-void skills_V1(){}
-
-void skills_V2(){}
-
-void old_left(){}
-
-void old_right(){}
 
 void blank(){}
 
@@ -118,11 +111,7 @@ std::vector<Auton> autons
     Auton("elims rush", elims_left, ""),
     Auton("elims straight", left_straight, ""),
     Auton("elims diagonal", left_diagonal, ""),
-    Auton("V1 skills", skills_V1, ""),
-    Auton("V2 skills", skills_V2, ""),
-    Auton("OLD left", old_left, ""),
-    Auton("OLD right", old_right, ""),
-    Auton("OLD SAFE right", old_safe_right, ""),
+    Auton("V1 skills", skills, ""),
     Auton("no auton", blank, "blank"),
     Auton("test", test, "test_function")
 };
