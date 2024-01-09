@@ -75,28 +75,28 @@ void test_mode()
 }
 
 void test(){
-    // turn(180);
-    // delay(200);
+    turn(180);
+    delay(200);
 
-    // turn(-90);
-    // delay(200);
+    turn(-90);
+    delay(200);
 
-    // turn(45);
-    // delay(200);
+    turn(45);
+    delay(200);
 
-    // turn(-22.5);
-    // delay(200);
+    turn(-22.5);
+    delay(200);
 
-    // turn(12.25);
-    // delay(200);
+    turn(12.25);
+    delay(200);
 
-    // turn(-6);
-    // delay(200);
+    turn(-6);
+    delay(200);
 
-    // turn(3);
-    // delay(200);
+    turn(3);
+    delay(200);
 
-    // turn(-1);
+    turn(-1);
 }
 
 std::vector<Auton> autons

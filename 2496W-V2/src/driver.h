@@ -9,7 +9,7 @@
 
 #define TURN_K 2.2
 
-//using namespace pros;
+using namespace pros;
 using namespace glb;
 //using namespace std;
 bool intakeCooldown = false;
@@ -18,29 +18,14 @@ void drive()
     double left = abs(con.get_analog(E_CONTROLLER_ANALOG_LEFT_Y)) > 10 ? con.get_analog(E_CONTROLLER_ANALOG_LEFT_Y) : 0;
     double right = abs(con.get_analog(E_CONTROLLER_ANALOG_RIGHT_X)) > 10 ? con.get_analog(E_CONTROLLER_ANALOG_RIGHT_X) : 0;
     
-    // int power = con.get_analog(ANALOG_LEFT_Y); // left joystick y axis is power
-    // int turn = con.get_analog(ANALOG_RIGHT_X); // right joystick x axis controls turn
-
-
-    // double turn = (abs(valForTurn) * valForTurn / 75);
-    // double turn = valForTurn; 
+    //right = ((127.0 / pow(127, TURN_K)) * pow(abs(right), TURN_K) * (right/127));
     if(left || right)
     {
-        RF.move(left - right);
-        RM.move(left - right); //hii
-        RB.move(left - right); // hi
-        LF.move(left + right);
-        LM.move(left + right);
-        LB.move(left + right);
+        chas.spin_left(left + right);
+        chas.spin_right(left - right);
     }
-    else{
-        RF.move(0);
-        RM.move(0); //hii
-        RB.move(0); // hi
-        LF.move(0);
-        LM.move(0);
-        LB.move(0);
-    }
+    else
+        chas.stop();
 }
 
 void intakeCon()

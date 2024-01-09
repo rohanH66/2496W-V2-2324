@@ -29,15 +29,15 @@ namespace glb
    
    
     //objects
-    // Chassis chas({P_LF, P_LM, P_LB}, {P_RF, P_RM, P_RB}, pros::E_MOTOR_GEARSET_06, false);
-    Motor RF (P_RF, E_MOTOR_GEARSET_06);
-    Motor RM (P_RM, E_MOTOR_GEARSET_06);
-    Motor RB (P_RB, E_MOTOR_GEARSET_06, 1);
-    Motor LF (P_LF, E_MOTOR_GEARSET_06,1);
-    Motor LM (P_LM, E_MOTOR_GEARSET_06,1);
-    Motor LB (P_LB, E_MOTOR_GEARSET_06);
+    Chassis chas({P_LF, P_LM, P_LB}, {P_RF, P_RM, P_RB}, pros::E_MOTOR_GEARSET_06, false);
+    // Motor RF (P_RF, E_MOTOR_GEARSET_06);
+    // Motor RM (P_RM, E_MOTOR_GEARSET_06);
+    // Motor RB (P_RB, E_MOTOR_GEARSET_06, 1);
+    // Motor LF (P_LF, E_MOTOR_GEARSET_06,1);
+    // Motor LM (P_LM, E_MOTOR_GEARSET_06,1);
+    // Motor LB (P_LB, E_MOTOR_GEARSET_06);
     Motor intake(P_INTAKE, E_MOTOR_GEARSET_06);
-    // Motor cata (P_CATA, E_MOTOR_GEARSET_36,1);
+    // // Motor cata (P_CATA, E_MOTOR_GEARSET_36,1);
 
     Piston LwingsP(P_LWINGSP);
     Piston RwingsP(P_RWINGSP);

@@ -44,14 +44,13 @@ void opcontrol()
 	{
 		drive();
 		intakeCon();
-		
 		piston_cont();
 		// if ((*auton).get_name() != "V1 skills" && (*auton).get_name() != "V2 skills"){
-		// 	print_info(time, chassis_on);
+		print_info(time, chassis_on);
 		// }
 		
-		// if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_LEFT)) chassis_on = !chassis_on;
-		// if(con.get_digital(E_CONTROLLER_DIGITAL_UP) && chassis_on) autonomous();
+		if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_LEFT)) chassis_on = !chassis_on;
+		if(con.get_digital(E_CONTROLLER_DIGITAL_UP) && chassis_on) autonomous();
 
 		delay(2);
 		time += 2;
