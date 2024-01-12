@@ -24,8 +24,8 @@ namespace glb
     // #define P_DISTANCE 3
     // #define P_CATASWITCH 'A'
     #define P_HANGP 'C'
-    #define P_RWINGSP 'G'
-    #define P_LWINGSP 'H'
+    #define P_RWINGSP 'A'
+    #define P_LWINGSP 'B'
     // #define P_BLOCKERP 'D'
    
    
