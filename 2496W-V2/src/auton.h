@@ -153,9 +153,9 @@ void test(){
 std::vector<Auton> autons
 {
     Auton("safe left", left_safe, ""),
+    Auton("safe right", right_safe_bar, ""),
     Auton("block rush right", rush_right_block, ""),
     Auton("straight rush right", rush_right_straight, ""),
-    Auton("bar safe right", right_safe_bar, ""),
     Auton("elims rush", elims_left, ""),
     Auton("elims straight", left_straight, ""),
     Auton("elims diagonal", left_diagonal, ""),
