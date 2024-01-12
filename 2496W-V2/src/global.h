@@ -19,6 +19,7 @@ namespace glb
     #define P_LM 11
     #define P_LB 9
     #define P_INTAKE 10
+    #define P_HANG 8
     // #define P_CATA 15
     // #define P_DISTANCE 3
     // #define P_CATASWITCH 'A'
@@ -37,6 +38,7 @@ namespace glb
     // Motor LM (P_LM, E_MOTOR_GEARSET_06,1);
     // Motor LB (P_LB, E_MOTOR_GEARSET_06);
     Motor intake(P_INTAKE, E_MOTOR_GEARSET_06);
+    Motor hang(P_HANG, E_MOTOR_GEARSET_36, 1);
     // // Motor cata (P_CATA, E_MOTOR_GEARSET_36,1);
 
     Piston LwingsP(P_LWINGSP);

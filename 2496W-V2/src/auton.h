@@ -14,14 +14,61 @@
 #include <list>
 #include <iostream>
 
-
 using namespace pros;
 using namespace std;
 using namespace pid;
 
+void left_safe(){
+    chas.spin(127);
+    delay(100);
+    chas.stop();
+    delay(600);
+    LwingsP.set(true);
+    delay(600);
+    chas.spin(-127);
+    delay(90);
+    chas.stop();
+    delay(600);
+    chas.spin_left(-127);
+    chas.spin_right(127);
+    delay(100);
+    chas.stop();
+    delay(600);
+    chas.spin_left(127);
+    chas.spin_right(-127);
+    delay(100);
+    chas.spin(127);
+    delay(150);
+    chas.stop();
+    chas.spin_left(127);
+    chas.spin_right(0);
+    delay(180);
+    chas.stop();
+    intake.move(-127);
+    delay(500);
+    chas.spin_left(-127);
+    chas.spin_right(127);
+    delay(250);
+    chas.stop();
+    delay(500);
+    chas.spin(-127);
+    delay(120);
+    chas.stop();
+    delay(1000);
+    chas.spin(127);
+    delay(200);
+    chas.stop();
+    delay(10);
+    chas.spin_left(0);
+    chas.spin_right(127);
+    delay(575);
+    chas.stop();
+    delay(100);
+    chas.spin(127);
+    delay(25);
+    chas.stop();
 
-
-void left_safe(){}
+}
 
 void left_straight(){}
 
@@ -33,7 +80,11 @@ void rush_right_block(){}
 
 void rush_right_straight(){}
 
-void right_safe_bar(){}
+void right_safe_bar(){
+    chas.spin(-127);
+    delay(2000);
+    chas.stop();
+}
 
 void skills(){}
 

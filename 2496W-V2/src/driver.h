@@ -17,7 +17,8 @@ void drive()
 {
     double left = abs(con.get_analog(E_CONTROLLER_ANALOG_LEFT_Y)) > 10 ? con.get_analog(E_CONTROLLER_ANALOG_LEFT_Y) : 0;
     double right = abs(con.get_analog(E_CONTROLLER_ANALOG_RIGHT_X)) > 10 ? con.get_analog(E_CONTROLLER_ANALOG_RIGHT_X) : 0;
-    
+    right /= 1.2275;
+
     //right = ((127.0 / pow(127, TURN_K)) * pow(abs(right), TURN_K) * (right/127));
     if(left || right)
     {
@@ -36,6 +37,16 @@ void intakeCon()
         intake.move(-127);
     else 
         intake.move(0);
+}
+
+void hangCon()
+{
+    if(con.get_digital(E_CONTROLLER_DIGITAL_Y)) 
+		hang.move(127);
+    else if(con.get_digital(E_CONTROLLER_DIGITAL_RIGHT))
+        hang.move(-127);
+    else 
+        hang.move(0);
 }
 
 void piston_cont()
