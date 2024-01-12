@@ -61,9 +61,9 @@ void print_info(int time, bool chassis_on)
 {
 
     if(time % 50 == 0 && time % 100 != 0 && time % 150 != 0)
-        con.print(0, 0, !chassis_on ? "CHASSIS OFF (right)            " : "%.1lf | %.1lf", intake.get_temperature());
-    if(time % 100 == 0 && time % 150 != 0) 
-        con.print(1, 0, "%.2f", imu.get_heading());
+        con.print(0, 0, !chassis_on ? "CHASSIS OFF (right)            " : "%.1lf | %.1lf | %.1lf", chas.temp(), intake.get_temperature(), hang.get_temperature());
+    if(time % 100 == 0 && time % 150 != 0) {}
+        // con.print(1, 0, "%.2f", imu.get_heading());
   //if(time % 150 == 0)
         //con.print(2, 0, "auton: %s         ", (*auton).get_name());
 }

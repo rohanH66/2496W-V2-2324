@@ -23,7 +23,7 @@ namespace glb
     // #define P_CATA 15
     // #define P_DISTANCE 3
     // #define P_CATASWITCH 'A'
-    // #define P_HANGP 'C'
+    #define P_HANGP 'C'
     #define P_RWINGSP 'G'
     #define P_LWINGSP 'H'
     // #define P_BLOCKERP 'D'
@@ -43,7 +43,7 @@ namespace glb
 
     Piston LwingsP(P_LWINGSP);
     Piston RwingsP(P_RWINGSP);
-    // Piston hangP(P_HANGP);
+    Piston hangP(P_HANGP);
     // Piston blockerP(P_BLOCKERP);
 
     // Distance dist(P_DISTANCE);
