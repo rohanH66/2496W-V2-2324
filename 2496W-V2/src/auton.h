@@ -48,15 +48,15 @@ void left_safe(){
     delay(500);
     chas.spin_left(-127);
     chas.spin_right(127);
-    delay(250);
+    delay(300);
     chas.stop();
     delay(500);
     chas.spin(-127);
-    delay(120);
+    delay(150);
     chas.stop();
     delay(1000);
     chas.spin(127);
-    delay(200);
+    delay(150);
     chas.stop();
     delay(10);
     chas.spin_left(0);
