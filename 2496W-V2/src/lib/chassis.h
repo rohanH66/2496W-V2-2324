@@ -109,6 +109,13 @@ public:
         for(pros::Motor motor : right_motors)
             motor.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
     }
+
+    void set_brake_brake(){
+        for(pros::Motor motor : left_motors)
+            motor.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+        for(pros::Motor motor : right_motors)
+            motor.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+    }
 };
 
 #endif

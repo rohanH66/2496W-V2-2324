@@ -18,6 +18,7 @@ void drive()
     double left = abs(con.get_analog(E_CONTROLLER_ANALOG_LEFT_Y)) > 10 ? con.get_analog(E_CONTROLLER_ANALOG_LEFT_Y) : 0;
     double right = abs(con.get_analog(E_CONTROLLER_ANALOG_RIGHT_X)) > 10 ? con.get_analog(E_CONTROLLER_ANALOG_RIGHT_X) : 0;
     right /= 1.2275;
+    // right /= 1.236;
 
     //right = ((127.0 / pow(127, TURN_K)) * pow(abs(right), TURN_K) * (right/127));
     if(left || right)
@@ -55,6 +56,10 @@ void piston_cont()
         LwingsP.toggle();
         RwingsP.toggle();
     }
+    if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_DOWN)){
+        hangP.toggle();
+    }
+    
 }
 
 void print_info(int time, bool chassis_on)

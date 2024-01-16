@@ -38,10 +38,12 @@ void opcontrol()
 	bool chassis_on = true;
 	// cata.tare_position();
 	hang.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+	chas.set_brake();
 	// if ((*auton).get_name() == "V1 skills" || (*auton).get_name() == "V2 skills") pid::global_heading = 337;
 
 	while(true)
 	{
+		chas.set_brake();
 		drive();
 		intakeCon();
 		piston_cont();
