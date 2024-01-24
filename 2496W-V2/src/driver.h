@@ -30,6 +30,22 @@ void drive()
         chas.stop();
 }
 
+void slapperCon()
+{
+    static bool matchload = false;
+    if(con.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
+        matchload = !matchload;
+    } 
+
+    if (matchload) {
+        cata.move(-100);
+    }
+
+    else {
+        cata.move(0);
+    }
+}
+
 void intakeCon()
 {
     if(con.get_digital(E_CONTROLLER_DIGITAL_R1)) 
