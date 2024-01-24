@@ -235,7 +235,7 @@ void test_mode()
     }
 }
 
-void test(){
+void idk_what_this_is(){
     turn(180);
     delay(200);
 
@@ -260,8 +260,13 @@ void test(){
     turn(-1);
 }
 
+void test(){
+    drive(1000);
+}
+
 std::vector<Auton> autons
 {
+    Auton("test", test, "test_function"),
     Auton("safe left", left_safe, ""),
     Auton("safe right", right_safe_bar, ""),
     Auton("block rush right", rush_right_block, ""),
@@ -271,7 +276,6 @@ std::vector<Auton> autons
     Auton("elims diagonal", left_diagonal, ""),
     Auton("V1 skills", skills, ""),
     Auton("no auton", blank, "blank"),
-    Auton("test", test, "test_function")
 };
 
 #endif

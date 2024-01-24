@@ -38,10 +38,10 @@ namespace pid
         //1000: 0.1685
         //2000: 0.1429
         #define DRIVE_KI 0.002
-        #define DRIVE_KD 0 //5
+        #define DRIVE_KD 0 //0 for good
 
 
-        #define IMU_K 0.001
+        #define IMU_K 0
 
         if (fabs(end_head) - fabs(imu.get_heading()) > 1) {
             start_head += end_head-imu.get_heading();
