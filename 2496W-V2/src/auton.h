@@ -261,7 +261,41 @@ void idk_what_this_is(){
 }
 
 void test(){
-    drive(1000);
+// turn(90);
+// delay(500);
+// turn(-90);
+// delay(500);
+
+// turn(135);
+// delay(500);
+// turn(-135);
+// delay(500);
+
+
+// turn(180);
+// delay(500);
+// turn(-180);
+
+drive(2000);
+delay(500);
+drive(-2000);
+delay(500);
+
+drive(1000);
+delay(500);
+drive(-1000);
+delay(500);
+
+drive(500);
+delay(500);
+drive(-500);
+delay(500);
+
+drive(250);
+delay(500);
+drive(-250);
+delay(500);
+
 }
 
 std::vector<Auton> autons

@@ -52,7 +52,7 @@ void opcontrol()
 		// if ((*auton).get_name() != "V1 skills" && (*auton).get_name() != "V2 skills"){
 		print_info(time, chassis_on);
 		// }
-		if(time % 100 == 0 && time % 150 != 0) {
+		if(time % 150 == 0) {
 			if(hangP.get_status() == true){
         		con.print(2, 0, "HANG");
 			}

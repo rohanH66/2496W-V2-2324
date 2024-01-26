@@ -31,7 +31,7 @@ namespace pid
     double end_head = 0;
     double global_heading;
 
-    void drive(double target_dist, int timeout=1500, double mult=1.0, double max_speed=127, int exit_time=100, double dou_kp = DRIVE_KP_H, double dou_ki = DRIVE_KI_H,double dou_kd = DRIVE_KD_H,double dou_imuk = IMU_K_H)
+    void drive(double target_dist, int timeout=1500, double mult=1.0, double max_speed=127, int exit_time=100)
     {
         #define DRIVE_KP ((17.6647 * (pow(fabs(target_dist), -0.975028))) + 0.139685) //0.14
         //500: 0.1777
@@ -62,9 +62,12 @@ namespace pid
         double heading_error = 0;
         double error_range_time = 0;
         bool start_positive = target_dist >= 0 ? true : false;
+        double early_exit_time = 0;
 
         bool exit = false;
+        bool same_error = false;
 
+        int scaler = 100;
         int time = 0;
 
         while (time < timeout)
@@ -100,13 +103,23 @@ namespace pid
             }
 
             //Exit Loop
-            if (fabs(error) < 4)
+            if (fabs(error) < 0) /// CHANGED FOR TESTING
             {
                 if(!exit)
                     exit = true;
                 else
                     error_range_time++;
                 if (exit_time <= error_range_time)
+                    break;
+            }
+            
+            if (fabs(error) < 20 && (std::round(prev_error * scaler) / scaler - std::round(error * scaler) / scaler < 0.2)) // 0.15
+            {
+                if(!same_error)
+                    same_error = true;
+                else
+                    early_exit_time += 10;
+                if (exit_time <= early_exit_time)
                     break;
             }
 
@@ -138,7 +151,7 @@ namespace pid
         return error / fabs(error) * (25 * log(0.25 * (fabs(error) + 4)) + 5);
     }
 
-    void turn(double target_deg, int timeout=1000, bool early_exit = true, double multi=1.0, double max_speed=127, int exit_time=100)
+    void turn(double target_deg, int timeout=1000, bool early_exit = true, double multi=1.0, double max_speed=127, int exit_time=75)
     {  
 
         target_deg = fabs(target_deg)<=180 ? target_deg : (target_deg<0 ? target_deg + 180 : target_deg - 180);
@@ -147,22 +160,22 @@ namespace pid
         double TURN_KI;
         double TURN_KD;
         
-        if (target_deg < 120) //90 degree
+        if (target_deg < 70) 
         {
             TURN_KP = 4.15;
             TURN_KI = 0.04;
             TURN_KD = 0.26;
         }
-        else{ //tuned to 180 degree
-            TURN_KP = 4.03;
-            TURN_KI = 0.09;
-            TURN_KD = 0.3;
+        else{ //not tuned yet :(
+            TURN_KP = 4.75; //last=4.75//4.3, 4.5
+            TURN_KI = 0.42; //last=.4//0.08, .1
+            TURN_KD = 0.33; //last=.26//.25, .26(earlier), .27(90)
         }
 
         //comment this out later. If need to revert, comment out the lines below.
-        TURN_KP = 4.75; //4.3, 4.5
-        TURN_KI = 0.4; //0.08, .1
-        TURN_KD = 0.26; //.25, .26(earlier), .27(90)
+        TURN_KP = 4.75; //last=4.75//4.3, 4.5
+        TURN_KI = 0.42; //last=.4//0.08, .1
+        TURN_KD = 0.33; //last=.26//.25, .26(earlier), .27(90)
 
         int starting;
 
@@ -184,14 +197,16 @@ namespace pid
         double integral = 0;
         double derivative = 0;
         double error_range_time;
-        double early_exit_time;
+        double early_exit_time = 0;
 
         bool exit = false;
-        bool same_error;
+        bool same_error = false;
+
 
         int time = 0;
 
-        int scaler = (target_deg<20 ? 1000 : 100);
+        //int scaler = (target_deg<20 ? 1000 : 100);
+        int scaler = 100;
 
 
         while (time<timeout)
@@ -222,7 +237,7 @@ namespace pid
                 speed *= multiplier;
             }
 
-            if (fabs(error) < 0.6) // 0.15
+            if (fabs(error) < 0.5) // 0.15
             {
                 if(!exit)
                     exit = true;
@@ -232,7 +247,7 @@ namespace pid
                     break;
             }
 
-            if (fabs(error) < 2 && (std::round(prev_error * scaler) / scaler == std::round(error * scaler) / scaler)) // 0.15
+            if (fabs(error) < 2 && (std::round(prev_error * scaler) / scaler - std::round(error * scaler) / scaler < 0.02)) // 0.15
             {
                 if(!same_error)
                     same_error = true;
@@ -241,7 +256,6 @@ namespace pid
                 if (exit_time <= early_exit_time)
                     break;
             }
-
             // if (target_deg > 0 && speed < 0 &&(-6<error && error<0.3)) speed *= K_BOOST;
             // else if (target_deg < 0 && speed > 0 && (0.3<error && error<6)) speed *= K_BOOST;
 
