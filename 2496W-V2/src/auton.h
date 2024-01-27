@@ -24,6 +24,7 @@ void left_safe(){
     chas.stop();
     delay(600);
     LwingsP.set(true);
+    RwingsP.set(true);
     delay(600);
     chas.spin(-127);
     delay(75);
@@ -34,6 +35,7 @@ void left_safe(){
     delay(100);
     chas.stop();
     LwingsP.set(false);
+    RwingsP.set(false);
     delay(600);
     chas.spin(-127);
     delay(100);
@@ -51,9 +53,7 @@ void left_safe(){
     chas.spin(-25);
     delay(250);
     chas.stop();
-    chas.spin(100);
-    delay(350);
-    chas.stop();
+
 
     
     // chas.spin_left(127);
