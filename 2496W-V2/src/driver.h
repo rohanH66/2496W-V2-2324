@@ -32,15 +32,15 @@ void drive()
 
 void slapperCon()
 {
+
     static bool matchload = false;
-    if(con.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
+    if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_DOWN)){
         matchload = !matchload;
     } 
 
     if (matchload) {
-        cata.move(-100);
+        cata.move(-115);
     }
-
     else {
         cata.move(0);
     }
@@ -56,25 +56,30 @@ void intakeCon()
         intake.move(0);
 }
 
-void hangCon()
-{
-    if(con.get_digital(E_CONTROLLER_DIGITAL_Y)) 
-		hang.move(127);
-    else if(con.get_digital(E_CONTROLLER_DIGITAL_RIGHT))
-        hang.move(-127);
-    else 
-        hang.move(0);
-}
+// void hangCon()
+// {
+//     if(con.get_digital(E_CONTROLLER_DIGITAL_Y)) 
+// 		hang.move(127);
+//     else if(con.get_digital(E_CONTROLLER_DIGITAL_RIGHT))
+//         hang.move(-127);
+//     else 
+//         hang.move(0);
+// }
 
 void piston_cont()
 {
-    if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_L2)){
-        LwingsP.toggle();
-        RwingsP.toggle();
-    }
-    if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_DOWN)){
+    if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_Y)){
         hangP.toggle();
+    }    
+    
+    if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_RIGHT)){
+        hangP.toggle();
+        pto.toggle();
     }
+    
+    // if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_DOWN)){
+    //     hangP.toggle();
+    // }
     
 }
 
@@ -82,10 +87,10 @@ void print_info(int time, bool chassis_on)
 {
 
     if(time % 50 == 0 && time % 100 != 0 && time % 150 != 0)
-        con.print(0, 0, !chassis_on ? "CHASSIS OFF (right)            " : "%.1lf | %.1lf | %.1lf", chas.temp(), intake.get_temperature(), hang.get_temperature());
+        con.print(0, 0, !chassis_on ? "CHASSIS OFF (left)            " : "%.1lf | %.1lf | %.1lf", chas.temp(), intake.get_temperature(), hang.get_temperature());
     if(time % 100 == 0 && time % 150 != 0)
         con.print(1, 0, "%.2f", chas.pos());
-  //if(time % 150 == 0)
+    //if(time % 150 == 0){}
         //con.print(2, 0, "auton: %s         ", (*auton).get_name());
 }
 
