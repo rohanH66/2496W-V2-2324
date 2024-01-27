@@ -37,7 +37,7 @@ void opcontrol()
 	long long time = 0;
 	bool chassis_on = true;
 	// cata.tare_position();
-	hang.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+	//hang.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	chas.set_brake();
 	// if ((*auton).get_name() == "V1 skills" || (*auton).get_name() == "V2 skills") pid::global_heading = 337;
 
@@ -47,7 +47,7 @@ void opcontrol()
 		drive();
 		intakeCon();
 		piston_cont();
-		hangCon();
+		//hangCon();
 		slapperCon();
 		// if ((*auton).get_name() != "V1 skills" && (*auton).get_name() != "V2 skills"){
 		print_info(time, chassis_on);
