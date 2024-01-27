@@ -276,25 +276,6 @@ void test(){
 // delay(500);
 // turn(-180);
 
-drive(2000);
-delay(500);
-drive(-2000);
-delay(500);
-
-drive(1000);
-delay(500);
-drive(-1000);
-delay(500);
-
-drive(500);
-delay(500);
-drive(-500);
-delay(500);
-
-drive(250);
-delay(500);
-drive(-250);
-delay(500);
 
 }
 
