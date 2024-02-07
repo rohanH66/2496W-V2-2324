@@ -20,8 +20,8 @@ namespace glb
     #define P_LB 9
     #define P_INTAKE 13
     #define P_CATA 18
-    // #define P_DISTANCE 3
-    // #define P_CATASWITCH 'A'
+
+
     #define P_HANGP 'C'
     #define P_PTO 'E'
     #define P_RWINGSP 'B'

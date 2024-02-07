@@ -23,7 +23,6 @@ void initialize() {
 	con.clear();
 	static Auton temp = auton_selector(autons);
 	auton = &temp;
-	
 }
 
 void autonomous() {

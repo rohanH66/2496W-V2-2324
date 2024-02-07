@@ -93,7 +93,10 @@ void left_safe(){
 
 }
 
-void left_straight(){}
+void left_straight(){
+
+    
+}
 
 void left_diagonal(){}
 
@@ -166,31 +169,40 @@ void rush_right_block(){}
 void rush_right_straight(){}
 
 void right_safe_bar(){
-    chas.spin(-127);
-    delay(1000);
+        chas.spin(-127);
+    delay(2500);
     chas.stop();
-    delay(500);
+    delay(600);
+
     chas.spin(127);
-    delay(100);
+    delay(800);
     chas.stop();
-    delay(100);
-    chas.spin_left(127);
-    chas.spin_right(-127);
-    delay(100);
-    chas.stop();
-    delay(100);
-    chas.spin(127);
-    delay(150);
-    chas.stop();
-    delay(100);
-    chas.spin_left(127);
-    chas.spin_right(-127);
-    delay(100);
-    chas.stop();
-    delay(100);
-    chas.spin(127);
-    delay(200);
-    chas.stop();
+    delay(600);
+    // chas.spin(-127);
+    // delay(1000);
+    // chas.stop();
+    // delay(500);
+    // chas.spin(127);
+    // delay(100);
+    // chas.stop();
+    // delay(100);
+    // chas.spin_left(127);
+    // chas.spin_right(-127);
+    // delay(100);
+    // chas.stop();
+    // delay(100);
+    // chas.spin(127);
+    // delay(150);
+    // chas.stop();
+    // delay(100);
+    // chas.spin_left(127);
+    // chas.spin_right(-127);
+    // delay(100);
+    // chas.stop();
+    // delay(100);
+    // chas.spin(127);
+    // delay(200);
+    // chas.stop();
 
 
 
