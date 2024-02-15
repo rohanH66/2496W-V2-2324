@@ -39,7 +39,7 @@ void slapperCon()
     } 
 
     if (matchload) {
-        cata.move(-115);
+        cata.move(100);
     }
     else {
         cata.move(0);
