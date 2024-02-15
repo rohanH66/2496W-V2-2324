@@ -12,7 +12,7 @@ namespace glb
 {
     // ports
     #define P_IMU 15
-    #define P_RF 10
+    #define P_RF 12
     #define P_RM 20
     #define P_RB 19
     #define P_LF 4
