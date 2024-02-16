@@ -66,19 +66,37 @@ void intakeCon()
 //         hang.move(0);
 // }
 
-void piston_cont()
+void piston_cont(bool skills)
 {
     if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_Y)){
         hangP.toggle();
+        pto.set(false);
     }    
     
     if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_RIGHT)){
-        hangP.toggle();
-        pto.toggle();
+        hangP.set(false);
+        pto.set(true);
+    }
+
+    if (!skills && con.get_digital_new_press(E_CONTROLLER_DIGITAL_L1)){
+        LfrontP.toggle();
+        LbackP.toggle();
+    }
+    else {
+        if (con.get_digital(E_CONTROLLER_DIGITAL_L1)){
+            LfrontP.set(true);
+            RfrontP.set(true);
+        }
+        else{
+            LfrontP.set(false);
+            RfrontP.set(false);
+        }
+
+
     }
     if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_L2)){
-        LwingsP.toggle();
-        RwingsP.toggle();
+        LbackP.toggle();
+        RbackP.toggle();
     }
     
 }

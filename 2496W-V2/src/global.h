@@ -24,8 +24,10 @@ namespace glb
 
     #define P_HANGP 'C'
     #define P_PTO 'E'
-    #define P_RWINGSP 'B'
-    #define P_LWINGSP 'A'
+    #define P_RWFRONTP 'B'
+    #define P_LWFRONTP 'A'
+    #define P_RWBACKP 'B'
+    #define P_LWBACKP 'A'
 
     // #define P_BLOCKERP 'D'
    
@@ -39,18 +41,19 @@ namespace glb
     // Motor LM (P_LM, E_MOTOR_GEARSET_06,1);
     // Motor LB (P_LB, E_MOTOR_GEARSET_06);
     Motor intake(P_INTAKE, E_MOTOR_GEARSET_06);
-    Motor cata (P_CATA, E_MOTOR_GEARSET_36,1);
+    Motor cata (P_CATA, E_MOTOR_GEARSET_18,1);
 
-    Piston LwingsP(P_LWINGSP);
-    Piston RwingsP(P_RWINGSP);
+    Piston LfrontP(P_LWFRONTP);
+    Piston RfrontP(P_RWFRONTP);
+    Piston LbackP(P_LWBACKP);
+    Piston RbackP(P_RWBACKP);
+
     Piston hangP(P_HANGP);
     Piston pto(P_PTO);
     // Piston blockerP(P_BLOCKERP);
-
     // Distance dist(P_DISTANCE);
     Imu imu(P_IMU);
     // ADIDigitalIn cataLimit(P_CATASWITCH);
-
     Controller con(E_CONTROLLER_MASTER);
 
 }

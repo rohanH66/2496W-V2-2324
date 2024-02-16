@@ -16,12 +16,14 @@ using namespace std;
 using namespace glb;
  
 Auton *auton;
+bool skillsb;
 
 
 void initialize() {
 	lcd::initialize();
 	con.clear();
 	static Auton temp = auton_selector(autons);
+	skillsb = temp.get_name() == "skills";
 	auton = &temp;
 }
 
@@ -42,10 +44,10 @@ void opcontrol()
 
 	while(true)
 	{
-		//chas.set_brake();
+
 		drive();
 		intakeCon();
-		piston_cont();
+		piston_cont(skillsb);
 		//hangCon();
 		slapperCon();
 		// if ((*auton).get_name() != "V1 skills" && (*auton).get_name() != "V2 skills"){

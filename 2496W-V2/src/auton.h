@@ -23,8 +23,8 @@ void left_safe(){
     delay(100);
     chas.stop();
     delay(600);
-    LwingsP.set(true);
-    RwingsP.set(true);
+    LbackP.set(true);
+    RbackP.set(true);
     delay(600);
     chas.spin(-127);
     delay(75);
@@ -34,8 +34,8 @@ void left_safe(){
     chas.spin_right(127);
     delay(100);
     chas.stop();
-    LwingsP.set(false);
-    RwingsP.set(false);
+    LbackP.set(false);
+    RbackP.set(false);
     delay(600);
     chas.spin(-127);
     delay(100);
@@ -103,8 +103,8 @@ void left_diagonal(){}
 void elims_left(){
     chas.spin(-127);
     delay(500);
-    LwingsP.set(true);
-    RwingsP.set(true);
+    LbackP.set(true);
+    RbackP.set(true);
     //drive(-800);
     chas.stop();
     delay(200);
@@ -117,8 +117,8 @@ void elims_left(){
     delay(575);
     chas.stop();
     delay(100);
-    LwingsP.set(false);
-    RwingsP.set(false);
+    LbackP.set(false);
+    RbackP.set(false);
     chas.spin(127);
     delay(200);
     intake.move(-127);
