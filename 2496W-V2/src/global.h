@@ -11,15 +11,15 @@ using namespace std;
 namespace glb
 {
     // ports
-    #define P_IMU 15
-    #define P_RF 12
-    #define P_RM 20
-    #define P_RB 19
-    #define P_LF 4
-    #define P_LM 11
-    #define P_LB 9
-    #define P_INTAKE 13
-    #define P_CATA 18
+    #define P_IMU 21
+    #define P_RF 10
+    #define P_RM 9
+    #define P_RB 8
+    #define P_LF 7
+    #define P_LM 6
+    #define P_LB 5
+    #define P_INTAKE 4
+    #define P_CATA 1
 
 
     #define P_HANGP 'C'
