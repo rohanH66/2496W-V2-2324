@@ -39,10 +39,10 @@ void slapperCon()
     } 
 
     if (matchload) {
-        cata.move(100);
+        slapper.move(100);
     }
     else {
-        cata.move(0);
+        slapper.move(0);
     }
 }
 
@@ -68,17 +68,29 @@ void intakeCon()
 
 void piston_cont(bool skills)
 {
+    static bool pressed_once = false;
+
+    if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_B)){
+        if (!pressed_once){
+            hangP.set(true);
+            pressed_once = true;
+        }
+        else{
+            hangP.set(false);
+            pto.set(false);
+        }
+    }
+
+
     if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_Y)){
-        hangP.toggle();
-        pto.set(false);
+        RfrontP.toggle();
     }    
     
     if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_RIGHT)){
-        hangP.set(false);
-        pto.set(true);
+        LfrontP.toggle();
     }
 
-    if (!skills && con.get_digital_new_press(E_CONTROLLER_DIGITAL_L1)){
+    if (skills && con.get_digital_new_press(E_CONTROLLER_DIGITAL_L1)){
         LfrontP.toggle();
         LbackP.toggle();
     }
@@ -105,7 +117,7 @@ void print_info(int time, bool chassis_on)
 {
 
     if(time % 50 == 0 && time % 100 != 0 && time % 150 != 0)
-        con.print(0, 0, !chassis_on ? "CHASSIS OFF (left)            " : "%.1lf | %.1lf | %.1lf", chas.temp(), intake.get_temperature(), cata.get_temperature());
+        con.print(0, 0, !chassis_on ? "CHASSIS OFF (left)            " : "%.1lf | %.1lf | %.1lf", chas.temp(), intake.get_temperature(), slapper.get_temperature());
     if(time % 100 == 0 && time % 150 != 0)
         con.print(1, 0, "%.2f", chas.pos());
     //if(time % 150 == 0)
