@@ -20,6 +20,7 @@ namespace glb
     #define P_LB 5
     #define P_INTAKE 4
     #define P_CATA 1
+    #define P_DISTANCE 2
 
 
     #define P_HANGP 'C'
@@ -53,7 +54,7 @@ namespace glb
     // Piston blockerP(P_BLOCKERP);
     // Distance dist(P_DISTANCE);
     Imu imu(P_IMU);
-    // ADIDigitalIn cataLimit(P_CATASWITCH);
+    Distance dist(P_DISTANCE);
     Controller con(E_CONTROLLER_MASTER);
 
 }

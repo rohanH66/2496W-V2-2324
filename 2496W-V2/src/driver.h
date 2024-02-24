@@ -6,6 +6,7 @@
 #include "lib/auton_obj.h"
 #include <iostream>
 #include <cmath>
+#include "../include/pros/misc.h"
 
 #define TURN_K 2.2
 
@@ -44,6 +45,20 @@ void slapperCon()
     else {
         cata.move(0);
     }
+}
+
+void distCon(int time){
+    static bool active = false;
+    bool isTri = dist.get() < 20;
+    static int activeTime = 0;
+
+    
+
+    if (active){
+
+
+    }
+
 }
 
 void intakeCon()
