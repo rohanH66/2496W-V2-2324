@@ -42,7 +42,7 @@ namespace glb
     // Motor LM (P_LM, E_MOTOR_GEARSET_06,1);
     // Motor LB (P_LB, E_MOTOR_GEARSET_06);
     Motor intake(P_INTAKE, E_MOTOR_GEARSET_06);
-    Motor cata (P_CATA, E_MOTOR_GEARSET_18,1);
+    Motor slapper (P_SLAPPER, E_MOTOR_GEARSET_18,1);
 
     Piston LfrontP(P_LWFRONTP);
     Piston RfrontP(P_RWFRONTP);
