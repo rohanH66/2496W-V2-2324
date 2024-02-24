@@ -48,16 +48,7 @@ void slapperCon()
 }
 
 void distCon(int time){
-    static bool active = false;
-    bool isTri = dist.get() < 20;
-    static int activeTime = 0;
 
-    
-
-    if (active){
-
-
-    }
 
 }
 

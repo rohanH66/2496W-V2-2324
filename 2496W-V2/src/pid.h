@@ -17,19 +17,70 @@ using namespace pros;
 using namespace std;
 using namespace glb;
 
-#define DRIVE_KP_H 0.2
+#define DRIVE_KP 0.2
 
-#define DRIVE_KI_H 0
-#define DRIVE_KD_H 0
-#define IMU_K_H 0
+#define DRIVE_KI 0
+#define DRIVE_KD 0
+#define IMU_K 0
 
 namespace pid
 {
     double start_head = 0; 
-    //For Yousef: finish abs turn
-    //For Brandon: improve
     double end_head = 0;
     double global_heading;
+
+    double driveR(double target_dist, double kP, double kI = 0, double kD = 0, int timeout=3500, double mult=1.0, double max_speed=127, int exit_time=100)
+    {
+
+        //Set Variables
+        double target = target_dist + chas.pos();
+        double error = target - chas.pos();
+        double prev_error;
+        double integral = 0;
+        double derivative = 0;
+
+        bool exit = false;
+        bool same_error = false;
+
+        int scaler = 100;
+        int time = 0;
+
+        while (time < timeout)
+        {
+            prev_error = error;
+            
+            //P
+            error = target - chas.pos();
+            //I
+            if(fabs(error)<30) {
+                integral += error;
+            }
+            //D
+            derivative = (error - prev_error) * 1000;
+            //PID
+            double speed = mult * (error * kP + integral * kI + derivative * kD);
+
+
+            //Cap speed and correction sum to max
+            if (fabs(speed) > max_speed) 
+            {
+                double multiplier = max_speed/(fabs(speed));
+                speed *= multiplier;
+            }
+
+            chas.spin(speed);
+
+            //Logging
+            print_info_auton(time, error, speed);
+            
+            //Prevent infinite loops
+            pros::delay(2);
+            time++;
+        }
+        chas.stop();
+        return error;
+
+    }
 
     void drive(double target_dist, int timeout=1500, double mult=1.0, double max_speed=127, int exit_time=100)
     {
@@ -144,6 +195,52 @@ namespace pid
         end_head = imu.get_heading();
 
         global_heading += imu.get_heading() - starting;
+    }
+
+
+    void drive_const(double distance, int speed=127, int timeout=3000)
+    {
+        int time = 0;
+        double start_pos = glb::chas.pos();
+        double target = start_pos + distance;
+        double s = distance / fabs(distance) * abs(speed);
+        
+        double straight_kP = 3.5;
+        double straight_kI = 1.0;
+        double straight_i = 0;
+        double init_heading = global_heading;
+        double cur_heading = glb::imu.get_heading();
+        double last_heading = glb::imu.get_heading();
+
+        while((distance < 0 ? glb::chas.pos() > target : glb::chas.pos() < target) && time < timeout)
+        {
+            // inertial wrapping
+            if(cur_heading - last_heading > 100)
+            {
+                global_heading += (cur_heading - 360) - last_heading;
+            }
+            else if(cur_heading - last_heading < -100)
+            {
+                global_heading += cur_heading + (360 - last_heading);
+            }
+            else
+            {
+                global_heading += cur_heading - last_heading;
+            }
+
+            last_heading = cur_heading;
+            cur_heading = glb::imu.get_heading();
+
+            straight_i += (global_heading - init_heading) / 100;
+            double correction = straight_i * straight_kI + (global_heading - init_heading) * straight_kP;
+            
+            glb::chas.spin_left(s - correction);
+            glb::chas.spin_right(s + correction);
+            pros::delay(10);
+            time += 10;
+        }
+
+        glb::chas.stop();
     }
 
     double turn_f(double error)
@@ -284,115 +381,8 @@ namespace pid
         degree = (degree > 180) ? -(360 - degree) : ((degree < -180) ? (360 + degree) : (degree)); // optimize the turn direction
         turn(degree, timeout, multi, max_speed, exit_time);
     }
-
-    void drive_variable(double target_dist, double kp, int timeout=1500, double mult=1.0, double max_speed=127, int exit_time=100, double dou_kp = DRIVE_KP_H, double dou_ki = DRIVE_KI_H,double dou_kd = DRIVE_KD_H,double dou_imuk = IMU_K_H)
-    {
-        double drivekp;
-        
-        drivekp = kp;
-        //500: 0.1777
-        //1000: 0.1685
-        //2000: 0.1429
-
-
-        //0.1642
-        #define DRIVE_KI 0.002
-        #define DRIVE_KD 0 //5
-
-
-        #define IMU_K 0.001
-
-        if (fabs(end_head) - fabs(imu.get_heading()) > 1) {
-            start_head += end_head-imu.get_heading();
-        }
-
-        int starting = 180;
-        // start_head -= starting;
-        imu.set_heading(starting);
-
-        //Set Variables
-        double target = target_dist + chas.pos();
-        double error = target - chas.pos();
-        double prev_error;
-        double integral = 0;
-        double kintegral = 0;
-        double derivative = 0;
-        double init_heading = imu.get_heading();
-        double heading_error = 0;
-        double error_range_time = 0;
-        bool start_positive = target_dist >= 0 ? true : false;
-
-        bool exit = false;
-
-        int time = 0;
-
-        while (time < timeout)
-        {
-            prev_error = error;
-            
-            //P
-            error = target - chas.pos();
-            //I
-            if(fabs(error)<30) {
-                integral += error;
-            }
-            //D
-            derivative = (error - prev_error) * 1000;
-
-            //Correct sides, ensure heading stays same as beginning
-            heading_error = init_heading - imu.get_heading();
-
-            //PID
-            double speed = mult * (error * drivekp + integral * DRIVE_KI + derivative * DRIVE_KD);
-
-            //Heading correction
-            kintegral += heading_error;
-
-            double correction = (kintegral * IMU_K);
-
-            //Cap speed and correction sum to max
-            if (fabs(speed) + fabs(correction) > max_speed) 
-            {
-                double multiplier = max_speed/(fabs(speed) + fabs(correction));
-                speed *= multiplier;
-                correction *= multiplier;
-            }
-
-            //Exit Loop
-            if (fabs(error) < 3)
-            {
-                if(!exit)
-                    exit = true;
-                else
-                    error_range_time++;
-                if (exit_time <= error_range_time)
-                    break;
-            }
-
-            //Keep sides moving the same distances
-            // chas.spin_left(speed + correction * speed / 127.0);
-            // chas.spin_right(speed - correction * speed / 127.0);
-            chas.spin(speed);
-
-            //Logging
-            print_info_auton(time, error, speed);
-            
-            //Prevent infinite loops
-            pros::delay(1);
-            time++;
-        }
-        chas.stop();
-        double diff = imu.get_heading() - starting;
-        if (fabs(diff)>2) {
-            start_head+=diff;
-        }
-        
-        end_head = imu.get_heading();
-
-        global_heading += imu.get_heading() - starting;
-    }
-
 }
+
 
 //180
 
