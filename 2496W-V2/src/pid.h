@@ -71,10 +71,10 @@ namespace pid
             chas.spin(speed);
 
             //Logging
-            print_info_auton(time, error, speed);
+            print_info_R(time, error);
             
             //Prevent infinite loops
-            pros::delay(2);
+            delay(2);
             time++;
         }
         chas.stop();

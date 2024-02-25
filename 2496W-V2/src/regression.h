@@ -20,15 +20,15 @@
 
 
 using namespace glb;
-using namespace std;
 using namespace pros;
+
 
 namespace reg {
     class regression {
     public:
         std::vector<double> xData;
         std::vector<double> yData;
-        double mean(const std::vector<double>& data) const {
+        double mean(const vector<double>& data) const {
             return std::accumulate(data.begin(), data.end(), 0.0) / data.size();
         }
 
@@ -40,7 +40,7 @@ namespace reg {
             double denominator = 0.0;
             double xMean = mean(xData);
             double yMean = mean(yData);
-            for (size_t i = 0; i < xData.size(); ++i) {
+            for (int i = 0; i < xData.size(); ++i) {
                 numerator += (xData[i] - xMean) * (yData[i] - yMean);
                 denominator += (xData[i] - xMean) * (xData[i] - xMean);
             }
@@ -56,14 +56,14 @@ namespace reg {
         double getXIntercept() const {
             double m = slope();
             if (m == 0) {
-                return std::numeric_limits<double>::quiet_NaN(); // Return NaN to indicate an undefined result
+                return 0.0;
             }
             double b = intercept();
             return -b / m;
         }
         void printCSV() const {
-            std::cout << "X,Y\n";
-            for (size_t i = 0; i < xData.size(); ++i) {
+            printf("X,Y\n");
+            for (int i = 0; i < xData.size(); ++i) {
                 std::cout << xData[i] << "," << yData[i] << "\n";
             }
         }
@@ -115,7 +115,7 @@ namespace reg {
 
 
     // main regression model runner (super cool! poggers)
-    void regMain(int target){
+    void regMain(int target, int init_trials, double guess){
         glb::con.clear();
         regression r;
         bool cont = true;
@@ -124,19 +124,61 @@ namespace reg {
         double error;
 
         while (cont){
-            glb::con.
+            glb::con.clear();
+            delay(50);
+            con.print(0,0,"Reg target " + target);
+            delay(50);
+            
+            error = pid::driveR(target, guess);
+            r.addData(guess, error);
+            printf("{},{}",to_string(guess),to_string(error));
+            delay(50);
+
+            error = pid::driveR(target * -1, guess+0.01);
+            r.addData(guess+0.01, error);
+            printf("{},{}",to_string(guess+0.01),to_string(error));
+            delay(50);
+            
 
             nextK = r.getXIntercept();
-            error = pid::driveR(target, nextK);
-            r.addData(nextK, error);
+            for (int i=0;i<init_trials;i++){
+                for (int j=0;j<6;j++){
+                    error = pid::driveR(target * (j%2==0 ? 1 : -1), nextK);
+                    r.addData(nextK, error);
+                    delay(50);
+                    printf("{},{}",to_string(nextK),to_string(error));
+                    delay(50);
+                }
+                nextK = r.getXIntercept();
+            }
 
+            std::array<std::string, 3> results = getResults(r);
+            string one = results[0];
+            string two = results[1];
+            string three = results[2];
+            delay(50);
+
+            con.clear();
+            delay(50);
+            con.print(0,0,"{}                ",one);
+            delay(50);
+            con.print(1,0,"{}                ",two);
+            delay(50);
+            con.print(2,0,"{}                ",three);
+            delay(50);
+            while (true){
+                if (con.get_digital_new_press(E_CONTROLLER_DIGITAL_A)){
+                    init_trials = 5;
+                    cont = true; 
+                    break;
+                }
+                if (con.get_digital_new_press(E_CONTROLLER_DIGITAL_A)){ 
+                    cont = false;
+                    break; 
+                }
+            }
         }
-
-
     }
-
-
-
 }
 
 

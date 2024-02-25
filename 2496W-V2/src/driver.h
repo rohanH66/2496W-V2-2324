@@ -22,7 +22,9 @@ void drive()
     // right /= 1.236;
 
     //right = ((127.0 / pow(127, TURN_K)) * pow(abs(right), TURN_K) * (right/127));
-    if(left || right)
+    if (pto.get_status() == true)
+        chas.spin(left);
+    else if(left || right)
     {
         chas.spin_left(left + right);
         chas.spin_right(left - right);
@@ -40,14 +42,41 @@ void slapperCon()
     } 
 
     if (matchload) {
-        slapper.move(100);
+        cata.move(100);
     }
     else {
-        slapper.move(0);
+        cata.move(0);
     }
 }
 
 void distCon(int time){
+    bool isTri = dist.get() < 20;
+    int pos = abs((int) cata.get_position()) % 900;
+    static int deadzone = 330;
+    const int realDead = 330;
+    const int cutoff = 380;
+
+    if(time % 150 == 0)
+        con.print(2, 0, "pos: %d  ", (((int) cata.get_position()) % 900));
+
+    if (con.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
+        cata.move(100);
+    }
+    // else if (isTri){
+    //     cata.move(-127);
+    // }
+    else{
+        if (pos>deadzone && pos<cutoff){
+            deadzone = realDead - 50;
+            cata.move(0);
+        }
+        else {
+            deadzone = realDead;
+            cata.move(100);
+        }
+        cata.move(0);
+
+    }
 
 
 }
@@ -79,11 +108,13 @@ void piston_cont(bool skills)
     if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_B)){
         if (!pressed_once){
             hangP.set(true);
+            pto.set(false);
             pressed_once = true;
         }
         else{
             hangP.set(false);
-            pto.set(false);
+            pto.set(true);
+            pressed_once = false;
         }
     }
 
@@ -100,7 +131,7 @@ void piston_cont(bool skills)
         LfrontP.toggle();
         LbackP.toggle();
     }
-    else {
+    else{
         if (con.get_digital(E_CONTROLLER_DIGITAL_L1)){
             LfrontP.set(true);
             RfrontP.set(true);
@@ -109,6 +140,7 @@ void piston_cont(bool skills)
             LfrontP.set(false);
             RfrontP.set(false);
         }
+
 
 
     }
@@ -123,11 +155,11 @@ void print_info(int time, bool chassis_on)
 {
 
     if(time % 50 == 0 && time % 100 != 0 && time % 150 != 0)
-        con.print(0, 0, !chassis_on ? "CHASSIS OFF (left)            " : "%.1lf | %.1lf | %.1lf", chas.temp(), intake.get_temperature(), slapper.get_temperature());
+        con.print(0, 0, !chassis_on ? "CHASSIS OFF (left)            " : "%.1lf | %.1lf | %.1lf", chas.temp(), intake.get_temperature(), cata.get_temperature());
     if(time % 100 == 0 && time % 150 != 0)
         con.print(1, 0, "%.2f", chas.pos());
-    //if(time % 150 == 0)
-        //con.print(2, 0, "auton: %s         ", (*auton).get_name());
+    // if(time % 150 == 0)
+    //     con.print(2, 0, "dis: %d     mm  ", abs((int) cata.get_position()) % 900);
 }
 
 void print_info_auton(int time, double error, double speed)
@@ -138,6 +170,14 @@ void print_info_auton(int time, double error, double speed)
         con.print(1, 0, "%.2f : %.2f          ", imu.get_heading());
     if(time % 150 == 0 && time % 100 != 0 && time % 150 != 0 && time%2000 != 0) 
         con.print(2, 0, "%.2f | %.0f       ", error, time);
+}
+
+void print_info_R(int time, double error)
+{
+    if(time % 50 == 0 && time%2000 != 0) 
+        con.print(1, 0, "Error: %.2f        ", error);
+    if(time % 100 == 0 && time % 150 != 0 && time%2000 != 0) 
+        con.print(2, 0, "%.2f : %.2f          ", imu.get_heading());
 }
 
 void print_name(int time, string name){

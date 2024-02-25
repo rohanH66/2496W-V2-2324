@@ -7,6 +7,7 @@
 #include "lib/auton_obj.h"
 #include "lib/chassis.h"
 #include "lib/piston.h"
+#include "regression.h"
 
 
 #include <iostream>
@@ -16,14 +17,14 @@ using namespace std;
 using namespace glb;
  
 Auton *auton;
-bool skillsb;
+string names;
 
 
 void initialize() {
 	lcd::initialize();
 	con.clear();
 	static Auton temp = auton_selector(autons);
-	skillsb = temp.get_name() == "skills";
+	names = temp.get_name();
 	auton = &temp;
 }
 
@@ -37,20 +38,22 @@ void opcontrol()
 	glb::con.clear();
 	long long time = 0;
 	bool chassis_on = true;
+	const bool skillsb = names == "skills";
 	// cata.tare_position();
 	//hang.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	chas.set_brake();
+	pto.set(false);
 	// if ((*auton).get_name() == "V1 skills" || (*auton).get_name() == "V2 skills") pid::global_heading = 337;
 
 	while(true)
 	{
 
-		drive();
+		if (!chassis_on) drive();
 		intakeCon();
 		piston_cont(skillsb);
 		//hangCon();
-		//slapperCon();
-		distCon(time);
+		slapperCon();
+		//distCon(time);
 		// if ((*auton).get_name() != "V1 skills" && (*auton).get_name() != "V2 skills"){
 		print_info(time, chassis_on);
 		// }
@@ -61,7 +64,7 @@ void opcontrol()
 		// }
         // con.print(1, 0, "%.2f", imu.get_heading());
 		if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_LEFT)) chassis_on = !chassis_on;
-		if(con.get_digital(E_CONTROLLER_DIGITAL_UP) && chassis_on) autonomous();
+		if(con.get_digital(E_CONTROLLER_DIGITAL_UP) && chassis_on) (*auton).run();
 
 		delay(2);
 		time += 2;

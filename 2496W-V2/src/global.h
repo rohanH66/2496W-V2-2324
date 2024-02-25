@@ -19,15 +19,15 @@ namespace glb
     #define P_LM 6
     #define P_LB 5
     #define P_INTAKE 4
-    #define P_CATA 1
-    #define P_DISTANCE 2
+    #define P_CATA 12
+    #define P_DISTANCE 3
 
 
-    #define P_HANGP 'C'
-    #define P_PTO 'E'
-    #define P_RWFRONTP 'B'
-    #define P_LWFRONTP 'A'
-    #define P_RWBACKP 'B'
+    #define P_HANGP 'F'
+    #define P_PTO 'B'
+    #define P_RWFRONTP 'D'
+    #define P_LWFRONTP 'C'
+    #define P_RWBACKP 'E'
     #define P_LWBACKP 'A'
 
     // #define P_BLOCKERP 'D'
@@ -42,7 +42,7 @@ namespace glb
     // Motor LM (P_LM, E_MOTOR_GEARSET_06,1);
     // Motor LB (P_LB, E_MOTOR_GEARSET_06);
     Motor intake(P_INTAKE, E_MOTOR_GEARSET_06);
-    Motor slapper (P_SLAPPER, E_MOTOR_GEARSET_18,1);
+    Motor cata (P_CATA, E_MOTOR_GEARSET_18, true);
 
     Piston LfrontP(P_LWFRONTP);
     Piston RfrontP(P_RWFRONTP);

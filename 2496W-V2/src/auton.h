@@ -6,6 +6,7 @@
 #include "pid.h"
 #include "auton_func.h"
 #include "lib/auton_obj.h"
+#include "regression.h"
 
 #include "pros/misc.h"
 #include "pros/rtos.h"
@@ -218,10 +219,10 @@ void six_ball(){}
 void test_mode()
 {
     long long timer = 0;
-    double temp_kp = DRIVE_KP_H;
-    double temp_ki = DRIVE_KI_H;
-    double temp_kd = DRIVE_KD_H;
-    double temp_imuk = IMU_K_H;
+    // double temp_kp = DRIVE_KP_H;
+    // double temp_ki = DRIVE_KI_H;
+    // double temp_kd = DRIVE_KD_H;
+    // double temp_imuk = IMU_K_H;
     int selected = 0;
     string items[4] ={"KP","KI","KD","IMU_K"};
 
@@ -291,6 +292,12 @@ void test(){
 
 }
 
+
+void regr(){
+    reg::regMain(750, 15, 0.17);
+}
+
+
 std::vector<Auton> autons
 {
     Auton("test", test, "test_function"),
@@ -303,6 +310,7 @@ std::vector<Auton> autons
     Auton("elims diagonal", left_diagonal, ""),
     Auton("V1 skills", skills, ""),
     Auton("no auton", blank, "blank"),
+    Auton("reg tuning", regr, "U got that"),
 };
 
 #endif

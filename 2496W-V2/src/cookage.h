@@ -10,13 +10,15 @@
 #include "pros/misc.h"
 #include "pros/rtos.h"
 #include <iostream>
+#include <cmath>
 #include <fstream>
 #include <list>
-#include <iostream>
+#include "lib/chassis.h"
 
 using namespace pros;
 using namespace std;
 using namespace pid;
+using namespace glb;
 
 namespace cook
 {
@@ -43,8 +45,8 @@ namespace cook
         double init_heading = imu.get_heading();
 
 
-        double target = target_dist + chas.pos();
-        double error = target - chas.pos();
+        double target = target_dist + glb::chas.pos();
+        double error = target - glb::chas.pos();
         double prev_error;
         double integral = 0;
         double kintegral = 0;
