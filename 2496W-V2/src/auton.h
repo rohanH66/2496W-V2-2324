@@ -170,7 +170,7 @@ void rush_right_block(){}
 void rush_right_straight(){}
 
 void right_safe_bar(){
-        chas.spin(-127);
+    chas.spin(-127);
     delay(2500);
     chas.stop();
     delay(600);
@@ -273,36 +273,64 @@ void idk_what_this_is(){
     turn(-1);
 }
 
+void test_all_drive(){
+    drive(1750);
+    delay(1000);
+    drive(-1750);
+    delay(1000);
+
+    drive(1500);
+    delay(1000);
+    drive(-1500);
+    delay(1000);
+
+    drive(1250);
+    delay(1000);
+    drive(-1250);
+    delay(1000);
+
+    drive(1000);
+    delay(1000);
+    drive(-1000);
+    delay(1000);
+
+    drive(750);
+    delay(1000);
+    drive(-750);
+    delay(1000);
+
+    drive(500);
+    delay(1000);
+    drive(-500);
+    delay(1000);
+
+    drive(250);
+    delay(1000);
+    drive(-250);
+    delay(1000);
+
+}
+
 void test(){
-// turn(90);
-// delay(500);
-// turn(-90);
-// delay(500);
-
-// turn(135);
-// delay(500);
-// turn(-135);
-// delay(500);
-
-
-// turn(180);
-// delay(500);
-// turn(-180);
-
-
+    drive_const(1000);
 }
 
 
 void regr(){
-    reg::regMain(750, 15, 0.17);
+    delay(100);
+    con.clear();
+    delay(100);
+    con.print(0,0,"not good");
+    delay(3000);
 }
 
 
 std::vector<Auton> autons
 {
     Auton("test", test, "test_function"),
+    Auton("reg tuning", regr, "U got that"),
     Auton("safe left", left_safe, ""),
-    Auton("safe right", right_safe_bar, ""),
+    Auton("USE safe right", right_safe_bar, ""),
     Auton("block rush right", rush_right_block, ""),
     Auton("straight rush right", rush_right_straight, ""),
     Auton("elims rush", elims_left, "lardbots"),
@@ -310,7 +338,7 @@ std::vector<Auton> autons
     Auton("elims diagonal", left_diagonal, ""),
     Auton("V1 skills", skills, ""),
     Auton("no auton", blank, "blank"),
-    Auton("reg tuning", regr, "U got that"),
+
 };
 
 #endif

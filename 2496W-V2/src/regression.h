@@ -17,6 +17,8 @@
 #include <numeric>
 #include <string>
 #include <array>
+#include <stdio.h>
+#include <cstring>
 
 
 using namespace glb;
@@ -116,38 +118,49 @@ namespace reg {
 
     // main regression model runner (super cool! poggers)
     void regMain(int target, int init_trials, double guess){
-        glb::con.clear();
+        //glb::con.clear();
+        const int iterations = 6;
+        delay(100);
+        printf("kP, error\n");
+        delay(100);
         regression r;
         bool cont = true;
         bool neg = false;
         double nextK;
         double error;
 
+
         while (cont){
+            delay(100);
             glb::con.clear();
-            delay(50);
-            con.print(0,0,"Reg target " + target);
-            delay(50);
+            delay(60);
+            con.print(0,0,"Reg K=%.4f" , target);
             
             error = pid::driveR(target, guess);
             r.addData(guess, error);
-            printf("{},{}",to_string(guess),to_string(error));
+            pid::driveR(-target, guess);
+            delay(50);
+            printf("%.4f, %.4f\n", guess, error);
             delay(50);
 
-            error = pid::driveR(target * -1, guess+0.01);
+            error = pid::driveR(target, guess+0.01);
             r.addData(guess+0.01, error);
-            printf("{},{}",to_string(guess+0.01),to_string(error));
+            pid::driveR(-target, guess+0.01);
+            delay(50);
+            printf("%.4f, %.4f\n", guess+0.01, error);
             delay(50);
             
-
+            int count = 2;
             nextK = r.getXIntercept();
             for (int i=0;i<init_trials;i++){
-                for (int j=0;j<6;j++){
-                    error = pid::driveR(target * (j%2==0 ? 1 : -1), nextK);
+                for (int j=0;j<iterations;j++){
+                    error = pid::driveR(target, nextK);
+                    count++;
                     r.addData(nextK, error);
-                    delay(50);
-                    printf("{},{}",to_string(nextK),to_string(error));
-                    delay(50);
+                    pid::driveR(-target, nextK);
+                    delay(100);
+                    printf("%.4f, %.4f\n", nextK, error);
+                    delay(100);
                 }
                 nextK = r.getXIntercept();
             }
@@ -160,11 +173,17 @@ namespace reg {
 
             con.clear();
             delay(50);
-            con.print(0,0,"{}                ",one);
+            con.print(0,0,"%s                ",one);
             delay(50);
-            con.print(1,0,"{}                ",two);
+            con.print(1,0,"%s                ",two);
             delay(50);
-            con.print(2,0,"{}                ",three);
+            con.print(2,0,"%s                ",three);
+            delay(50);
+            printf("%s                ",one);
+            delay(50);
+            printf("%s                ",two);
+            delay(50);
+            printf("%s                ",three);
             delay(50);
             while (true){
                 if (con.get_digital_new_press(E_CONTROLLER_DIGITAL_A)){
@@ -172,10 +191,11 @@ namespace reg {
                     cont = true; 
                     break;
                 }
-                if (con.get_digital_new_press(E_CONTROLLER_DIGITAL_A)){ 
+                if (con.get_digital_new_press(E_CONTROLLER_DIGITAL_B)){ 
                     cont = false;
                     break; 
                 }
+                delay(5);
             }
         }
     }

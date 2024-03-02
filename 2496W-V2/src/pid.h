@@ -17,11 +17,11 @@ using namespace pros;
 using namespace std;
 using namespace glb;
 
-#define DRIVE_KP 0.2
+// #define DRIVE_KP 0.2
 
-#define DRIVE_KI 0
-#define DRIVE_KD 0
-#define IMU_K 0
+// #define DRIVE_KI 0
+// #define DRIVE_KD 0
+// #define IMU_K 0
 
 namespace pid
 {
@@ -29,8 +29,11 @@ namespace pid
     double end_head = 0;
     double global_heading;
 
-    double driveR(double target_dist, double kP, double kI = 0, double kD = 0, int timeout=3500, double mult=1.0, double max_speed=127, int exit_time=100)
-    {
+    
+    double rCount = 0;
+    double driveR(double target_dist, double kP, double kI = 0, double kD = 0, int timeout=1000, double mult=1.0, double max_speed=127, int exit_time=100)
+    {   
+        pid::rCount++;
 
         //Set Variables
         double target = target_dist + chas.pos();
@@ -71,35 +74,42 @@ namespace pid
             chas.spin(speed);
 
             //Logging
-            print_info_R(time, error);
+            print_info_R(time, error * (target_dist<0 ? -1 : 1), kP);
             
             //Prevent infinite loops
             delay(2);
             time++;
         }
         chas.stop();
-        return error;
+        return error * (target_dist<0 ? -1 : 1);
 
     }
 
-    void drive(double target_dist, int timeout=1500, double mult=1.0, double max_speed=127, int exit_time=100)
+    void drive(double target_dist, int timeout=2000, double mult=1.0, double max_speed=127, int exit_time=100)
     {
-        #define DRIVE_KP ((17.6647 * (pow(fabs(target_dist), -0.975028))) + 0.139685) //0.14
+        double drive_kp = 4.62646 * std::pow(fabs(target_dist), -0.689989) + 0.107432; 
+        //NEW:
+        // 4.62646 * std::pow(fabs(target_dist), -0.689989) + 0.107432 for 0
+        // 2.04035 * std::pow(fabs(target_dist), -0.534162) + 0.0949831 for 2.5
+        
+        
+        
+        //((17.6647 * (pow(fabs(target_dist), -0.975028))) + 0.139685) //0.14, 0.16929
         //500: 0.1777
         //1000: 0.1685
         //2000: 0.1429
-        #define DRIVE_KI 0.002
-        #define DRIVE_KD 0 //0 for good
+        double drive_ki = 0.002;
+        double drive_kd = 0; //0 for good
 
 
-        #define IMU_K 0
+        double imu_k = 0.001;
 
         if (fabs(end_head) - fabs(imu.get_heading()) > 1) {
             start_head += end_head-imu.get_heading();
         }
 
         int starting = 180;
-        // start_head -= starting;
+        start_head -= starting;
         imu.set_heading(starting);
 
         //Set Variables
@@ -138,12 +148,12 @@ namespace pid
             heading_error = init_heading - imu.get_heading();
 
             //PID
-            double speed = mult * (error * DRIVE_KP + integral * DRIVE_KI + derivative * DRIVE_KD);
+            double speed = mult * (error * drive_kp + integral * drive_ki + derivative * drive_kd);
 
             //Heading correction
             kintegral += heading_error;
 
-            double correction = (kintegral * IMU_K);
+            double correction = (kintegral * imu_k);
 
             //Cap speed and correction sum to max
             if (fabs(speed) + fabs(correction) > max_speed) 
@@ -164,15 +174,15 @@ namespace pid
                     break;
             }
             
-            if (fabs(error) < 20 && (std::round(prev_error * scaler) / scaler - std::round(error * scaler) / scaler < 0.2)) // 0.15
-            {
-                if(!same_error)
-                    same_error = true;
-                else
-                    early_exit_time += 10;
-                if (exit_time <= early_exit_time)
-                    break;
-            }
+            // if (fabs(error) < 20 && (std::round(prev_error * scaler) / scaler - std::round(error * scaler) / scaler < 0.2)) // 0.15
+            // {
+            //     if(!same_error)
+            //         same_error = true;
+            //     else
+            //         early_exit_time += 10;
+            //     if (exit_time <= early_exit_time)
+            //         break;
+            // }
 
             //Keep sides moving the same distances
             // chas.spin_left(speed + correction * speed / 127.0);
@@ -205,8 +215,8 @@ namespace pid
         double target = start_pos + distance;
         double s = distance / fabs(distance) * abs(speed);
         
-        double straight_kP = 3.5;
-        double straight_kI = 1.0;
+        double straight_kP = 1.8;
+        double straight_kI = 0.7;
         double straight_i = 0;
         double init_heading = global_heading;
         double cur_heading = glb::imu.get_heading();
@@ -381,6 +391,9 @@ namespace pid
         degree = (degree > 180) ? -(360 - degree) : ((degree < -180) ? (360 + degree) : (degree)); // optimize the turn direction
         turn(degree, timeout, multi, max_speed, exit_time);
     }
+
+
+    
 }
 
 

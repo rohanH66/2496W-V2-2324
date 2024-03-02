@@ -20,7 +20,7 @@ namespace glb
     #define P_LB 5
     #define P_INTAKE 4
     #define P_CATA 12
-    #define P_DISTANCE 3
+    #define P_DISTANCE 14
 
 
     #define P_HANGP 'F'

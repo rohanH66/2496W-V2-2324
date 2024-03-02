@@ -50,22 +50,41 @@ void slapperCon()
 }
 
 void distCon(int time){
-    bool isTri = dist.get() < 20;
-    int pos = abs((int) cata.get_position()) % 900;
-    static int deadzone = 330;
-    const int realDead = 330;
-    const int cutoff = 380;
+    int pos = ((int) cata.get_position() % 900);
+    static int deadzone = 550;
+    const int realDead = 550;
+    const int cutoff = 610;
+    const int delay = 160; //delay for after distance detects --> start firing, for human error
+
+    static bool isTri = false;
+    static bool shoot = false;
+    static int timeCount = 0;
+
+    if (isTri){
+        timeCount++;
+        if (timeCount>delay){
+            timeCount = 0;
+            isTri = false;
+            shoot = true;
+        }
+
+    }
+    else if (shoot){
+        cata.move(127);
+        timeCount++;
+        if (timeCount>100) shoot = false;
+    }
+    else{
+        if (dist.get() < 8 && shoot == false && pos>deadzone && pos<cutoff) isTri = true;
+    }
 
     if(time % 150 == 0)
-        con.print(2, 0, "pos: %d  ", (((int) cata.get_position()) % 900));
+        con.print(2, 0, "pos: %d  ", pos);
 
     if (con.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
         cata.move(100);
     }
-    // else if (isTri){
-    //     cata.move(-127);
-    // }
-    else{
+    else if (!shoot){
         if (pos>deadzone && pos<cutoff){
             deadzone = realDead - 50;
             cata.move(0);
@@ -74,7 +93,6 @@ void distCon(int time){
             deadzone = realDead;
             cata.move(100);
         }
-        cata.move(0);
 
     }
 
@@ -105,6 +123,8 @@ void piston_cont(bool skills)
 {
     static bool pressed_once = false;
 
+    static bool dWings = false;
+
     if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_B)){
         if (!pressed_once){
             hangP.set(true);
@@ -119,31 +139,42 @@ void piston_cont(bool skills)
     }
 
 
-    if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_Y)){
+    if (dWings){
+        LfrontP.set(true);
+        RfrontP.set(true);
+    }
+    else if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_Y)){
         RfrontP.toggle();
     }    
     
-    if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_RIGHT)){
+    else if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_RIGHT)){
         LfrontP.toggle();
     }
 
-    if (skills && con.get_digital_new_press(E_CONTROLLER_DIGITAL_L1)){
-        LfrontP.toggle();
-        LbackP.toggle();
-    }
-    else{
-        if (con.get_digital(E_CONTROLLER_DIGITAL_L1)){
-            LfrontP.set(true);
-            RfrontP.set(true);
-        }
-        else{
+
+
+    if (con.get_digital_new_press(E_CONTROLLER_DIGITAL_L1)){
+        dWings = !dWings;
+
+        if (!dWings){
             LfrontP.set(false);
             RfrontP.set(false);
         }
 
-
-
     }
+    // else{
+    //     if (con.get_digital(E_CONTROLLER_DIGITAL_L1)){
+    //         LfrontP.set(true);
+    //         RfrontP.set(true);
+    //     }
+    //     else{
+    //         LfrontP.set(false);
+    //         RfrontP.set(false);
+    //     }
+
+
+
+    // }
     if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_L2)){
         LbackP.toggle();
         RbackP.toggle();
@@ -172,12 +203,14 @@ void print_info_auton(int time, double error, double speed)
         con.print(2, 0, "%.2f | %.0f       ", error, time);
 }
 
-void print_info_R(int time, double error)
+void print_info_R(int time, double error, double guess)
 {
-    if(time % 50 == 0 && time%2000 != 0) 
+    if (time%50 == 0 && time%100 != 0 && time%150 != 0)
+        con.print(0,0,"Reg K=%.4f" , guess);
+    if(time % 100 == 0 && time%150 != 0) 
         con.print(1, 0, "Error: %.2f        ", error);
-    if(time % 100 == 0 && time % 150 != 0 && time%2000 != 0) 
-        con.print(2, 0, "%.2f : %.2f          ", imu.get_heading());
+    if(time % 150 == 0) 
+        con.print(2, 0, "%.2f : %.2f          ", imu.get_heading(), chas.pos());
 }
 
 void print_name(int time, string name){
