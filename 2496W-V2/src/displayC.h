@@ -1,4 +1,5 @@
 #include "main.h"
+#include <display/lv_core/lv_obj.h>
 
 lv_obj_t * myButton;
 lv_obj_t * myButtonLabel;
