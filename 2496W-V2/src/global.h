@@ -35,12 +35,7 @@ namespace glb
    
     //objects
     Chassis chas({P_LF, P_LM, P_LB}, {P_RF, P_RM, P_RB}, pros::E_MOTOR_GEARSET_06, false);
-    // Motor RF (P_RF, E_MOTOR_GEARSET_06);
-    // Motor RM (P_RM, E_MOTOR_GEARSET_06);
-    // Motor RB (P_RB, E_MOTOR_GEARSET_06, 1);
-    // Motor LF (P_LF, E_MOTOR_GEARSET_06,1);
-    // Motor LM (P_LM, E_MOTOR_GEARSET_06,1);
-    // Motor LB (P_LB, E_MOTOR_GEARSET_06);
+
     Motor intake(P_INTAKE, E_MOTOR_GEARSET_06);
     Motor cata (P_CATA, E_MOTOR_GEARSET_18, true);
 
@@ -56,6 +51,9 @@ namespace glb
     Imu imu(P_IMU);
     Distance dist(P_DISTANCE);
     Controller con(E_CONTROLLER_MASTER);
+
+    std::vector<pros::Motor> right_m = chas.get_right();
+    std::vector<pros::Motor> left_m = chas.get_left();
 
 }
 #endif

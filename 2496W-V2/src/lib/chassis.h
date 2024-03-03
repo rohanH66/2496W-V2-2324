@@ -21,6 +21,13 @@ public:
             right_motors.push_back(pros::Motor(port, gearset, !(reverse_spin + abs(port) > 0)));
     }
 
+    std::vector<pros::Motor> get_left(){
+        return left_motors;
+    }
+    std::vector<pros::Motor> get_right(){
+        return right_motors;
+    }
+
     void spin_left(double speed)
     {
         for(pros::Motor motor : left_motors)
