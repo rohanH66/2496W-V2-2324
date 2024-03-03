@@ -27,7 +27,8 @@ string names;
 
 
 void initialize() {
-	disp::displayTemps();
+	disp::setupUI();
+	delay(800);
 	con.clear();
 	static Auton temp = auton_selector(autons);
 	names = temp.get_name();

@@ -24,9 +24,9 @@ namespace glb
 
 
     #define P_HANGP 'F'
-    #define P_PTO 'B'
+    #define P_PTO 'C'
     #define P_RWFRONTP 'D'
-    #define P_LWFRONTP 'C'
+    #define P_LWFRONTP 'B'
     #define P_RWBACKP 'E'
     #define P_LWBACKP 'A'
 
