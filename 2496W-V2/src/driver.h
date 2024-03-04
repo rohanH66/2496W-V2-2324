@@ -43,7 +43,7 @@ void slapperCon()
     } 
 
     if (matchload) {
-        cata.move(100);
+        cata.move(115);
     }
     else {
         cata.move(0);
@@ -120,6 +120,14 @@ void intakeCon()
 //         hang.move(0);
 // }
 
+void updateTemps(){
+    static int count = 0;
+    glb::temps_a[count] = motorV[count].get_temperature();
+    //printf("%.2f\n",temps_a[count]);
+    count++;
+    if (count>7) count=0;
+}
+
 void piston_cont(bool skills)
 {
     static bool pressed_once = false;
@@ -189,7 +197,7 @@ void print_info(int time, bool chassis_on)
     if(time % 50 == 0 && time % 100 != 0 && time % 150 != 0)
         con.print(0, 0, !chassis_on ? "CHASSIS OFF (left)            " : "%.1lf | %.1lf | %.1lf", chas.temp(), intake.get_temperature(), cata.get_temperature());
     if(time % 100 == 0 && time % 150 != 0)
-        con.print(1, 0, "%.2f", chas.pos());
+        con.print(1, 0, "%.2f  | %.2f", chas.pos(), imu.get_heading());
     // if(time % 150 == 0)
     //     con.print(2, 0, "dis: %d     mm  ", abs((int) cata.get_position()) % 900);
 }
@@ -256,7 +264,7 @@ Auton auton_selector(std::vector<Auton> autons)
             pros::delay(50);
             //glb::con.print(0, 0, "Selected           ");   
             glb::con.print(2, 0, "%s             ", autons.at(selected).get_d()); 
-            pros::delay(1500);
+            pros::delay(800);
             glb::con.clear();
             return autons.at(selected);
         }

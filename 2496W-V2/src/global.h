@@ -24,9 +24,9 @@ namespace glb
 
 
     #define P_HANGP 'F'
-    #define P_PTO 'C'
+    #define P_PTO 'B'
     #define P_RWFRONTP 'D'
-    #define P_LWFRONTP 'B'
+    #define P_LWFRONTP 'C'
     #define P_RWBACKP 'E'
     #define P_LWBACKP 'A'
 
@@ -54,6 +54,37 @@ namespace glb
 
     std::vector<pros::Motor> right_m = chas.get_right();
     std::vector<pros::Motor> left_m = chas.get_left();
+    std::vector<pros::Motor> motorV = {
+        right_m[0],
+        right_m[1],
+        right_m[2],
+        intake,
+        left_m[0],
+        left_m[1],
+        left_m[2],
+        cata,
+    };
+    std::string motor_labels[] = {
+        "R. Top",
+        "R. Middle",
+        "R. Bottom",
+        "Intake",
+        "L. Top",
+        "L. Middle",
+        "L. Bottom",
+        "Shooter",
+    };
+
+    int temps_a[] = {
+        50,
+        50,
+        50,
+        50,
+        50,
+        50,
+        50,
+        50
+    };
 
 }
 #endif

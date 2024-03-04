@@ -3,27 +3,25 @@
 #include "display/lv_core/lv_obj.h"
 #include "display/lv_objx/lv_label.h"
 #include "display/lv_objx/lv_gauge.h"
-#include "images/field_new.c"
-#include "images/thermo.c"
+#include "images/close_awp.h"
+#include "images/close_dis.h"
+#include "images/far_6b.h"
+#include "images/far_6bsafe.h"
+#include "images/skills.h"
+#include "images/none_pic.h"
+#include "images/reg_pic.h"
+#include "images/test_pic.h"
+//#include "display/images/thermo.c"
+#define num_motors 8 // If not already defined
+
+
+
 
 
     //const lv_img_dsc_t field;
 
 namespace disp{
-    //LV_IMG_DECLARE(field);
-
-    std::string motor_labels[] = {
-        "R. Top",
-        "R. Middle",
-        "R. Bottom",
-        "Intake",
-        "L. Top",
-        "L. Middle",
-        "L. Bottom",
-        "Shooter",
-    };
-
-    const lv_img_dsc_t field_new = {
+    const lv_img_dsc_t close_awp_img = {
     {
         LV_IMG_CF_TRUE_COLOR_CHROMA_KEYED,
         0,
@@ -32,32 +30,115 @@ namespace disp{
         240,
     },
     57600 * LV_COLOR_SIZE / 8,
-    field_new_map,
+    close_awp_map,
+    };
+    const lv_img_dsc_t close_dis_img = {
+    {
+        LV_IMG_CF_TRUE_COLOR_CHROMA_KEYED,
+        0,
+        0,
+        240,
+        240,
+    },
+    57600 * LV_COLOR_SIZE / 8,
+    close_dis_map,
+    };
+    const lv_img_dsc_t far_6b_img = {
+    {
+        LV_IMG_CF_TRUE_COLOR_CHROMA_KEYED,
+        0,
+        0,
+        240,
+        240,
+    },
+    57600 * LV_COLOR_SIZE / 8,
+    far_6b_map,
+    };
+    const lv_img_dsc_t far_6bsafe_img = {
+    {
+        LV_IMG_CF_TRUE_COLOR_CHROMA_KEYED,
+        0,
+        0,
+        240,
+        240,
+    },
+    57600 * LV_COLOR_SIZE / 8,
+    far_6bsafe_map,
+    };
+    const lv_img_dsc_t skills_img = {
+    {
+        LV_IMG_CF_TRUE_COLOR_CHROMA_KEYED,
+        0,
+        0,
+        240,
+        240,
+    },
+    57600 * LV_COLOR_SIZE / 8,
+    skills_img_map,
+    };
+    const lv_img_dsc_t none_img = {
+    {
+        LV_IMG_CF_TRUE_COLOR_CHROMA_KEYED,
+        0,
+        0,
+        240,
+        240,
+    },
+    57600 * LV_COLOR_SIZE / 8,
+    none_pic_map,
+    };
+    const lv_img_dsc_t reg_img = {
+    {
+        LV_IMG_CF_TRUE_COLOR_CHROMA_KEYED,
+        0,
+        0,
+        240,
+        240,
+    },
+    57600 * LV_COLOR_SIZE / 8,
+    reg_pic_map,
+    };
+    const lv_img_dsc_t test_img = {
+    {
+        LV_IMG_CF_TRUE_COLOR_CHROMA_KEYED,
+        0,
+        0,
+        240,
+        240,
+    },
+    57600 * LV_COLOR_SIZE / 8,
+    test_pic_map,
     };
 
-    const lv_img_dsc_t thermo = {
-        { // Initialize the header substructure
-            LV_IMG_CF_TRUE_COLOR, // cf
-            0,                     // always_zero
-            0,                     // reserved
-            64,                   // w
-            64                    // h
-        },
-        4096 * LV_COLOR_SIZE / 8, // data_size
-        thermo_map,                  // data
+    const lv_img_dsc_t* imagePointers[] = {
+        &close_awp_img,
+        &close_dis_img,
+        &far_6b_img,
+        &far_6bsafe_img,
+        &skills_img,
+        &skills_img,
+        &reg_img,
+        &test_img,
+        &none_img,
     };
+
+
+    //LV_IMG_DECLARE(field);
+    // Arrays to store widget references
+    lv_obj_t* motor_lmeters[num_motors];
+    lv_obj_t* motor_temp_labels[num_motors];
+
     static const char * auton_arr[] = {
         "Close half-awp",
-        "Close safe",
         "Close rush",
-        "Far half-awp",
-        "Far safe",
-        "Far rush",
         "Far 6-ball",
+        "Far 6-b safe",
         "Skills",
-        "None",
-        "Testing",
+        "Driver Skills",
         "Regression",
+        "Testing",
+        "None",
+
     };
     static int auton_index = 0; // Index of the currently displayed auton option
     static lv_obj_t *auton_label; // Label for displaying the current auton option
@@ -72,17 +153,41 @@ namespace disp{
     void createDispTSView();
     void createDispDefView();
 
+    lv_obj_t *img_field;
+
     static lv_res_t btn_left_action(lv_obj_t *btn) {
         auton_index = (auton_index + (sizeof(auton_arr) / sizeof(auton_arr[0])) - 1) % (sizeof(auton_arr) / sizeof(auton_arr[0]));
         lv_label_set_text(auton_label, auton_arr[auton_index]);
+        lv_img_set_src(img_field, imagePointers[auton_index]); // Update the image
         return LV_RES_OK;
     }
 
     static lv_res_t btn_right_action(lv_obj_t *btn) {
         auton_index = (auton_index + 1) % (sizeof(auton_arr) / sizeof(auton_arr[0]));
         lv_label_set_text(auton_label, auton_arr[auton_index]);
+        lv_img_set_src(img_field, imagePointers[auton_index]); // Update the image
         return LV_RES_OK;
     }
+
+    void updateMotorTemps() {
+        char temp_str[10];
+        int temp;
+
+        for (int i = 0; i < num_motors; i++) {
+            // Assuming glb::temps_a[i] holds the current temperature for motor i
+            temp = glb::temps_a[i];
+
+            // Update the line meter's value
+            lv_lmeter_set_value(motor_lmeters[i], temp);
+
+            // Update the label text
+            sprintf(temp_str, "%d°C", temp);
+            lv_label_set_text(motor_temp_labels[i], temp_str);
+
+            // No need to realign the label here unless its size changes, which it doesn't in this case
+        }
+    }
+
 
     void switchView(lv_obj_t *view_container) {
         // Hide all containers
@@ -173,12 +278,12 @@ namespace disp{
         container_temps = lv_cont_create(lv_scr_act(), NULL);
         lv_obj_set_size(container_temps, 420, 240); 
         lv_obj_set_pos(container_temps, 0, 0); 
-        lv_obj_set_hidden(container_temps, true);
+        lv_obj_set_hidden(container_temps, false);
       
         container_auton = lv_cont_create(lv_scr_act(), NULL);
         lv_obj_set_size(container_auton, 420, 240); 
         lv_obj_set_pos(container_auton, 0, 0); 
-        lv_obj_set_hidden(container_auton, false); //set as true for default
+        lv_obj_set_hidden(container_auton, true); //set as true for default
 
         container_ts = lv_cont_create(lv_scr_act(), NULL);
         lv_obj_set_size(container_ts, 420, 240); 
@@ -201,7 +306,7 @@ namespace disp{
     void createDisplayTempsView() {
 
         // calculate dimensions for each view
-        const int num_motors = 8;
+        int temp;
         const lv_coord_t container_width = 420; 
         const lv_coord_t container_height = 240;
         const lv_coord_t motor_block_width = container_width / 4; 
@@ -210,10 +315,11 @@ namespace disp{
         // create style to be applied to each view
         static lv_style_t lmeter_style;
         lv_style_copy(&lmeter_style, &lv_style_pretty);
-        lmeter_style.body.main_color = LV_COLOR_MAKE(0x00, 0xB0, 0x00); // Green for the inactive part
+        lmeter_style.body.main_color = LV_COLOR_MAKE(0xE0, 0xE0, 0xE0); // Light grey for the inactive part
         lmeter_style.body.grad_color = LV_COLOR_MAKE(0xB0, 0x00, 0x00); // Darker red for the active part
         lmeter_style.line.color = LV_COLOR_MAKE(0x5E, 0x5E, 0x5E); // Dark grey for the scale lines
         lmeter_style.line.width = 3; // Thickness of the scale lines
+        
 
         for (int i = 0; i < num_motors; i++) {
             // creating a container for each motor temp display
@@ -228,15 +334,17 @@ namespace disp{
             lv_obj_t *label = lv_label_create(motor_container, NULL);
 
 
-            lv_label_set_text(label, motor_labels[i].c_str());
+            lv_label_set_text(label, glb::motor_labels[i].c_str());
             lv_obj_align(label, NULL, LV_ALIGN_IN_TOP_MID, 0, 5);
 
             // meter
             lv_obj_t *lmeter = lv_lmeter_create(motor_container, NULL);
             lv_lmeter_set_range(lmeter, 15, 60); // Set the new temperature range
-
+           
+            
             // adjusting temp
-            int temp = /* motor_x.get_temperature() */ 50; 
+            //if (pros::millis()%500==0) updateTemps();
+            temp = glb::temps_a[i];
 
             lv_lmeter_set_value(lmeter, temp); 
             lv_obj_set_size(lmeter, motor_block_width * 3 / 4, motor_block_height * 3 / 4);
@@ -244,6 +352,7 @@ namespace disp{
 
             // apply style
             lv_lmeter_set_style(lmeter, &lmeter_style);
+            motor_lmeters[i] = lmeter;
 
             // Label for meter temp
             lv_obj_t *temp_label = lv_label_create(motor_container, NULL);
@@ -251,16 +360,17 @@ namespace disp{
             sprintf(temp_str, "%d°C", temp); 
             lv_label_set_text(temp_label, temp_str);
             lv_obj_align(temp_label, lmeter, LV_ALIGN_CENTER, 0, 0);
+            motor_temp_labels[i] = temp_label;
         }
     }
 
 
     // view for auton selector
     void createDispAutonView(){
-        LV_IMG_DECLARE(field_new);
+        // LV_IMG_DECLARE(close_awp_img);
 
         lv_obj_t *img_field = lv_img_create(container_auton, NULL);
-        lv_img_set_src(img_field, &field_new);
+        lv_img_set_src(img_field, &close_awp_img);
         lv_obj_set_size(img_field, 240, 240);
         lv_obj_set_pos(img_field, 0, 0);
 

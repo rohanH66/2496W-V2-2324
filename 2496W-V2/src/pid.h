@@ -164,7 +164,7 @@ namespace pid
             }
 
             //Exit Loop
-            if (fabs(error) < 0) /// CHANGED FOR TESTING
+            if (fabs(error) < 6) 
             {
                 if(!exit)
                     exit = true;
@@ -260,29 +260,60 @@ namespace pid
 
     void turn(double target_deg, int timeout=1000, bool early_exit = true, double multi=1.0, double max_speed=127, int exit_time=75)
     {  
+        
+        // fix turns more/less than 180
+        if (target_deg > 180) target_deg -= 360;
+        else if (target_deg <= -180) target_deg += 360;
 
-        target_deg = fabs(target_deg)<=180 ? target_deg : (target_deg<0 ? target_deg + 180 : target_deg - 180);
         
         double TURN_KP;
         double TURN_KI;
         double TURN_KD;
+
         
-        if (target_deg < 70) 
+        if (fabs(target_deg) <= 185) 
         {
-            TURN_KP = 4.15;
-            TURN_KI = 0.04;
-            TURN_KD = 0.26;
+            TURN_KP = 4.6;
+            TURN_KI = 1.05; 
+            TURN_KD = 0.37;  
         }
-        else{ //not tuned yet :(
+        if (fabs(target_deg) < 150) { 
             TURN_KP = 4.75; //last=4.75//4.3, 4.5
-            TURN_KI = 0.42; //last=.4//0.08, .1
+            TURN_KI = 0.47; //last=.4//0.08, .1, .42
             TURN_KD = 0.33; //last=.26//.25, .26(earlier), .27(90)
         }
+        if (fabs(target_deg) < 110){
+            TURN_KP = 4.75; 
+            TURN_KI = 0.47; 
+            TURN_KD = 0.33; 
+        }
+        if (fabs(target_deg) < 65){
+            TURN_KP = 4.5; 
+            TURN_KI = 0.36; 
+            TURN_KD = 0.26; 
+        }
 
-        //comment this out later. If need to revert, comment out the lines below.
-        TURN_KP = 4.75; //last=4.75//4.3, 4.5
-        TURN_KI = 0.42; //last=.4//0.08, .1
-        TURN_KD = 0.33; //last=.26//.25, .26(earlier), .27(90)
+
+        //3/3 180deg good ig
+        // TURN_KP = 4.6; /
+        // TURN_KI = 0.55; 
+        // TURN_KD = 0.37;  
+
+        //3/3 135deg good enough?????????????????
+        // TURN_KP = 4.5; 
+        // TURN_KI = 0.36; //.36
+        // TURN_KD = 0.3;  //.26
+
+        //3/3 45deg tuned below
+        // TURN_KP = 4.5; 
+        // TURN_KI = 0.36; 
+        // TURN_KD = 0.26; 
+
+
+        // 3/3 90deg Tuned below
+        // TURN_KP = 4.75; 
+        // TURN_KI = 0.42; 
+        // TURN_KD = 0.33; 
 
         int starting;
 
@@ -344,7 +375,7 @@ namespace pid
                 speed *= multiplier;
             }
 
-            if (fabs(error) < 0.5) // 0.15
+            if (fabs(error) < .8) // 0.15
             {
                 if(!exit)
                     exit = true;
@@ -354,15 +385,15 @@ namespace pid
                     break;
             }
 
-            if (fabs(error) < 2 && (std::round(prev_error * scaler) / scaler - std::round(error * scaler) / scaler < 0.02)) // 0.15
-            {
-                if(!same_error)
-                    same_error = true;
-                else
-                    early_exit_time += 10;
-                if (exit_time <= early_exit_time)
-                    break;
-            }
+            // if (fabs(error) < 2 && (std::round(prev_error * scaler) / scaler - std::round(error * scaler) / scaler < 0.02)) // 0.15
+            // {
+            //     if(!same_error)
+            //         same_error = true;
+            //     else
+            //         early_exit_time += 10;
+            //     if (exit_time <= early_exit_time)
+            //         break;
+            // }
             // if (target_deg > 0 && speed < 0 &&(-6<error && error<0.3)) speed *= K_BOOST;
             // else if (target_deg < 0 && speed > 0 && (0.3<error && error<6)) speed *= K_BOOST;
 
@@ -392,9 +423,89 @@ namespace pid
         turn(degree, timeout, multi, max_speed, exit_time);
     }
 
+    void drive_var(double LRatio, double target_deg, int max_speed=127, int timeout=3000)
+    {
+        int time = 0;
+        // double start_pos = glb::chas.pos();
+        // double target = start_pos + distance;
+        // double s = distance / fabs(distance) * abs(max_speed);
+
+        if (LRatio>1) LRatio=1;
+        if (LRatio<-1) LRatio=-1;
+
+        bool side = target_deg<0;
+        
+
+
+        int starting;
+
+        if (fabs(end_head) - fabs(imu.get_heading()) > 1) {
+            start_head += end_head-imu.get_heading();
+        }
+        if (target_deg > 150)
+            starting = 30;
+        else if (target_deg < -150)
+            starting = 330;
+        else
+            starting = 180;
+        
+        imu.set_heading(starting);
+        
+        // double straight_kP = 1.8;
+        // double straight_kI = 0.7;
+        // double straight_i = 0;
+        double init_heading = global_heading;
+        double cur_heading = glb::imu.get_heading();
+        double last_heading = glb::imu.get_heading();
+
+        while(time < timeout)
+        {
+            // inertial wrapping
+            if(cur_heading - last_heading > 100)
+            {
+                global_heading += (cur_heading - 360) - last_heading;
+            }
+            else if(cur_heading - last_heading < -100)
+            {
+                global_heading += cur_heading + (360 - last_heading);
+            }
+            else
+            {
+                global_heading += cur_heading - last_heading;
+            }
+
+            last_heading = cur_heading;
+            cur_heading = glb::imu.get_heading();
+
+            // straight_i += (global_heading - init_heading) / 100;
+            // double correction = straight_i * straight_kI + (global_heading - init_heading) * straight_kP;
+            
+            glb::chas.spin_left(max_speed*(side ? LRatio : 1));
+            glb::chas.spin_right(max_speed*(!side ? LRatio : 1));
+            pros::delay(4);
+            time += 4;
+        }
+
+        chas.stop();
+
+        double diff = imu.get_heading() - starting;
+        
+        start_head+=diff;
+        
+        end_head = imu.get_heading();
+
+        global_heading += imu.get_heading() - starting;
+    }
+
+    
+
+
+
 
     
 }
+
+
 
 
 //180

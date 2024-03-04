@@ -28,7 +28,7 @@ string names;
 
 void initialize() {
 	disp::setupUI();
-	delay(800);
+	//lcd::initialize();
 	con.clear();
 	static Auton temp = auton_selector(autons);
 	names = temp.get_name();
@@ -57,6 +57,8 @@ void opcontrol()
 
 	while(true)
 	{
+		if (time%2000==0) disp::updateMotorTemps();
+		if (time%200==0) updateTemps();
 
 		if (chassis_on) drive();
 		intakeCon();
