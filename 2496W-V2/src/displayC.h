@@ -7,7 +7,7 @@
 #include "display/lv_objx/lv_label.h"
 #include "display/lv_objx/lv_gauge.h"
 
-#include "images/reg_img.h"
+//#include "images/reg_img.h"
 #include "images/field_img.h"
 
 #define num_motors 8 
@@ -42,17 +42,17 @@ namespace disp{
     57600 * LV_COLOR_SIZE / 8,
     field_img_map,
     };
-    const lv_img_dsc_t reg_img = {
-    {
-        LV_IMG_CF_TRUE_COLOR_CHROMA_KEYED,
-        0,
-        0,
-        240,
-        240,
-    },
-    57600 * LV_COLOR_SIZE / 8,
-    reg_pic_map,
-    };
+    //const lv_img_dsc_t reg_img = {
+    // {
+    //     LV_IMG_CF_TRUE_COLOR_CHROMA_KEYED,
+    //     0,
+    //     0,
+    //     240,
+    //     240,
+    // },
+    // 57600 * LV_COLOR_SIZE / 8,
+    // reg_pic_map,
+    // };
    
     //LV_IMG_DECLARE(field);
     // Arrays to store widget references
