@@ -74,7 +74,7 @@ namespace disp{
     static int auton_index = 0; // Index of the currently displayed auton option
     static lv_obj_t *auton_label; // Label for displaying the current auton option
 
-        // Global pointers for view containers
+    // Global pointers for view containers
     lv_obj_t *container_temps, *container_auton, *container_ts, *container_def;
 
 
@@ -95,7 +95,6 @@ namespace disp{
         update_shapes();
         return LV_RES_OK;
     }
-
     static lv_res_t btn_right_action(lv_obj_t *btn) {
         auton_index++;
         if (auton_index>8) auton_index = 0;
@@ -285,7 +284,6 @@ namespace disp{
         int temp;
 
         for (int i = 0; i < num_motors; i++) {
-            // Assuming glb::temps_a[i] holds the current temperature for motor i
             temp = glb::temps_a[i];
 
             // Update the line meter's value
@@ -294,8 +292,6 @@ namespace disp{
             // Update the label text
             sprintf(temp_str, "%d°C", temp);
             lv_label_set_text(motor_temp_labels[i], temp_str);
-
-            // No need to realign the label here unless its size changes, which it doesn't in this case
         }
     }
 
@@ -554,7 +550,5 @@ namespace disp{
     }
 
 }
-
-
 
 #endif
