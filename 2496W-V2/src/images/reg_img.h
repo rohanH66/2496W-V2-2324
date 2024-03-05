@@ -988,14 +988,4 @@ const uint8_t reg_pic_map[] = {
 #endif
 };
 
-const lv_img_dsc_t reg_pic = {
-  {
-    LV_IMG_CF_TRUE_COLOR_CHROMA_KEYED,
-    0,
-    0,
-    240,
-    240,
-  },
-  57600 * LV_COLOR_SIZE / 8,
-  reg_pic_map,
-};
+

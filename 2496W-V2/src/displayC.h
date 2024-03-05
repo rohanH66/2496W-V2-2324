@@ -1,27 +1,37 @@
+#ifndef __DISPLAYINFO__
+#define __DISPLAYINFO__
+
 #include "main.h"
 #include "global.h"
 #include "display/lv_core/lv_obj.h"
 #include "display/lv_objx/lv_label.h"
 #include "display/lv_objx/lv_gauge.h"
-#include "images/close_awp.h"
-#include "images/close_dis.h"
-#include "images/far_6b.h"
-#include "images/far_6bsafe.h"
-#include "images/skills.h"
-#include "images/none_pic.h"
-#include "images/reg_pic.h"
-#include "images/test_pic.h"
-//#include "display/images/thermo.c"
-#define num_motors 8 // If not already defined
 
+#include "images/reg_img.h"
+#include "images/field_img.h"
 
+#define num_motors 8 
 
-
-
-    //const lv_img_dsc_t field;
 
 namespace disp{
-    const lv_img_dsc_t close_awp_img = {
+    // setting up shapes for auton selector graphics
+    static const lv_point_t close_awp_points[] = {{180, 40}, {200, 30}, {60, 60}, {20, 30}, {0, 0}};
+    static const lv_point_t close_rush_points[] = {{0, 0}, {50, 30}, {0, 60}, {20, 30}, {0, 0}};
+    static const lv_point_t far_6b_points[] = {{0, 0}, {50, 30}, {0, 60}, {20, 30}, {0, 0}};
+    static const lv_point_t far_6bsafe_points[] = {{0, 0}, {50, 30}, {0, 60}, {20, 30}, {0, 0}};
+    static const lv_point_t skills_points[] = {{0, 0}, {50, 30}, {0, 60}, {20, 30}, {0, 0}};
+    static const lv_point_t skills_driver_points[] = {{0, 0}, {50, 30}, {0, 60}, {20, 30}, {0, 0}}; 
+
+    lv_obj_t* circles[6];
+    lv_obj_t* square;
+    lv_obj_t* robot_square;
+    lv_obj_t* alliTri;
+    lv_obj_t* line_arrow;
+
+
+
+
+    const lv_img_dsc_t field_img = {
     {
         LV_IMG_CF_TRUE_COLOR_CHROMA_KEYED,
         0,
@@ -30,62 +40,7 @@ namespace disp{
         240,
     },
     57600 * LV_COLOR_SIZE / 8,
-    close_awp_map,
-    };
-    const lv_img_dsc_t close_dis_img = {
-    {
-        LV_IMG_CF_TRUE_COLOR_CHROMA_KEYED,
-        0,
-        0,
-        240,
-        240,
-    },
-    57600 * LV_COLOR_SIZE / 8,
-    close_dis_map,
-    };
-    const lv_img_dsc_t far_6b_img = {
-    {
-        LV_IMG_CF_TRUE_COLOR_CHROMA_KEYED,
-        0,
-        0,
-        240,
-        240,
-    },
-    57600 * LV_COLOR_SIZE / 8,
-    far_6b_map,
-    };
-    const lv_img_dsc_t far_6bsafe_img = {
-    {
-        LV_IMG_CF_TRUE_COLOR_CHROMA_KEYED,
-        0,
-        0,
-        240,
-        240,
-    },
-    57600 * LV_COLOR_SIZE / 8,
-    far_6bsafe_map,
-    };
-    const lv_img_dsc_t skills_img = {
-    {
-        LV_IMG_CF_TRUE_COLOR_CHROMA_KEYED,
-        0,
-        0,
-        240,
-        240,
-    },
-    57600 * LV_COLOR_SIZE / 8,
-    skills_img_map,
-    };
-    const lv_img_dsc_t none_img = {
-    {
-        LV_IMG_CF_TRUE_COLOR_CHROMA_KEYED,
-        0,
-        0,
-        240,
-        240,
-    },
-    57600 * LV_COLOR_SIZE / 8,
-    none_pic_map,
+    field_img_map,
     };
     const lv_img_dsc_t reg_img = {
     {
@@ -98,31 +53,7 @@ namespace disp{
     57600 * LV_COLOR_SIZE / 8,
     reg_pic_map,
     };
-    const lv_img_dsc_t test_img = {
-    {
-        LV_IMG_CF_TRUE_COLOR_CHROMA_KEYED,
-        0,
-        0,
-        240,
-        240,
-    },
-    57600 * LV_COLOR_SIZE / 8,
-    test_pic_map,
-    };
-
-    const lv_img_dsc_t* imagePointers[] = {
-        &close_awp_img,
-        &close_dis_img,
-        &far_6b_img,
-        &far_6bsafe_img,
-        &skills_img,
-        &skills_img,
-        &reg_img,
-        &test_img,
-        &none_img,
-    };
-
-
+   
     //LV_IMG_DECLARE(field);
     // Arrays to store widget references
     lv_obj_t* motor_lmeters[num_motors];
@@ -153,20 +84,200 @@ namespace disp{
     void createDispTSView();
     void createDispDefView();
 
-    lv_obj_t *img_field;
+    void update_shapes();
+
+    static lv_obj_t *img_field;
 
     static lv_res_t btn_left_action(lv_obj_t *btn) {
-        auton_index = (auton_index + (sizeof(auton_arr) / sizeof(auton_arr[0])) - 1) % (sizeof(auton_arr) / sizeof(auton_arr[0]));
+        auton_index--;
+        if (auton_index<0) auton_index = 8;
         lv_label_set_text(auton_label, auton_arr[auton_index]);
-        lv_img_set_src(img_field, imagePointers[auton_index]); // Update the image
+        update_shapes();
         return LV_RES_OK;
     }
 
     static lv_res_t btn_right_action(lv_obj_t *btn) {
-        auton_index = (auton_index + 1) % (sizeof(auton_arr) / sizeof(auton_arr[0]));
+        auton_index++;
+        if (auton_index>8) auton_index = 0;
         lv_label_set_text(auton_label, auton_arr[auton_index]);
-        lv_img_set_src(img_field, imagePointers[auton_index]); // Update the image
+        update_shapes();
         return LV_RES_OK;
+    }
+
+    void init_shapes() {
+
+        // Define points for the arrow shape
+
+        // Create a style for the line
+        static lv_style_t style_line;
+        lv_style_copy(&style_line, &lv_style_plain);
+        style_line.line.color = LV_COLOR_RED; // Set the color of the arrow
+        style_line.line.width = 3; // Set the width of the lines
+
+        // Style for circles and square with transparent fill and yellow outline
+        static lv_style_t style_circle;
+        lv_style_copy(&style_circle, &lv_style_plain); // Start with a base style
+        style_circle.body.empty = 1; // Make it transparent inside
+        style_circle.body.border.color = LV_COLOR_YELLOW; // Set the border color to bright yellow
+        style_circle.body.border.width = 4; // Set the border width
+        style_circle.body.radius = LV_RADIUS_CIRCLE; // This should make the shape fully rounded
+
+        static lv_style_t style_square;
+        lv_style_copy(&style_square, &style_circle); // Start with a base style
+        style_square.body.radius = 0;
+
+        // Apply the style to each circle
+        for (int i = 0; i < 6; i++) {
+            circles[i] = lv_btn_create(container_auton, NULL); // Create the button
+            lv_obj_set_size(circles[i], 30, 30); // Set the size to ensure it's square
+            lv_btn_set_style(circles[i], LV_BTN_STYLE_REL, &style_circle); // Apply the circular style
+            lv_obj_set_hidden(circles[i], true); // Initially hide it
+        }// Max radius for circles
+
+        // Style for robot_square with light purple fill and dark purple outline
+        static lv_style_t style_robot_square;
+        lv_style_copy(&style_robot_square, &lv_style_plain); // Copy a base style
+        style_robot_square.body.main_color = LV_COLOR_MAKE(204, 153, 255); // Light purple
+        style_robot_square.body.grad_color = LV_COLOR_MAKE(204, 153, 255); // Light purple
+        style_robot_square.body.border.color = LV_COLOR_MAKE(128, 0, 128); // Dark purple
+        style_robot_square.body.border.width = 5; // Border width
+        style_robot_square.body.radius = 0; // No rounding for squares
+
+
+        // Square with transparent fill and yellow outline
+        //style_circle.body.radius = 0; 
+        square = lv_btn_create(container_auton, NULL);
+        lv_obj_set_hidden(square, true);
+        lv_btn_set_style(square, LV_BTN_STYLE_REL, &style_square); // Apply the style
+        lv_obj_set_size(square, 40, 40); // Example size, adjust as needed
+       // Override for square
+
+        // Robot square with light purple fill and dark purple outline
+        robot_square = lv_btn_create(container_auton, NULL);
+        lv_obj_set_hidden(robot_square, true);
+        lv_btn_set_style(robot_square, LV_BTN_STYLE_REL, &style_robot_square); // Apply the style
+        lv_obj_set_size(robot_square, 40, 40); // Example size, adjust as needed
+
+        line_arrow = lv_line_create(container_auton, NULL); // Create the line object on the active screen
+        lv_line_set_points(line_arrow, close_awp_points, 5); // Set the points (the second parameter is the number of points)
+        lv_line_set_style(line_arrow, &style_line); // Apply the style
+        //lv_obj_align(line_arrow, NULL, LV_ALIGN_CENTER, 0, 0);
+        lv_obj_set_hidden(line_arrow, true);
+
+    }
+
+    // Adjust shapes based on auton_index
+
+    void update_shapes() {
+        // Hide all shapes first
+        for (int i = 0; i < 6; i++) {
+            lv_obj_set_hidden(circles[i], true);
+        }
+        lv_obj_set_hidden(square, true);
+        lv_obj_set_hidden(robot_square, true);
+        lv_obj_set_hidden(line_arrow, true);
+
+
+        // Logic to adjust positions, sizes, visibility based on auton_index
+        // This example shows a simple way to manage it. You need to adapt it based on your specific requirements.
+        switch (auton_index) {
+            case 0:
+                // close_awp positioning!
+                lv_obj_set_hidden(circles[0], false);
+                lv_obj_set_pos(circles[0], 210, 0); 
+
+                lv_obj_set_hidden(circles[1], false);
+                lv_obj_set_pos(circles[1], 200, 30); 
+
+                lv_obj_set_hidden(square, false);
+                lv_obj_set_size(square, 20, 45);
+                lv_obj_set_pos(square, 110, 0);
+
+                lv_obj_set_hidden(robot_square, false);
+                lv_obj_set_pos(robot_square, 160, 1); 
+
+                lv_obj_set_hidden(line_arrow, false);
+                lv_line_set_points(line_arrow, close_awp_points, 5);
+
+                break;
+            
+            case 1:
+
+                lv_obj_set_hidden(circles[0], false);
+                lv_obj_set_pos(circles[0], 210, 0); 
+
+                lv_obj_set_hidden(circles[1], false);
+                lv_obj_set_pos(circles[1], 200, 30); 
+
+                lv_obj_set_hidden(circles[2], false);
+                lv_obj_set_pos(circles[2], 144, 105); 
+
+                lv_obj_set_hidden(square, false);
+                lv_obj_set_size(square, 20, 45);
+                lv_obj_set_pos(square, 110, 0);
+
+                lv_obj_set_hidden(robot_square, false);
+                lv_obj_set_pos(robot_square, 160, 1); 
+
+                lv_obj_set_hidden(line_arrow, false);
+                lv_line_set_points(line_arrow, close_rush_points, 5);
+
+                break;
+            case 2:
+                lv_obj_set_hidden(circles[0], false);
+                lv_obj_set_pos(circles[0], 0, 0); 
+
+                lv_obj_set_hidden(circles[1], false);
+                lv_obj_set_pos(circles[1], 97, 105); 
+
+                lv_obj_set_hidden(circles[2], false);
+                lv_obj_set_pos(circles[2], 63, 105); 
+                
+                lv_obj_set_hidden(circles[3], false);
+                lv_obj_set_pos(circles[3], 10, 30); 
+
+                lv_obj_set_hidden(circles[4], false);
+                lv_obj_set_pos(circles[4], 97, 65); 
+
+                lv_obj_set_hidden(circles[5], false);
+                lv_obj_set_pos(circles[5], 105, 5); 
+
+                lv_obj_set_hidden(robot_square, false);
+                lv_obj_set_pos(robot_square, 40, 1); 
+
+                lv_obj_set_hidden(line_arrow, false);
+                lv_line_set_points(line_arrow, far_6b_points, 5);
+                break;
+
+            case 3:
+                lv_obj_set_hidden(circles[0], false);
+                lv_obj_set_pos(circles[0], 0, 0); 
+
+                lv_obj_set_hidden(circles[1], false);
+                lv_obj_set_pos(circles[1], 97, 105); 
+
+                lv_obj_set_hidden(circles[2], false);
+                lv_obj_set_pos(circles[2], 63, 105); 
+                
+                lv_obj_set_hidden(circles[3], false);
+                lv_obj_set_pos(circles[3], 10, 30); 
+
+                lv_obj_set_hidden(circles[4], false);
+                lv_obj_set_pos(circles[4], 97, 65); 
+
+                lv_obj_set_hidden(circles[5], false);
+                lv_obj_set_pos(circles[5], 105, 5); 
+
+                lv_obj_set_hidden(robot_square, false);
+                lv_obj_set_pos(robot_square, 40, 1); 
+
+                lv_obj_set_hidden(line_arrow, false);
+                lv_line_set_points(line_arrow, far_6bsafe_points, 5);
+                break;
+            
+
+            
+        }
     }
 
     void updateMotorTemps() {
@@ -370,25 +481,53 @@ namespace disp{
         // LV_IMG_DECLARE(close_awp_img);
 
         lv_obj_t *img_field = lv_img_create(container_auton, NULL);
-        lv_img_set_src(img_field, &close_awp_img);
+        lv_img_set_src(img_field, &field_img);
         lv_obj_set_size(img_field, 240, 240);
         lv_obj_set_pos(img_field, 0, 0);
 
         // L. arrow button
         lv_obj_t *btn_left = lv_btn_create(container_auton, NULL);
-        lv_obj_set_pos(btn_left, 240 + 5, 5); 
-        lv_obj_set_size(btn_left, 40, 40);
+        lv_obj_set_pos(btn_left, 20, 150); 
+        lv_obj_set_size(btn_left, 70, 70);
         lv_obj_t *label_left = lv_label_create(btn_left, NULL);
 
         // R. arrow button
         lv_obj_t *btn_right = lv_btn_create(container_auton, NULL);
-        lv_obj_set_pos(btn_right, 420 - 45, 5); 
-        lv_obj_set_size(btn_right, 40, 40);
+        lv_obj_set_pos(btn_right, 240-70-20, 150); 
+        lv_obj_set_size(btn_right, 70, 70);
         lv_obj_t *label_right = lv_label_create(btn_right, NULL);
 
-        // setting text
-        lv_label_set_text(label_left, "<-"); 
-        lv_label_set_text(label_right, "->"); 
+        // Define a custom style for the buttons
+        static lv_style_t style_btn_select;
+        lv_style_copy(&style_btn_select, &lv_style_pretty); // Start with a base style
+
+        // Set the background (fill) color to light orange
+        style_btn_select.body.main_color = LV_COLOR_MAKE(255, 165, 0); // Example light orange color
+        style_btn_select.body.grad_color = LV_COLOR_MAKE(255, 165, 0); // Same as main_color for a solid fill
+
+        // Make the filling semi-transparent (opaque)
+        style_btn_select.body.opa = LV_OPA_70; // Adjust opacity as needed, LV_OPA_70 is ~70% opacity
+        style_btn_select.body.border.color = LV_COLOR_MAKE(255, 140, 0); // Example dark orange color
+        style_btn_select.body.border.width = 2;
+
+        // Set the corner roundness
+        style_btn_select.body.radius = 10; // For fully rounded corners, or use a specific pixel value for less roundness
+
+
+        // Apply the custom style to the left button
+        lv_btn_set_style(btn_left, LV_BTN_STYLE_REL, &style_btn_select); // Apply the style for the released state
+        lv_btn_set_style(btn_right, LV_BTN_STYLE_REL, &style_btn_select);
+
+        static lv_style_t style_btn_released;
+        lv_style_copy(&style_btn_released, &style_btn_select);
+
+        style_btn_select.body.opa = LV_OPA_50;
+        lv_btn_set_style(btn_left, LV_BTN_STYLE_PR, &style_btn_released); // Apply the style for the released state
+        lv_btn_set_style(btn_right, LV_BTN_STYLE_PR, &style_btn_released); // Apply the same style for the pressed state
+
+        // Set the text for the button labels
+        lv_label_set_text(label_left, "<"); // Set text for the left button
+        lv_label_set_text(label_right, ">"); // Set text for the right button
 
 
         // Auton options
@@ -409,7 +548,13 @@ namespace disp{
         lv_btn_set_action(btn_left, LV_BTN_ACTION_CLICK, btn_left_action);
         lv_btn_set_action(btn_right, LV_BTN_ACTION_CLICK, btn_right_action);
         // lv_btn_set_action(btn_confirm, LV_BTN_ACTION_CLICK, btn_confirm_action); // TODO
+
+        init_shapes();
+        update_shapes();
     }
 
 }
 
+
+
+#endif
