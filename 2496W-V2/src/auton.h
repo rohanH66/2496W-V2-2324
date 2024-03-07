@@ -82,10 +82,61 @@ void close_rush(){
 }
 
 void far_6b_a(){
+    // rush and come back
+    intake.move(127);
+    drive(2310, 1200, 1, 127, RfrontP, 0, 450);
+    drive(-2600, 1550);
+
+    // position near goal 
+    intake.move(0);
+    turn_to(80, 500);
+    intake.move(-127);
+    delay(300);
+    turn_to(-78, 800);
+    intake.move(127);
+    drive(1260, 800);
+    //turn_to(-81);
+    drive(-1640, 925);
+    intake.move(0);
+    turn_to(-120, 400);
+    drive(-600, 500, 1, 127, LbackP, 200, 20000);
+    turn_to(-155, 350);
+    LbackP.set(false);
+    turn_to(-115, 350);
+    
+    RbackP.set(true);
+    drive_var(-40, -70, -33);
+
+    drive_const(-1500, 127, NULL, 0, 0, 450);
+    RbackP.set(false);
+    drive(400, 500);
+
+    // turn around to score next push
+    turn(178, 1200);
+    intake.move(-127);
+    delay(200);
+    drive_const(1500, 127, NULL, 0, 0, 600);
+    drive(-900, 600);
+
+    turn_to(-71, 600);
+    intake.move(127);
+    drive(2275, 1500);
+
+    drive_var(137, 100, 0);
+    intake.move(-127);
+    drive_const(2500, 127, NULL, 0, 0, 1200);
+    drive(-800);
+
+    turn_to(-78);
+
+
+    
 
 }
 
 void far_6bsafe_a(){
+    // drive_var(-20, -40, 0);
+    // turn_to(0);
 
 }
 
@@ -120,6 +171,8 @@ void skills(){
     drive(3200, 1700, 1.0, 127.0, LfrontP, 800, 10000);
     drive_var_to(-50);
     drive(600);
+
+    
 
 }
 

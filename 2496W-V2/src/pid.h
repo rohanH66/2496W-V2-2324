@@ -102,7 +102,7 @@ namespace pid
         double drive_kd = 0; //0 for good
 
 
-        double imu_k = 0.001;
+        double imu_k = 0.003;
 
         if (fabs(end_head) - fabs(imu.get_heading()) > 1) {
             start_head += end_head-imu.get_heading();
@@ -440,19 +440,19 @@ namespace pid
 
         int time = 0;
 
-        int starting;
+        // int starting;
 
-        if (fabs(end_head) - fabs(imu.get_heading()) > 1) {
-            start_head += end_head-imu.get_heading();
-        }
-        if (degree_to > 150)
-            starting = 30;
-        else if (degree_to < -150)
-            starting = 330;
-        else
-            starting = 180;
+        // if (fabs(end_head) - fabs(imu.get_heading()) > 1) {
+        //     start_head += end_head-imu.get_heading();
+        // }
+        // if (degree_to > 150)
+        //     starting = 30;
+        // else if (degree_to < -150)
+        //     starting = 330;
+        // else
+        //     starting = 180;
         
-        imu.set_heading(starting);
+        // imu.set_heading(starting);
 
         double target = degree_to + imu.get_heading();
 
@@ -466,19 +466,19 @@ namespace pid
 
         while((degree_to < 0 ? cur_heading > target+4 : cur_heading < target-4) && time < timeout)
         {
-            // inertial wrapping
-            // if(cur_heading - last_heading > 100)
-            // {
-            //     global_heading += (cur_heading - 360) - last_heading;
-            // }
-            // else if(cur_heading - last_heading < -100)
-            // {
-            //     global_heading += cur_heading + (360 - last_heading);
-            // }
-            // else
-            // {
-            //     global_heading += cur_heading - last_heading;
-            // }
+            //inertial wrapping
+            if(cur_heading - last_heading > 100)
+            {
+                global_heading += (cur_heading - 360) - last_heading;
+            }
+            else if(cur_heading - last_heading < -100)
+            {
+                global_heading += cur_heading + (360 - last_heading);
+            }
+            else
+            {
+                global_heading += cur_heading - last_heading;
+            }
 
             last_heading = cur_heading;
             cur_heading = glb::imu.get_heading();
@@ -492,13 +492,13 @@ namespace pid
             time += 5;
         }
         
-        double diff = imu.get_heading() - starting;
+        // double diff = imu.get_heading() - starting;
         
-        start_head+=diff;
+        // start_head+=diff;
         
-        end_head = imu.get_heading();
+        // end_head = imu.get_heading();
 
-        global_heading += imu.get_heading() - starting;
+        // global_heading += imu.get_heading() - starting;
 
         glb::chas.stop();
     }
