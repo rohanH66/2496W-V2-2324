@@ -58,6 +58,8 @@ void opcontrol()
 	while(true)
 	{
 		if (time%2000==0) disp::updateMotorTemps();
+		if (time%100==0) disp::update_motor_stats();
+
 		if (time%200==0) updateTemps();
 
 		if (chassis_on) drive();

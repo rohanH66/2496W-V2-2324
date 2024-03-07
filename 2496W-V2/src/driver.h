@@ -15,6 +15,7 @@ using namespace glb;
 using namespace std;
 
 bool intakeCooldown = false;
+bool facing_side = false;
 void drive()
 {
     double left = abs(con.get_analog(E_CONTROLLER_ANALOG_LEFT_Y)) > 10 ? con.get_analog(E_CONTROLLER_ANALOG_LEFT_Y) : 0;
@@ -56,7 +57,6 @@ void distCon(int time){
     const int realDead = 550;
     const int cutoff = 610;
     const int delay = 160; //delay for after distance detects --> start firing, for human error
-
     static bool isTri = false;
     static bool shoot = false;
     static int timeCount = 0;
@@ -79,9 +79,6 @@ void distCon(int time){
         if (dist.get() < 8 && shoot == false && pos>deadzone && pos<cutoff) isTri = true;
     }
 
-    if(time % 150 == 0)
-        con.print(2, 0, "pos: %d  ", pos);
-
     if (con.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
         cata.move(100);
     }
@@ -94,9 +91,7 @@ void distCon(int time){
             deadzone = realDead;
             cata.move(100);
         }
-
     }
-
 
 }
 
@@ -127,6 +122,31 @@ void updateTemps(){
     count++;
     if (count>7) count=0;
 }
+
+
+// void auto_wings(){
+//     //false for L, true for R
+//     if (intake.get_direction() < 0){
+//         if (pid::global_heading - imu.get_heading() < 0) facing_side = true;
+//         else facing_side = false;
+//     }
+    
+//     if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_Y)){
+//         if (facing_side) RfrontP.toggle();
+//         else LfrontP.toggle();
+//     }
+
+// }
+
+
+    // void driver_rumble(){
+    //     static int matchTime = 0;
+    //     if (pros::competition_is_connected()) matchTime++;
+
+    //     if (matchTime%15000 == 0 && matchTime >= 75000) con.rumble("-");
+    //     else if (matchTime%15000 == 0) con.rumble(".");
+    // }
+
 
 void piston_cont(bool skills)
 {
@@ -159,8 +179,6 @@ void piston_cont(bool skills)
     else if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_RIGHT)){
         LfrontP.toggle();
     }
-
-
 
     if (con.get_digital_new_press(E_CONTROLLER_DIGITAL_L1)){
         dWings = !dWings;
@@ -221,6 +239,8 @@ void print_info_R(int time, double error, double guess)
     if(time % 150 == 0) 
         con.print(2, 0, "%.2f : %.2f          ", imu.get_heading(), chas.pos());
 }
+
+
 
 void print_name(int time, string name){
     if (time % 50 == 0 and time % 2000 != 0){

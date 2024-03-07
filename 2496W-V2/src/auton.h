@@ -21,9 +21,63 @@ using namespace pid;
 
 void close_awp(){
 
+    drive(400);
+    LbackP.set(true);
+    delay(400);
+    turn(-30);
+    LbackP.set(false);
+    turn_to(34);
+    drive_const(200);
+    intake.move(-127);
+    drive(1000, 1000);
+    intake.move(0);
+    drive(-600, 800);
+
+    intake.move(-127);
+    drive(1000, 900);
+    intake.move(0);
+    drive(-900);
+
+    turn_to(180);
+    drive(950, 800);
+    turn_to(137);
+    intake.move(-127);
+    drive(1400);
+    delay(1000);
+    intake.move(0);
+
+
 }
 
 void close_rush(){
+    intake.move(127);
+    drive(2250, 2000, 1.0, 127, LfrontP, 0, 20000);
+    LfrontP.set(false);
+    delay(300);
+    turn_to(-95);
+    intake.move(0);
+    RbackP.set(true);
+    drive_const(-1200, 127, RbackP, 0, 460, 1000);
+    turn_to(-145, 800);
+    RbackP.set(false);
+    drive(2400);
+    turn_to(-10);
+    LbackP.set(true);
+    drive(-550);
+    turn_to(-55);
+    delay(400);
+    LbackP.set(false);
+    turn_to(88);
+
+    intake.move(-127);
+    drive(1650);
+    delay(500);
+    turn_to(91);
+    drive(-1450);
+    turn_to(133);
+    drive(-850);
+
+    //RbackP.set(true);
 
 }
 
@@ -35,11 +89,37 @@ void far_6bsafe_a(){
 
 }
 
-void skills(){
-
-}
 
 void skills_lineup(){
+    drive(-600);
+    turn_to(45, 500);
+    drive_const(-2000, 127, NULL, 0, 0, 900);
+    drive(650, 800);
+    turn_to(-64); /// we gotta find a way to get this good
+    drive(-200, 450);
+    RbackP.set(true);
+    LbackP.set(true);
+}
+
+
+void skills(){
+    skills_lineup();
+    LbackP.set(false);
+    int temp_heading = imu.get_heading();
+    matchload(46);
+
+
+    imu.set_heading(temp_heading);
+    delay(500);
+    RbackP.set(false);
+    delay(500);
+    turn_to(0);
+    drive(1000);
+    turn_to(-45);
+
+    drive(3200, 1700, 1.0, 127.0, LfrontP, 800, 10000);
+    drive_var_to(-50);
+    drive(600);
 
 }
 
@@ -127,8 +207,9 @@ void test_all_turn(){
 
 }
 void test(){
-    test_all_drive();
-    test_all_turn();
+    // test_all_drive();
+    // test_all_turn();
+    drive_var(30, 70, 40);
 }
 
 

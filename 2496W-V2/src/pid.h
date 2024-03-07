@@ -85,7 +85,7 @@ namespace pid
 
     }
 
-    void drive(double target_dist, int timeout=2000, double mult=1.0, double max_speed=127, int exit_time=100)
+    void drive(double target_dist, int timeout=2000, double mult=1.0, double max_speed=127, Piston pis = NULL, int piston_time = 0, int piston_open_time = 0, int exit_time=100)
     {
         double drive_kp = 4.62646 * std::pow(fabs(target_dist), -0.689989) + 0.107432; 
         //NEW:
@@ -130,9 +130,15 @@ namespace pid
 
         int scaler = 100;
         int time = 0;
+        pis.set(false);
+
+        int piston_on_time = piston_time + piston_open_time;
 
         while (time < timeout)
         {
+            if (time>piston_on_time) pis.set(false);
+            else if (time>piston_time) pis.set(true);
+
             prev_error = error;
             
             //P
@@ -205,10 +211,12 @@ namespace pid
         end_head = imu.get_heading();
 
         global_heading += imu.get_heading() - starting;
+
+        //pis.set(false);
     }
 
 
-    void drive_const(double distance, int speed=127, int timeout=3000)
+    void drive_const(double distance, int speed=127, Piston pis = NULL, int piston_activate_time = 0, int piston_on_dur = 0, int timeout=3000)
     {
         int time = 0;
         double start_pos = glb::chas.pos();
@@ -222,8 +230,12 @@ namespace pid
         double cur_heading = glb::imu.get_heading();
         double last_heading = glb::imu.get_heading();
 
+        int piston_on_time = piston_activate_time + piston_on_dur;
+
         while((distance < 0 ? glb::chas.pos() > target : glb::chas.pos() < target) && time < timeout)
         {
+            if (time>piston_on_time) pis.set(false);
+            else if (time>piston_activate_time) pis.set(true);
             // inertial wrapping
             if(cur_heading - last_heading > 100)
             {
@@ -423,56 +435,50 @@ namespace pid
         turn(degree, timeout, multi, max_speed, exit_time);
     }
 
-    void drive_var(double LRatio, double target_deg, int max_speed=127, int timeout=3000)
+    void drive_var(double degree_to, int l_s=127, int r_s = 127, int timeout=3000)
     {
+
         int time = 0;
-        // double start_pos = glb::chas.pos();
-        // double target = start_pos + distance;
-        // double s = distance / fabs(distance) * abs(max_speed);
-
-        if (LRatio>1) LRatio=1;
-        if (LRatio<-1) LRatio=-1;
-
-        bool side = target_deg<0;
-        
-
 
         int starting;
 
         if (fabs(end_head) - fabs(imu.get_heading()) > 1) {
             start_head += end_head-imu.get_heading();
         }
-        if (target_deg > 150)
+        if (degree_to > 150)
             starting = 30;
-        else if (target_deg < -150)
+        else if (degree_to < -150)
             starting = 330;
         else
             starting = 180;
         
         imu.set_heading(starting);
+
+        double target = degree_to + imu.get_heading();
+
         
         // double straight_kP = 1.8;
         // double straight_kI = 0.7;
         // double straight_i = 0;
-        double init_heading = global_heading;
+        //double init_heading = global_heading;
         double cur_heading = glb::imu.get_heading();
         double last_heading = glb::imu.get_heading();
 
-        while(time < timeout)
+        while((degree_to < 0 ? cur_heading > target+4 : cur_heading < target-4) && time < timeout)
         {
             // inertial wrapping
-            if(cur_heading - last_heading > 100)
-            {
-                global_heading += (cur_heading - 360) - last_heading;
-            }
-            else if(cur_heading - last_heading < -100)
-            {
-                global_heading += cur_heading + (360 - last_heading);
-            }
-            else
-            {
-                global_heading += cur_heading - last_heading;
-            }
+            // if(cur_heading - last_heading > 100)
+            // {
+            //     global_heading += (cur_heading - 360) - last_heading;
+            // }
+            // else if(cur_heading - last_heading < -100)
+            // {
+            //     global_heading += cur_heading + (360 - last_heading);
+            // }
+            // else
+            // {
+            //     global_heading += cur_heading - last_heading;
+            // }
 
             last_heading = cur_heading;
             cur_heading = glb::imu.get_heading();
@@ -480,14 +486,12 @@ namespace pid
             // straight_i += (global_heading - init_heading) / 100;
             // double correction = straight_i * straight_kI + (global_heading - init_heading) * straight_kP;
             
-            glb::chas.spin_left(max_speed*(side ? LRatio : 1));
-            glb::chas.spin_right(max_speed*(!side ? LRatio : 1));
-            pros::delay(4);
-            time += 4;
+            glb::chas.spin_left(l_s);
+            glb::chas.spin_right(r_s);
+            pros::delay(5);
+            time += 5;
         }
-
-        chas.stop();
-
+        
         double diff = imu.get_heading() - starting;
         
         start_head+=diff;
@@ -495,19 +499,20 @@ namespace pid
         end_head = imu.get_heading();
 
         global_heading += imu.get_heading() - starting;
+
+        glb::chas.stop();
     }
 
-    
+    void drive_var_to(double degree_to, int l_s=127, int r_s = 127, int timeout=3000)
+    {
+        double degree = degree_to - global_heading;
+        degree = (degree > 180) ? -(360 - degree) : ((degree < -180) ? (360 + degree) : (degree)); // optimize the turn direction
+        drive_var(degree, l_s, r_s, timeout);
+    }
 
 
 
-
-    
 }
-
-
-
-
 //180
 
 // good work out there rohan ur like that ur that guy ur the rizzler keep it up

@@ -7,14 +7,17 @@
 #include "display/lv_objx/lv_label.h"
 #include "display/lv_objx/lv_gauge.h"
 
-//#include "images/reg_img.h"
 #include "images/field_img.h"
 
 #define num_motors 8 
+#define circle_count 20
 
 
 namespace disp{
     // setting up shapes for auton selector graphics
+    static lv_obj_t *stat_labels[5]; // To hold labels for motor stats
+    static int current_motor_index = 0;
+    static lv_obj_t *motor_name_label = NULL; // Global variable for the motor name label
     static const lv_point_t close_awp_points[] = {{180, 40}, {200, 30}, {60, 60}, {20, 30}, {0, 0}};
     static const lv_point_t close_rush_points[] = {{0, 0}, {50, 30}, {0, 60}, {20, 30}, {0, 0}};
     static const lv_point_t far_6b_points[] = {{0, 0}, {50, 30}, {0, 60}, {20, 30}, {0, 0}};
@@ -22,12 +25,14 @@ namespace disp{
     static const lv_point_t skills_points[] = {{0, 0}, {50, 30}, {0, 60}, {20, 30}, {0, 0}};
     static const lv_point_t skills_driver_points[] = {{0, 0}, {50, 30}, {0, 60}, {20, 30}, {0, 0}}; 
 
+    lv_obj_t *circles_anim[circle_count];
+    int current_circle = 0; 
+
     lv_obj_t* circles[6];
     lv_obj_t* square;
     lv_obj_t* robot_square;
     lv_obj_t* alliTri;
     lv_obj_t* line_arrow;
-
 
 
 
@@ -42,17 +47,7 @@ namespace disp{
     57600 * LV_COLOR_SIZE / 8,
     field_img_map,
     };
-    //const lv_img_dsc_t reg_img = {
-    // {
-    //     LV_IMG_CF_TRUE_COLOR_CHROMA_KEYED,
-    //     0,
-    //     0,
-    //     240,
-    //     240,
-    // },
-    // 57600 * LV_COLOR_SIZE / 8,
-    // reg_pic_map,
-    // };
+
    
     //LV_IMG_DECLARE(field);
     // Arrays to store widget references
@@ -78,6 +73,8 @@ namespace disp{
     lv_obj_t *container_temps, *container_auton, *container_ts, *container_def;
 
 
+
+
     // Function prototypes (definitions to be added based on your content)
     void createDisplayTempsView();
     void createDispAutonView();
@@ -87,6 +84,32 @@ namespace disp{
     void update_shapes();
 
     static lv_obj_t *img_field;
+
+    void update_motor_stats() {
+        Motor motor = motorV.at(current_motor_index); // Assuming motorV is accessible and has a method .at()
+        bool error;
+
+        char buffer[64]; // Buffer for formatting text
+
+        double draw = motor.get_current_draw();
+        if (draw>100000) error = true;
+
+        snprintf(buffer, sizeof(buffer), "%.2f %%", motor.get_efficiency());
+        lv_label_set_text(stat_labels[0], error ? "ERROR" : buffer);
+
+        snprintf(buffer, sizeof(buffer), "%d mA", draw);
+        lv_label_set_text(stat_labels[1], error ? "ERROR" : buffer);
+
+        snprintf(buffer, sizeof(buffer), "%d °C", glb::temps_a[current_motor_index]);
+        lv_label_set_text(stat_labels[2], error ? "ERROR" : buffer);
+
+        snprintf(buffer, sizeof(buffer), "%.2f Nm", motor.get_torque());
+        lv_label_set_text(stat_labels[3], error ? "ERROR" : buffer);
+
+        snprintf(buffer, sizeof(buffer), "%d", motor.get_port());
+        lv_label_set_text(stat_labels[4], buffer);
+    }
+
 
     static lv_res_t btn_left_action(lv_obj_t *btn) {
         auton_index--;
@@ -103,6 +126,25 @@ namespace disp{
         return LV_RES_OK;
     }
 
+    static lv_res_t btn_left_action_ts(lv_obj_t *btn) {
+        current_motor_index--;
+        if (current_motor_index<0) current_motor_index = 7;
+        lv_label_set_text(motor_name_label, glb::motor_labels[current_motor_index].c_str());
+        update_motor_stats();
+        return LV_RES_OK;
+    }
+    static lv_res_t btn_right_action_ts(lv_obj_t *btn) {
+        current_motor_index++;
+        if (current_motor_index>7) current_motor_index = 0;
+        lv_label_set_text(motor_name_label, glb::motor_labels[current_motor_index].c_str());
+        update_motor_stats();
+        return LV_RES_OK;
+    }
+    
+
+    
+
+    
     void init_shapes() {
 
         // Define points for the arrow shape
@@ -379,8 +421,6 @@ namespace disp{
         lv_btn_set_action(btn_ts, LV_BTN_ACTION_CLICK, btn_ts_action);
         lv_btn_set_action(btn_def, LV_BTN_ACTION_CLICK, btn_def_action);
 
-
-
         // Initializing containers
         container_temps = lv_cont_create(lv_scr_act(), NULL);
         lv_obj_set_size(container_temps, 420, 240); 
@@ -405,6 +445,9 @@ namespace disp{
         // "turn on" each view to start displaying thigs
         createDisplayTempsView();
         createDispAutonView();
+        createDispTSView();
+        createDispDefView();
+        
     }
 
 
@@ -548,6 +591,77 @@ namespace disp{
         init_shapes();
         update_shapes();
     }
+
+ // Keep track of the currently displayed motor
+
+    void createDispTSView() {
+        // Motor name label
+        // Inside create_motor_infographic_screen function
+        motor_name_label = lv_label_create(container_ts, NULL);
+        lv_label_set_text(motor_name_label, glb::motor_labels[current_motor_index].c_str());
+        lv_obj_align(motor_name_label, container_ts, LV_ALIGN_IN_TOP_LEFT, 13, 13);
+
+        // Left and right buttons to switch the motor
+        lv_obj_t *left_btn = lv_btn_create(container_ts, NULL);
+        lv_obj_set_size(left_btn, 100, 60);
+        lv_obj_align(left_btn, NULL, LV_ALIGN_IN_BOTTOM_LEFT, 10, -10);
+        lv_obj_t *left_label = lv_label_create(left_btn, NULL);
+        lv_label_set_text(left_label, "<--");
+
+        lv_obj_t *right_btn = lv_btn_create(container_ts, NULL);
+        lv_obj_set_size(right_btn, 100, 60);
+        lv_obj_align(right_btn, left_btn, LV_ALIGN_IN_RIGHT_MID, 110, 0);
+        lv_obj_set_size(right_btn, 100, 60);
+        lv_obj_t *right_label = lv_label_create(right_btn, NULL);
+        lv_label_set_text(right_label, "-->");
+
+        // Right side for motor stats - placeholders for now
+        const char *stat_names[] = {"Efficiency:", "Current Draw:", "Temperature:", "Torque:", "Port:"};
+        for (int i = 0; i < 5; i++) {
+            lv_obj_t *stat_label = lv_label_create(container_ts, NULL);
+            lv_label_set_text(stat_label, stat_names[i]); // Placeholder text
+            lv_obj_align(stat_label, container_ts, LV_ALIGN_IN_TOP_LEFT, 220, (i * 50) + 10);
+            stat_labels[i] = lv_label_create(container_ts, stat_label); // Create label for value next to name
+            lv_label_set_text(stat_labels[i], "-"); // Placeholder value
+            lv_obj_align(stat_labels[i], stat_label, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
+        }
+
+        lv_btn_set_action(left_btn, LV_BTN_ACTION_CLICK, btn_left_action_ts);
+        lv_btn_set_action(right_btn, LV_BTN_ACTION_CLICK, btn_right_action_ts);
+
+        update_motor_stats();
+    }
+
+
+    void createDispDefView() {
+
+        lv_obj_t *label = lv_label_create(container_def, NULL);
+        lv_label_set_text(label, "2496W");
+        lv_obj_align(label, container_def, LV_ALIGN_CENTER, 0, 0); 
+
+
+        static lv_style_t style_circle;
+        lv_style_copy(&style_circle, &lv_style_plain); // Copy a base style
+        style_circle.body.main_color = LV_COLOR_BLUE; // Initial color
+        style_circle.body.grad_color = LV_COLOR_BLUE; // Make it a solid color
+        style_circle.body.radius = LV_RADIUS_CIRCLE; // Make it circular
+        style_circle.body.border.color = LV_COLOR_BLUE; // Border color
+        style_circle.body.border.width = 0; // No border
+        style_circle.body.opa = LV_OPA_100; // Fully opaque
+
+        for (int i = 0; i < circle_count; ++i) {
+            lv_obj_t *circle = lv_obj_create(container_def, NULL);
+            lv_obj_set_size(circle, 5, 5); 
+            // Calculate random positions within the specified range
+
+            lv_obj_align(circle, NULL, LV_ALIGN_IN_TOP_LEFT, rand() % (370 - 50 + 1) + 50, rand() % (190 - 50 + 1) + 50);
+
+            lv_obj_set_style(circle, &style_circle); 
+            circles_anim[i] = circle;
+        }
+
+    }
+
 
 }
 

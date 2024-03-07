@@ -75,6 +75,17 @@ namespace glb
         "Shooter",
     };
 
+    std::string efficiency_a[] = {
+        "100%",
+        "R. Middle",
+        "R. Bottom",
+        "Intake",
+        "L. Top",
+        "L. Middle",
+        "L. Bottom",
+        "Shooter",
+    };
+
     int temps_a[] = {
         50,
         50,
