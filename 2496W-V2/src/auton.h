@@ -142,38 +142,67 @@ void far_6bsafe_a(){
 
 
 void skills_lineup(){
-    drive(-600);
+    drive(-675);
     turn_to(45, 500);
-    drive_const(-2000, 127, NULL, 0, 0, 900);
-    drive(650, 800);
-    turn_to(-64); /// we gotta find a way to get this good
-    drive(-200, 450);
+    drive_const(-1100, 127, NULL, 0, 0, 1000);
+    drive(600, 800);
+    turn_to(-57); /// we gotta find a way to get this good
+    drive(-238, 450);
     RbackP.set(true);
     LbackP.set(true);
 }
 
-
-void skills(){
-    skills_lineup();
+void skills_post_matchload(){
+    
     LbackP.set(false);
-    int temp_heading = imu.get_heading();
-    matchload(46);
-
-
-    imu.set_heading(temp_heading);
-    delay(500);
     RbackP.set(false);
     delay(500);
     turn_to(0);
-    drive(1000);
+    drive(1250);
     turn_to(-45);
-
-    drive(3200, 1700, 1.0, 127.0, LfrontP, 800, 10000);
-    drive_var_to(-50);
+    drive_const(3500, 2000, 1.0, 127.0);
+    turn_to(100);
+    RbackP.set(true);
+    drive(-2200, 1000, 0.25, 127.0);
+    turn_to(45);
+    drive(-1700, 1000, 5);
+    drive(500);
+    turn_to(45);
+    drive(-1000, 1000, 5);
+    RbackP.set(false);
+    turn_to(50);
+    drive(250);
+    turn_to(-45);
+    drive(-1800);
+    turn_to(60);
+    LbackP.set(true);
+    RbackP.set(true);
+    drive(-800, 1000, 0.5);
+    LbackP.set(false);
+    RbackP.set(false);
     drive(600);
+    turn_to(0);
+    drive(-600);
+    turn_to(135);
 
-    
 
+
+}
+
+void skills_no_load(){
+    skills_lineup();
+    int temp_heading = imu.get_heading();
+    imu.set_heading(temp_heading);
+    delay(500);
+    skills_post_matchload();
+}
+void skills_load(){
+    skills_lineup();
+    int temp_heading = imu.get_heading();
+    matchload(46);
+    imu.set_heading(temp_heading);
+    delay(500);
+    skills_post_matchload();  
 }
 
 
@@ -278,13 +307,15 @@ void blank(){}
 
 
 std::vector<Auton> autons
-{
+{   
+    Auton("skills no load", skills_no_load, ""),
+    Auton("skills load", skills_load, ""),
+    Auton("skills driver", skills_lineup, "For lineup"),
     Auton("close half-awp", close_awp, ""),
     Auton("close rush", close_rush, ""),
     Auton("far 6-ball", far_6b_a, ""),
     Auton("far 6-b safe", far_6bsafe_a, ""),
-    Auton("skills", skills, ""),
-    Auton("skills driver", skills_lineup, "For lineup"),
+    
     Auton("reg tuning", regr, "Linear model"),
     Auton("test", test, "For testing"),
     Auton("no auton", blank, "blank"),
