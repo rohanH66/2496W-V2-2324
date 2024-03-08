@@ -157,33 +157,62 @@ void skills_post_matchload(){
     LbackP.set(false);
     RbackP.set(false);
     delay(500);
-    turn_to(0);
-    drive(1250);
-    turn_to(-45);
-    drive_const(3500, 2000, 1.0, 127.0);
+    drive(238);
+    turn_to(-178);
+    drive(-1780);
+    turn_to(138);
+
+    //drive down alley
+    drive(-3500, 2000, 1.0, 127.0, RbackP, 1000, 7000);
     turn_to(100);
-    RbackP.set(true);
-    drive(-2200, 1000, 0.25, 127.0);
-    turn_to(45);
-    drive(-1700, 1000, 5);
+    //RbackP.set(true);
+    drive(-530, 1000);
+
+    drive_var(-45, -70, -28);
+    drive_const(-2000, 127, NULL, 0, 0, 1000);
     drive(500);
-    turn_to(45);
-    drive(-1000, 1000, 5);
+    drive_const(-2000, 127, NULL, 0, 0, 1000);
     RbackP.set(false);
-    turn_to(50);
-    drive(250);
-    turn_to(-45);
-    drive(-1800);
-    turn_to(60);
-    LbackP.set(true);
+    //turn_to(45);
+    //drive(-1700, 1000, 5);
+    drive_var(45, 80, 30);
+    turn_to(-20);
+
+
+    drive(-1600);
     RbackP.set(true);
-    drive(-800, 1000, 0.5);
-    LbackP.set(false);
-    RbackP.set(false);
-    drive(600);
-    turn_to(0);
-    drive(-600);
-    turn_to(135);
+    drive_var(140, -20, -80);
+    RbackP.toggle();
+    LbackP.toggle();
+    drive_const(-2000, 127, NULL, 0, 0, 1300);
+
+    drive(1000);
+
+    // turn_to(45);
+    // RbackP.set(true);
+    // LbackP.set(true);
+    // drive(-400, 1000, 5);
+    // RbackP.set(false);
+    // LbackP.set(false);
+
+    // //After pistons are off
+    // //turn_to(50);
+    // drive(450);
+    // turn_to(-45);
+    // drive(-900);
+
+
+
+    // turn_to(60);
+    // LbackP.set(true);
+    // RbackP.set(true);
+    // drive(-800, 1000, 0.5);
+    // LbackP.set(false);
+    // RbackP.set(false);
+    // drive(600);
+    // turn_to(0);
+    // drive(-600);
+    // turn_to(135);
 
 
 
