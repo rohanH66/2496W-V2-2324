@@ -435,7 +435,7 @@ namespace pid
         turn(degree, timeout, multi, max_speed, exit_time);
     }
 
-    void drive_var(double degree_to, int l_s=127, int r_s = 127, int timeout=3000)
+    void drive_var(double degree_to, int l_s=127, int r_s = 127, int timeout=3000, Piston pis = NULL, int piston_init_time = 0, int piston_on_dur = 0)
     {
 
         int time = 0;
@@ -453,6 +453,7 @@ namespace pid
         //     starting = 180;
         
         // imu.set_heading(starting);
+        int piston_on_time = piston_init_time + piston_on_dur;
 
         double target = degree_to + imu.get_heading();
 
@@ -466,6 +467,9 @@ namespace pid
 
         while((degree_to < 0 ? cur_heading > target+4 : cur_heading < target-4) && time < timeout)
         {
+
+            if (time>piston_on_time) pis.set(false);
+            else if (time>piston_init_time) pis.set(true);
             //inertial wrapping
             if(cur_heading - last_heading > 100)
             {

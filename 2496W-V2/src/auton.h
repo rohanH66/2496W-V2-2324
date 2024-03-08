@@ -159,19 +159,19 @@ void skills_post_matchload(){
     delay(500);
     drive(238);
     turn_to(-178);
-    drive(-1780);
-    turn_to(138);
+    drive(-1790, 1400);
+    turn_to(140);
 
     //drive down alley
-    drive(-3500, 2000, 1.0, 127.0, RbackP, 1000, 7000);
+    drive(-3530, 2000, 1.0, 127.0, RbackP, 1000, 7000);
     turn_to(100);
     //RbackP.set(true);
     drive(-530, 1000);
 
-    drive_var(-45, -70, -28);
-    drive_const(-2000, 127, NULL, 0, 0, 1000);
-    drive(500);
-    drive_const(-2000, 127, NULL, 0, 0, 1000);
+    drive_var(-45, -105, -42);
+    drive_const(-2000, 127, NULL, 0, 0, 800);
+    drive(600, 800);
+    drive_const(-2000, 127, NULL, 0, 0, 800);
     RbackP.set(false);
     //turn_to(45);
     //drive(-1700, 1000, 5);
@@ -179,16 +179,34 @@ void skills_post_matchload(){
     turn_to(-20);
 
 
-    drive(-1600);
+    drive(-1800);
     RbackP.set(true);
-    drive_var(140, -20, -80);
-    RbackP.toggle();
-    LbackP.toggle();
-    drive_const(-2000, 127, NULL, 0, 0, 1300);
+    drive_var(145, -18, -80, 1500, RbackP, 0, 1000);
+    //RbackP.toggle();
+    //LbackP.toggle();
+    drive_const(-2000, 127, NULL, 0, 0, 800);
+    LbackP.set(false);
+    drive(800);
+    //LbackP.set(true);
+    drive_const(-2000, 127, NULL, 0, 0, 800);
+    LbackP.set(false);
+    drive(1500);
 
-    drive(1000);
+    turn_to(40);
+    //RbackP.set(true);
+    drive(-1600);
+    turn_to(160);
+    RbackP.set(false);
+    LbackP.set(true);
 
-    // turn_to(45);
+    drive_const(-2000, 127, NULL, 0, 0, 800);
+    LbackP.set(false);
+    drive(800);
+    //LbackP.set(true);
+    drive_const(-2000, 127, NULL, 0, 0, 800);
+
+    drive_var(90, 100, 40);
+    
     // RbackP.set(true);
     // LbackP.set(true);
     // drive(-400, 1000, 5);
