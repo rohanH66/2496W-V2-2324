@@ -46,7 +46,7 @@ void opcontrol()
 	glb::con.clear();
 	long long time = 0;
 	bool chassis_on = true;
-	const bool skillsb = names == "skills";
+	const bool skillsb = (names.find("skills")!= std::string::npos);
 	// cata.tare_position();
 	//hang.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	chas.set_brake();

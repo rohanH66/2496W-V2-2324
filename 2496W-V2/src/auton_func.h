@@ -24,5 +24,16 @@ void matchload(int triballs){
     cata.move(0);
 }
 
+void cata_rest(){
+    int pos = ((int) cata.get_position() % 900);
+    const int deadzone = 500;
+
+    while (pos<deadzone){
+        pos = ((int) cata.get_position() % 900);
+        cata.move(100);
+    }
+    cata.move(0);
+}
+
 
 #endif

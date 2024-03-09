@@ -53,13 +53,14 @@ void slapperCon()
 
 void distCon(int time){
     int pos = ((int) cata.get_position() % 900);
-    static int deadzone = 550;
-    const int realDead = 550;
-    const int cutoff = 610;
+    static int deadzone = 420;
+    const int realDead = 420;
+    const int cutoff = 470;
     const int delay = 160; //delay for after distance detects --> start firing, for human error
     static bool isTri = false;
     static bool shoot = false;
     static int timeCount = 0;
+    static bool matchload = false;
 
     if (isTri){
         timeCount++;
@@ -76,13 +77,18 @@ void distCon(int time){
         if (timeCount>100) shoot = false;
     }
     else{
-        if (dist.get() < 8 && shoot == false && pos>deadzone && pos<cutoff) isTri = true;
+        // if (dist.get() < 8 && shoot == false && pos>deadzone && pos<cutoff) isTri = true;
+        // Turn on when distance sensor is put back on!
     }
 
-    if (con.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
+    if (con.get_digital_new_press(E_CONTROLLER_DIGITAL_DOWN)){
+        matchload = !matchload;
+        //cata.move(100);
+    }
+    if (matchload){
         cata.move(100);
     }
-    else if (!shoot){
+    else {
         if (pos>deadzone && pos<cutoff){
             deadzone = realDead - 50;
             cata.move(0);
@@ -169,21 +175,39 @@ void piston_cont(bool skills)
 
 
     if (dWings){
+        // if (skills){
+        //     LbackP.set(true);
+        //     RbackP.set(true);
+        // }
+        // else{
+        //     LfrontP.set(true);
+        //     RfrontP.set(true);
+        // }
         LfrontP.set(true);
         RfrontP.set(true);
     }
     else if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_Y)){
-        RfrontP.toggle();
+        if (skills) RbackP.toggle();
+        else RfrontP.toggle();
     }    
     
     else if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_RIGHT)){
-        LfrontP.toggle();
+        if (skills) LbackP.toggle();
+        else LfrontP.toggle();
     }
 
     if (con.get_digital_new_press(E_CONTROLLER_DIGITAL_L1)){
         dWings = !dWings;
 
         if (!dWings){
+            // if (skills){
+            //     LbackP.set(false);
+            //     RbackP.set(false);
+            // }
+            // else{
+            //     LfrontP.set(false);
+            //     RfrontP.set(false);
+            // }
             LfrontP.set(false);
             RfrontP.set(false);
         }
@@ -203,6 +227,14 @@ void piston_cont(bool skills)
 
     // }
     if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_L2)){
+        // if (skills){
+        //     RfrontP.toggle();
+        //     LfrontP.toggle();
+        // }
+        // else{
+        //     LbackP.toggle();
+        //     RbackP.toggle();
+        // }
         LbackP.toggle();
         RbackP.toggle();
     }

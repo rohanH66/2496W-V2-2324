@@ -143,7 +143,7 @@ void far_6bsafe_a(){
 
 void skills_lineup(){
     drive(-675);
-    turn_to(45, 500);
+    turn_to(45, 1000);
     drive_const(-1100, 127, NULL, 0, 0, 1000);
     drive(600, 800);
     turn_to(-57); /// we gotta find a way to get this good
@@ -153,17 +153,19 @@ void skills_lineup(){
 }
 
 void skills_post_matchload(){
+    //cata_rest();
+
     
     LbackP.set(false);
     RbackP.set(false);
     delay(500);
     drive(238);
-    turn_to(-178);
-    drive(-1790, 1400);
-    turn_to(140);
+    turn_to(178, 2000, 1.0, 127.0, 100);
+    drive(-1780, 1400);
+    turn_to(146);
 
     //drive down alley
-    drive(-3530, 2000, 1.0, 127.0, RbackP, 1000, 7000);
+    drive(-3500, 2000, 1.0, 127.0, RbackP, 1000, 7000);
     turn_to(100);
     //RbackP.set(true);
     drive(-530, 1000);
@@ -171,6 +173,7 @@ void skills_post_matchload(){
     drive_var(-45, -105, -42);
     drive_const(-2000, 127, NULL, 0, 0, 800);
     drive(600, 800);
+    turn_to(45, 500);
     drive_const(-2000, 127, NULL, 0, 0, 800);
     RbackP.set(false);
     //turn_to(45);
@@ -179,33 +182,108 @@ void skills_post_matchload(){
     turn_to(-20);
 
 
-    drive(-1800);
+    drive(-1600, 2000, 1.0, 127.0, LbackP, 550, 3000);
     RbackP.set(true);
-    drive_var(145, -18, -80, 1500, RbackP, 0, 1000);
+
+
+    // turn_to(65);
+    LbackP.set(true);
+    // delay(300);
+    // turn_to(-20);
+
+    //turn to scoop
+    drive_var(142, -18, -80, 1500, RbackP, 0, 1000);
     //RbackP.toggle();
     //LbackP.toggle();
     drive_const(-2000, 127, NULL, 0, 0, 800);
     LbackP.set(false);
     drive(800);
-    //LbackP.set(true);
+    turn_to(135, 500);
+    LbackP.set(true);
     drive_const(-2000, 127, NULL, 0, 0, 800);
     LbackP.set(false);
-    drive(1500);
+    drive(1600);
 
-    turn_to(40);
+    LbackP.set(true);
+
+    // left side
+    turn_to(45);
     //RbackP.set(true);
-    drive(-1600);
-    turn_to(160);
-    RbackP.set(false);
+    drive(-200);
+    RbackP.set(true);
+
+    drive_var(83, -25, -90, 2000);
     LbackP.set(true);
 
     drive_const(-2000, 127, NULL, 0, 0, 800);
-    LbackP.set(false);
+    // LbackP.set(false);
+    // RbackP.set(false);
     drive(800);
-    //LbackP.set(true);
+    turn_to(135, 500);
+    RbackP.set(true);
+    LbackP.set(true);
     drive_const(-2000, 127, NULL, 0, 0, 800);
 
-    drive_var(90, 100, 40);
+    drive(1200);
+
+    LbackP.set(false);
+    RbackP.set(false);
+    turn_to(58);
+
+    //left push among us
+    drive(-2500);
+    LbackP.set(true);
+
+    drive_var(120, -20, -90);
+
+    //drive(-530);
+
+    drive_var(120, -100, -127, 1400);
+    //drive_const(-3000, 127, NULL, 0, 0, 1500);
+    LbackP.set(false);
+    drive(500);
+    turn_to(-146, 1000);
+    LbackP.set(true);
+    intake.move(-127);
+    drive_const(-2000, 127, NULL, 0, 0, 800);
+    LbackP.set(false);
+    drive(800);
+    turn_to(-135, 1000);
+
+    LbackP.set(true);
+    RbackP.set(true);
+    intake.move(-127);
+    drive_const(-2000, 127, NULL, 0, 0, 800);
+    LbackP.set(false);
+    RbackP.set(false);
+    drive(1600);
+
+
+    //turn_to(180);
+
+   //
+
+    intake.move(0);
+    chas.stop();
+
+
+//here here here
+    
+    // turn_to(160);
+    // RbackP.set(false);
+    // LbackP.set(true);
+
+    // drive_const(-2000, 127, NULL, 0, 0, 800);
+    // LbackP.set(false);
+    // drive(800);
+    // //LbackP.set(true);
+    // drive_const(-2000, 127, NULL, 0, 0, 800);
+
+    // drive_var(90, 100, 40);
+
+
+
+    // ALL BELOW IS OLD CODE 
     
     // RbackP.set(true);
     // LbackP.set(true);
@@ -238,8 +316,8 @@ void skills_post_matchload(){
 
 void skills_no_load(){
     skills_lineup();
-    int temp_heading = imu.get_heading();
-    imu.set_heading(temp_heading);
+    // int temp_heading = imu.get_heading();
+    // imu.set_heading(temp_heading);
     delay(500);
     skills_post_matchload();
 }
@@ -337,8 +415,8 @@ void test_all_turn(){
 }
 void test(){
     // test_all_drive();
-    // test_all_turn();
-    drive_var(30, 70, 40);
+    test_all_turn();
+    // drive_var(30, 70, 40);
 }
 
 

@@ -93,6 +93,7 @@ namespace disp{
 
         double draw = motor.get_current_draw();
         if (draw>100000) error = true;
+        else error = false;
 
         snprintf(buffer, sizeof(buffer), "%.2f %%", motor.get_efficiency());
         lv_label_set_text(stat_labels[0], error ? "ERROR" : buffer);

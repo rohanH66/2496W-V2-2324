@@ -282,6 +282,10 @@ namespace pid
         double TURN_KI;
         double TURN_KD;
 
+            TURN_KP = 4.6;
+            TURN_KI = 1.05; 
+            TURN_KD = 0.37;  
+
         
         if (fabs(target_deg) <= 185) 
         {
@@ -387,7 +391,7 @@ namespace pid
                 speed *= multiplier;
             }
 
-            if (fabs(error) < .8) // 0.15
+            if (fabs(error) < 0.15) // 0.15
             {
                 if(!exit)
                     exit = true;
@@ -428,11 +432,12 @@ namespace pid
         global_heading += imu.get_heading() - starting;
     }
 
-    void turn_to(double degree_to, int timeout=1000, double multi=1.0, double max_speed=127, int exit_time=100)
+    void turn_to(double degree_to, int timeout=1000, double multi=1.0, double max_speed=100, int exit_time=100)
     {
         double degree = degree_to - global_heading;
         degree = (degree > 180) ? -(360 - degree) : ((degree < -180) ? (360 + degree) : (degree)); // optimize the turn direction
-        turn(degree, timeout, multi, max_speed, exit_time);
+        //turn(degree, timeout, multi, max_speed, exit_time);
+        turn(degree, timeout, true, multi, max_speed, exit_time);
     }
 
     void drive_var(double degree_to, int l_s=127, int r_s = 127, int timeout=3000, Piston pis = NULL, int piston_init_time = 0, int piston_on_dur = 0)
