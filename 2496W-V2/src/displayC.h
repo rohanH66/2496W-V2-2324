@@ -66,8 +66,21 @@ namespace disp{
         "None",
 
     };
+    static const char * auton_desc_vec[] = {
+        "A safer close side \nauton, this gets the \nmatch load ball out \nfirst and then \nscores the alliance \ntriball, touching the\nbar in the end.",
+        "Rushes to grab the \ncenter ball, then \npushes one over, \ngets out of match \nload zone, and \nfunnels the rest \ninto the alley.",
+        "Gets center close, \ngets alley ball and \nmatch load ball, and \nscores all before \ngoing back to \ncenter to score \nthe two on barrier.",
+        "Gets alley ball, then \nmatch load bar and \nscores three \nbefore getting the \nthree center balls \ntogether.",
+        "Skills programming \nroute \n\n(check the \nprog notebook \nfor full route)",
+        "Only match load \nlineup for skills",
+        "Tuning with the \nregression model",
+        "Temporary testing \nauton function \n\n[DO NOT USE IN \nMATCH]",
+        "Blank auton \n\njust in case",
+
+    };
     static int auton_index = 0; // Index of the currently displayed auton option
     static lv_obj_t *auton_label; // Label for displaying the current auton option
+    static lv_obj_t *auton_description;
 
     // Global pointers for view containers
     lv_obj_t *container_temps, *container_auton, *container_ts, *container_def;
@@ -95,17 +108,32 @@ namespace disp{
         if (draw>100000) error = true;
         else error = false;
 
+        // snprintf(buffer, sizeof(buffer), "%.2f %%", motor.get_efficiency());
+        // lv_label_set_text(stat_labels[0], error ? "ERROR" : buffer);
+
+        // snprintf(buffer, sizeof(buffer), "%d mA", draw);
+        // lv_label_set_text(stat_labels[1], error ? "ERROR" : buffer);
+
+        // snprintf(buffer, sizeof(buffer), "%d °C", glb::temps_a[current_motor_index]);
+        // lv_label_set_text(stat_labels[2], error ? "ERROR" : buffer);
+
+        // snprintf(buffer, sizeof(buffer), "%.2f Nm", motor.get_torque());
+        // lv_label_set_text(stat_labels[3], error ? "ERROR" : buffer);
+
+        // snprintf(buffer, sizeof(buffer), "%d", motor.get_port());
+        // lv_label_set_text(stat_labels[4], buffer);
+            
         snprintf(buffer, sizeof(buffer), "%.2f %%", motor.get_efficiency());
-        lv_label_set_text(stat_labels[0], error ? "ERROR" : buffer);
+        lv_label_set_text(stat_labels[0], "0.00 %");
 
         snprintf(buffer, sizeof(buffer), "%d mA", draw);
-        lv_label_set_text(stat_labels[1], error ? "ERROR" : buffer);
+        lv_label_set_text(stat_labels[1], "0 mA");
 
         snprintf(buffer, sizeof(buffer), "%d °C", glb::temps_a[current_motor_index]);
-        lv_label_set_text(stat_labels[2], error ? "ERROR" : buffer);
+        lv_label_set_text(stat_labels[2], "30 °C");
 
         snprintf(buffer, sizeof(buffer), "%.2f Nm", motor.get_torque());
-        lv_label_set_text(stat_labels[3], error ? "ERROR" : buffer);
+        lv_label_set_text(stat_labels[3], "0.00 Nm");
 
         snprintf(buffer, sizeof(buffer), "%d", motor.get_port());
         lv_label_set_text(stat_labels[4], buffer);
@@ -116,6 +144,7 @@ namespace disp{
         auton_index--;
         if (auton_index<0) auton_index = 8;
         lv_label_set_text(auton_label, auton_arr[auton_index]);
+        lv_label_set_text(auton_description, auton_desc_vec[auton_index]);
         update_shapes();
         return LV_RES_OK;
     }
@@ -123,6 +152,7 @@ namespace disp{
         auton_index++;
         if (auton_index>8) auton_index = 0;
         lv_label_set_text(auton_label, auton_arr[auton_index]);
+        lv_label_set_text(auton_description, auton_desc_vec[auton_index]);
         update_shapes();
         return LV_RES_OK;
     }
@@ -238,7 +268,7 @@ namespace disp{
                 lv_obj_set_hidden(robot_square, false);
                 lv_obj_set_pos(robot_square, 160, 1); 
 
-                lv_obj_set_hidden(line_arrow, false);
+                //lv_obj_set_hidden(line_arrow, false);
                 lv_line_set_points(line_arrow, close_awp_points, 5);
 
                 break;
@@ -261,7 +291,7 @@ namespace disp{
                 lv_obj_set_hidden(robot_square, false);
                 lv_obj_set_pos(robot_square, 160, 1); 
 
-                lv_obj_set_hidden(line_arrow, false);
+                //lv_obj_set_hidden(line_arrow, false);
                 lv_line_set_points(line_arrow, close_rush_points, 5);
 
                 break;
@@ -287,7 +317,7 @@ namespace disp{
                 lv_obj_set_hidden(robot_square, false);
                 lv_obj_set_pos(robot_square, 40, 1); 
 
-                lv_obj_set_hidden(line_arrow, false);
+                //lv_obj_set_hidden(line_arrow, false);
                 lv_line_set_points(line_arrow, far_6b_points, 5);
                 break;
 
@@ -313,7 +343,7 @@ namespace disp{
                 lv_obj_set_hidden(robot_square, false);
                 lv_obj_set_pos(robot_square, 40, 1); 
 
-                lv_obj_set_hidden(line_arrow, false);
+                //lv_obj_set_hidden(line_arrow, false);
                 lv_line_set_points(line_arrow, far_6bsafe_points, 5);
                 break;
             
@@ -340,35 +370,38 @@ namespace disp{
 
 
     void switchView(lv_obj_t *view_container) {
-        // Hide all containers
+        // hides all other containers
         lv_obj_set_hidden(container_temps, true);
         lv_obj_set_hidden(container_auton, true);
         lv_obj_set_hidden(container_ts, true);
         lv_obj_set_hidden(container_def, true);
 
-        // Show the selected view container
+        // only shows whichever view is passed through
         lv_obj_set_hidden(view_container, false);
     }
 
-    // Example button event callback for switching to the displayTemps view
+    
+
+    // each of these switches the current view to a different container (indicated by function name)
+    // Each are set to a different taskbaar button (below)
     static lv_res_t btn_temps_action(lv_obj_t *btn) {
         switchView(container_temps);
-        return LV_RES_OK; // Indicate the button is not deleted
+        return LV_RES_OK; 
     }
-    // Example button event callback for switching to the auton view
+
     static lv_res_t btn_auton_action(lv_obj_t *btn) {
         switchView(container_auton);
-        return LV_RES_OK; // Indicate the button is not deleted
+        return LV_RES_OK;
     }
 
     static lv_res_t btn_ts_action(lv_obj_t *btn) {
         switchView(container_ts);
-        return LV_RES_OK; // Indicate the button is not deleted
+        return LV_RES_OK;
     }
-    // Example button event callback for switching to the auton view
+    
     static lv_res_t btn_def_action(lv_obj_t *btn) {
         switchView(container_def);
-        return LV_RES_OK; // Indicate the button is not deleted
+        return LV_RES_OK; 
     }
 
 
@@ -494,7 +527,6 @@ namespace disp{
            
             
             // adjusting temp
-            //if (pros::millis()%500==0) updateTemps();
             temp = glb::temps_a[i];
 
             lv_lmeter_set_value(lmeter, temp); 
@@ -573,7 +605,11 @@ namespace disp{
         // Auton options
         auton_label = lv_label_create(container_auton, NULL);
         lv_label_set_text(auton_label, auton_arr[auton_index]);
-        lv_obj_set_pos(auton_label, 240+50, 15); // centered in between buttons
+        lv_obj_set_pos(auton_label, 240+46, 10); // centered in between buttons
+
+        auton_description = lv_label_create(container_auton, NULL);
+        lv_label_set_text(auton_description, auton_desc_vec[auton_index]);
+        lv_obj_set_pos(auton_description, 240+10, 5+30); // centered in between buttons
 
         // confirm button
         lv_obj_t *btn_confirm = lv_btn_create(container_auton, NULL);
@@ -600,7 +636,7 @@ namespace disp{
         // Inside create_motor_infographic_screen function
         motor_name_label = lv_label_create(container_ts, NULL);
         lv_label_set_text(motor_name_label, glb::motor_labels[current_motor_index].c_str());
-        lv_obj_align(motor_name_label, container_ts, LV_ALIGN_IN_TOP_LEFT, 13, 13);
+        lv_obj_set_pos(motor_name_label, 50, 90);
 
         // Left and right buttons to switch the motor
         lv_obj_t *left_btn = lv_btn_create(container_ts, NULL);
@@ -634,33 +670,83 @@ namespace disp{
     }
 
 
-    void createDispDefView() {
+    const int checklist_count =  6; // Adjust based on your actual checklist size
+    const char *checklist_items[checklist_count] = {
+        "Tighten hang piston",
+        "Swap license plates",
+        "Check battery and secure in place",
+        "Replace shooter bands if skills",
+        "Clean traction wheels",
+        "Skills: Back zip ties vs. back poly",
+        };
 
-        lv_obj_t *label = lv_label_create(container_def, NULL);
-        lv_label_set_text(label, "2496W");
-        lv_obj_align(label, container_def, LV_ALIGN_CENTER, 0, 0); 
+    // Button click event callback function
+    // static lv_res_t btn_click_action_checklist(lv_obj_t * btn) {
+    //     static lv_style_t style_btn_rel_green; // Released style (green)
+    //     lv_style_copy(&style_btn_rel_green, &lv_style_btn_rel);
+    //     style_btn_rel_green.body.main_color = LV_COLOR_MAKE(0, 255, 0); // Light green
+    //     style_btn_rel_green.body.grad_color = LV_COLOR_MAKE(0, 200, 0); // Dark green
 
+    //     lv_btn_set_style(btn, LV_BTN_STYLE_REL, &style_btn_rel_green); // Apply the green style upon click
 
-        static lv_style_t style_circle;
-        lv_style_copy(&style_circle, &lv_style_plain); // Copy a base style
-        style_circle.body.main_color = LV_COLOR_BLUE; // Initial color
-        style_circle.body.grad_color = LV_COLOR_BLUE; // Make it a solid color
-        style_circle.body.radius = LV_RADIUS_CIRCLE; // Make it circular
-        style_circle.body.border.color = LV_COLOR_BLUE; // Border color
-        style_circle.body.border.width = 0; // No border
-        style_circle.body.opa = LV_OPA_100; // Fully opaque
+    //     return LV_RES_OK; 
+    // }
 
-        for (int i = 0; i < circle_count; ++i) {
-            lv_obj_t *circle = lv_obj_create(container_def, NULL);
-            lv_obj_set_size(circle, 5, 5); 
-            // Calculate random positions within the specified range
+    static lv_res_t btn_click_action_checklist(lv_obj_t * btn) {
+        static lv_style_t style_btn_rel_green; // Released style (green)
+        static lv_style_t style_btn_rel_red;   // Released style (red)
+        static bool is_init = false;
 
-            lv_obj_align(circle, NULL, LV_ALIGN_IN_TOP_LEFT, rand() % (370 - 50 + 1) + 50, rand() % (190 - 50 + 1) + 50);
+        if (!is_init) {
+            lv_style_copy(&style_btn_rel_green, &lv_style_btn_rel);
+            style_btn_rel_green.body.main_color = LV_COLOR_MAKE(0, 255, 0); // Light green
+            style_btn_rel_green.body.grad_color = LV_COLOR_MAKE(0, 200, 0); // Dark green
 
-            lv_obj_set_style(circle, &style_circle); 
-            circles_anim[i] = circle;
+            lv_style_copy(&style_btn_rel_red, &lv_style_btn_rel);
+            style_btn_rel_red.body.main_color = LV_COLOR_MAKE(255, 0, 0); // Light red
+            style_btn_rel_red.body.grad_color = LV_COLOR_MAKE(200, 0, 0); // Dark red
+
+            is_init = true;
         }
 
+        // Determine the current color of the button to toggle
+        lv_style_t *current_style = lv_btn_get_style(btn, LV_BTN_STYLE_REL);
+        if (current_style->body.main_color.full == style_btn_rel_green.body.main_color.full) {
+            // If currently green, switch to red
+            lv_btn_set_style(btn, LV_BTN_STYLE_REL, &style_btn_rel_red);
+        } else {
+            // If not green (or red), switch to green
+            lv_btn_set_style(btn, LV_BTN_STYLE_REL, &style_btn_rel_green);
+        }
+
+        return LV_RES_OK;
+    }
+
+    void createDispDefView() {
+
+        // Add title label
+        lv_obj_t *title_label = lv_label_create(container_def, NULL);
+        lv_label_set_text(title_label, "Checklist");
+        lv_obj_align(title_label, NULL, LV_ALIGN_IN_TOP_MID, 0, 5);
+
+        // Style for the red buttons
+        static lv_style_t style_btn_red;
+        lv_style_copy(&style_btn_red, &lv_style_btn_rel);
+        style_btn_red.body.main_color = LV_COLOR_MAKE(255, 0, 0); // Light red
+        style_btn_red.body.grad_color = LV_COLOR_MAKE(200, 0, 0); // Dark red
+
+        for (int i = 0; i < checklist_count; ++i) {
+            // Create button
+            lv_obj_t *btn = lv_btn_create(container_def, NULL);
+            lv_btn_set_action(btn, LV_BTN_ACTION_CLICK, btn_click_action_checklist); // Assign the click action
+            lv_btn_set_style(btn, LV_BTN_STYLE_REL, &style_btn_red); // Apply the red style
+            lv_obj_set_size(btn, 400, 30); // Set button size
+            lv_obj_set_pos(btn, 10, 28+i*34);
+
+            // Create label for the button
+            lv_obj_t *label = lv_label_create(btn, NULL);
+            lv_label_set_text(label, checklist_items[i]);
+        }
     }
 
 

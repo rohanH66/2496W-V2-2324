@@ -223,8 +223,8 @@ namespace pid
         double target = start_pos + distance;
         double s = distance / fabs(distance) * abs(speed);
         
-        double straight_kP = 1.8;
-        double straight_kI = 0.7;
+        double straight_kP = 0; //1.8
+        double straight_kI = 0; //7
         double straight_i = 0;
         double init_heading = global_heading;
         double cur_heading = glb::imu.get_heading();
@@ -270,7 +270,7 @@ namespace pid
         return error / fabs(error) * (25 * log(0.25 * (fabs(error) + 4)) + 5);
     }
 
-    void turn(double target_deg, int timeout=1000, bool early_exit = true, double multi=1.0, double max_speed=127, int exit_time=75)
+    void turn(double target_deg, int timeout=1000, bool early_exit = true, double multi=1.0, double max_speed=127, int exit_time=75, double tolerance = 0.8)
     {  
         
         // fix turns more/less than 180
@@ -391,7 +391,7 @@ namespace pid
                 speed *= multiplier;
             }
 
-            if (fabs(error) < 0.15) // 0.15
+            if (fabs(error) < tolerance) // 0.15
             {
                 if(!exit)
                     exit = true;
@@ -432,12 +432,12 @@ namespace pid
         global_heading += imu.get_heading() - starting;
     }
 
-    void turn_to(double degree_to, int timeout=1000, double multi=1.0, double max_speed=100, int exit_time=100)
+    void turn_to(double degree_to, int timeout=1000, double multi=1.0, double max_speed=100, int exit_time=100, double tolerance = 0.8)
     {
         double degree = degree_to - global_heading;
         degree = (degree > 180) ? -(360 - degree) : ((degree < -180) ? (360 + degree) : (degree)); // optimize the turn direction
         //turn(degree, timeout, multi, max_speed, exit_time);
-        turn(degree, timeout, true, multi, max_speed, exit_time);
+        turn(degree, timeout, true, multi, max_speed, exit_time, tolerance);
     }
 
     void drive_var(double degree_to, int l_s=127, int r_s = 127, int timeout=3000, Piston pis = NULL, int piston_init_time = 0, int piston_on_dur = 0)

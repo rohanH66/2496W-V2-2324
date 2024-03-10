@@ -51,31 +51,36 @@ void close_awp(){
 
 void close_rush(){
     intake.move(127);
-    drive(2250, 2000, 1.0, 127, LfrontP, 0, 20000);
+    drive(2250, 1400, 1.0, 127, LfrontP, 0, 20000);
     LfrontP.set(false);
-    delay(300);
-    turn_to(-95);
+    //delay(300);
     intake.move(0);
+    turn_to(-95, 900);
     RbackP.set(true);
-    drive_const(-1200, 127, RbackP, 0, 460, 1000);
-    turn_to(-145, 800);
+    drive_const(-1200, 127, RbackP, 0, 460, 900);
+    turn_to(-147, 700);
     RbackP.set(false);
-    drive(2400);
-    turn_to(-10);
+
+    //coming bsck
+    drive(2500, 1200);
+    turn_to(-10, 800);
     LbackP.set(true);
-    drive(-550);
-    turn_to(-55);
+    drive(-400, 600);
+    turn_to(-60, 700);
     delay(400);
     LbackP.set(false);
-    turn_to(88);
+    turn_to(95.5);
+
+    LfrontP.set(true);
 
     intake.move(-127);
-    drive(1650);
+    drive(1670);
     delay(500);
-    turn_to(91);
-    drive(-1450);
-    turn_to(133);
-    drive(-850);
+    turn_to(88);
+    LfrontP.set(false);
+    drive(-1700);
+    turn_to(130);
+    drive(-450);
 
     //RbackP.set(true);
 
@@ -92,11 +97,11 @@ void far_6b_a(){
     turn_to(80, 500);
     intake.move(-127);
     delay(300);
-    turn_to(-78, 800);
+    turn_to(-72);
     intake.move(127);
-    drive(1260, 800);
+    drive(1340);
     //turn_to(-81);
-    drive(-1640, 925);
+    drive(-1730);
     intake.move(0);
     turn_to(-120, 400);
     drive(-600, 500, 1, 127, LbackP, 200, 20000);
@@ -118,13 +123,16 @@ void far_6b_a(){
     drive_const(1500, 127, NULL, 0, 0, 600);
     drive(-900, 600);
 
-    turn_to(-71, 600);
+    turn(-66, 1300);
     intake.move(127);
-    drive(2275, 1500);
+    drive(2222, 1500);
+    drive(-200);
 
-    drive_var(137, 100, 0);
+    //LfrontP.set(true);
+    drive_var(137, 100, 0, 3000, LfrontP, 500,5000);
     intake.move(-127);
-    drive_const(2500, 127, NULL, 0, 0, 1200);
+    drive_const(2500, 800, NULL, 0, 0, 1000);
+    LfrontP.set(false);
     drive(-800);
 
     turn_to(-78);
@@ -142,37 +150,38 @@ void far_6bsafe_a(){
 
 
 void skills_lineup(){
-    drive(-675);
-    turn_to(45, 1000);
+    drive(-675, 1000);
+    turn_to(45, 700);
     drive_const(-1100, 127, NULL, 0, 0, 1000);
     drive(600, 800);
-    turn_to(-57); /// we gotta find a way to get this good
-    drive(-238, 450);
+    turn_to(-54, 1000, 1.0, 100, 100, 0.3); /// we gotta find a way to get this good
+    drive(-175, 600);
     RbackP.set(true);
     LbackP.set(true);
 }
 
 void skills_post_matchload(){
-    //cata_rest();
+    cata_rest();
 
     
     LbackP.set(false);
     RbackP.set(false);
-    delay(500);
-    drive(238);
-    turn_to(178, 2000, 1.0, 127.0, 100);
-    drive(-1780, 1400);
-    turn_to(146);
+    delay(300);
+    drive(175);
+    turn_to(178, 950);
+    drive(-1780, 1150);
+    turn_to(146, 650);
 
     //drive down alley
-    drive(-3500, 2000, 1.0, 127.0, RbackP, 1000, 7000);
-    turn_to(100);
+    drive(-3500, 1800, 1.0, 127.0, RbackP, 1000, 7000);
+    turn_to(100, 450);
     //RbackP.set(true);
-    drive(-530, 1000);
+    drive(-530, 550);
 
-    drive_var(-45, -105, -42);
+    //right scoop
+    drive_var(-45, -105, -42, 1200);
     drive_const(-2000, 127, NULL, 0, 0, 800);
-    drive(600, 800);
+    drive(600, 700);
     turn_to(45, 500);
     drive_const(-2000, 127, NULL, 0, 0, 800);
     RbackP.set(false);
@@ -182,7 +191,7 @@ void skills_post_matchload(){
     turn_to(-20);
 
 
-    drive(-1600, 2000, 1.0, 127.0, LbackP, 550, 3000);
+    drive(-1600, 1000, 1.0, 127.0, LbackP, 125, 3000);
     RbackP.set(true);
 
 
@@ -192,39 +201,42 @@ void skills_post_matchload(){
     // turn_to(-20);
 
     //turn to scoop
-    drive_var(142, -18, -80, 1500, RbackP, 0, 1000);
-    //RbackP.toggle();
+    drive_var(139, -21, -80, 1500, RbackP, 0, 1450);
+    RbackP.set(false);
     //LbackP.toggle();
-    drive_const(-2000, 127, NULL, 0, 0, 800);
+    drive_const(-2000, 127, NULL, 0, 0, 600);
     LbackP.set(false);
-    drive(800);
-    turn_to(135, 500);
-    LbackP.set(true);
-    drive_const(-2000, 127, NULL, 0, 0, 800);
-    LbackP.set(false);
-    drive(1600);
+
+    //removed second push below
+    // drive(800);
+    // turn_to(135, 500);
+    // LbackP.set(true);
+    // drive_const(-2000, 127, NULL, 0, 0, 800);
+    // LbackP.set(false);
+    drive(1600, 1400);
 
     LbackP.set(true);
 
     // left side
-    turn_to(45);
+    turn_to(45, 850);
     //RbackP.set(true);
-    drive(-200);
+    drive(-200, 500);
     RbackP.set(true);
 
-    drive_var(83, -25, -90, 2000);
+    //second scoop on left side
+    drive_var(82, -34, -90, 2000);
     LbackP.set(true);
 
     drive_const(-2000, 127, NULL, 0, 0, 800);
-    // LbackP.set(false);
+    LbackP.set(false);
     // RbackP.set(false);
-    drive(800);
-    turn_to(135, 500);
+    drive(1000, 2000, 1.0, 127.0, RbackP, 0, 200);
+    turn_to(150, 500);
     RbackP.set(true);
     LbackP.set(true);
     drive_const(-2000, 127, NULL, 0, 0, 800);
 
-    drive(1200);
+    drive(700);
 
     LbackP.set(false);
     RbackP.set(false);
@@ -233,8 +245,11 @@ void skills_post_matchload(){
     //left push among us
     drive(-2500);
     LbackP.set(true);
+    RbackP.set(true);
 
+    //scoop for right
     drive_var(120, -20, -90);
+    RbackP.set(false);
 
     //drive(-530);
 
@@ -242,13 +257,15 @@ void skills_post_matchload(){
     //drive_const(-3000, 127, NULL, 0, 0, 1500);
     LbackP.set(false);
     drive(500);
-    turn_to(-146, 1000);
+    turn_to(-151, 1000);
     LbackP.set(true);
     intake.move(-127);
+
+    // edit this after if it's out of time
     drive_const(-2000, 127, NULL, 0, 0, 800);
     LbackP.set(false);
     drive(800);
-    turn_to(-135, 1000);
+    turn_to(-145, 1000);
 
     LbackP.set(true);
     RbackP.set(true);
@@ -256,14 +273,16 @@ void skills_post_matchload(){
     drive_const(-2000, 127, NULL, 0, 0, 800);
     LbackP.set(false);
     RbackP.set(false);
-    drive(1600);
+
+    drive_var(-140, 0, 127);
+    //drive(600);
 
 
     //turn_to(180);
 
    //
 
-    intake.move(0);
+    //intake.move(0);
     chas.stop();
 
 

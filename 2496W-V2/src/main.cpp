@@ -66,8 +66,8 @@ void opcontrol()
 		intakeCon();
 		piston_cont(skillsb);
 		//hangCon();
-		slapperCon();
-		//distCon(time);
+		//slapperCon();
+		distCon(time);
 		// if ((*auton).get_name() != "V1 skills" && (*auton).get_name() != "V2 skills"){
 		print_info(time, chassis_on);
 		// }

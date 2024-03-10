@@ -53,9 +53,9 @@ void slapperCon()
 
 void distCon(int time){
     int pos = ((int) cata.get_position() % 900);
-    static int deadzone = 420;
-    const int realDead = 420;
-    const int cutoff = 470;
+    static int deadzone = 270;
+    const int realDead = 270;
+    const int cutoff = 320;
     const int delay = 160; //delay for after distance detects --> start firing, for human error
     static bool isTri = false;
     static bool shoot = false;
