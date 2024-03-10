@@ -108,35 +108,21 @@ namespace disp{
         if (draw>100000) error = true;
         else error = false;
 
-        // snprintf(buffer, sizeof(buffer), "%.2f %%", motor.get_efficiency());
-        // lv_label_set_text(stat_labels[0], error ? "ERROR" : buffer);
-
-        // snprintf(buffer, sizeof(buffer), "%d mA", draw);
-        // lv_label_set_text(stat_labels[1], error ? "ERROR" : buffer);
-
-        // snprintf(buffer, sizeof(buffer), "%d °C", glb::temps_a[current_motor_index]);
-        // lv_label_set_text(stat_labels[2], error ? "ERROR" : buffer);
-
-        // snprintf(buffer, sizeof(buffer), "%.2f Nm", motor.get_torque());
-        // lv_label_set_text(stat_labels[3], error ? "ERROR" : buffer);
-
-        // snprintf(buffer, sizeof(buffer), "%d", motor.get_port());
-        // lv_label_set_text(stat_labels[4], buffer);
-            
         snprintf(buffer, sizeof(buffer), "%.2f %%", motor.get_efficiency());
-        lv_label_set_text(stat_labels[0], "0.00 %");
+        lv_label_set_text(stat_labels[0], error ? "ERROR" : buffer);
 
         snprintf(buffer, sizeof(buffer), "%d mA", draw);
-        lv_label_set_text(stat_labels[1], "0 mA");
+        lv_label_set_text(stat_labels[1], error ? "ERROR" : buffer);
 
         snprintf(buffer, sizeof(buffer), "%d °C", glb::temps_a[current_motor_index]);
-        lv_label_set_text(stat_labels[2], "30 °C");
+        lv_label_set_text(stat_labels[2], error ? "ERROR" : buffer);
 
         snprintf(buffer, sizeof(buffer), "%.2f Nm", motor.get_torque());
-        lv_label_set_text(stat_labels[3], "0.00 Nm");
+        lv_label_set_text(stat_labels[3], error ? "ERROR" : buffer);
 
         snprintf(buffer, sizeof(buffer), "%d", motor.get_port());
         lv_label_set_text(stat_labels[4], buffer);
+            
     }
 
 
