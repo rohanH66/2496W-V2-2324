@@ -51,7 +51,7 @@ void close_awp(){
 
 void close_rush(){
     intake.move(127);
-    drive(2250, 1400, 1.0, 127, LfrontP, 0, 20000);
+    drive(2240, 1400, 1.0, 127, LfrontP, 0, 20000);
     LfrontP.set(false);
     //delay(300);
     intake.move(0);
@@ -62,8 +62,8 @@ void close_rush(){
     RbackP.set(false);
 
     //coming bsck
-    drive(2500, 1200);
-    turn_to(-10, 800);
+    drive(2700, 1200);
+    turn_to(-30, 800);
     LbackP.set(true);
     drive(-400, 600);
     turn_to(-60, 700);
@@ -71,16 +71,16 @@ void close_rush(){
     LbackP.set(false);
     turn_to(95.5);
 
-    LfrontP.set(true);
+   //  LfrontP.set(true);
 
     intake.move(-127);
-    drive(1670);
+    drive(1770);
     delay(500);
-    turn_to(88);
+    // turn_to(88);
     LfrontP.set(false);
-    drive(-1700);
-    turn_to(130);
-    drive(-450);
+    // drive(-1700);
+    // turn_to(130);
+    // drive(-450);
 
     //RbackP.set(true);
 
@@ -94,14 +94,14 @@ void far_6b_a(){
 
     // position near goal 
     intake.move(0);
-    turn_to(80, 500);
+    turn_to(80, 400);
     intake.move(-127);
     delay(300);
     turn_to(-72);
     intake.move(127);
-    drive(1340);
+    drive(1360);
     //turn_to(-81);
-    drive(-1730);
+    drive(-1450);
     intake.move(0);
     turn_to(-120, 400);
     drive(-600, 500, 1, 127, LbackP, 200, 20000);
@@ -110,7 +110,7 @@ void far_6b_a(){
     turn_to(-115, 350);
     
     RbackP.set(true);
-    drive_var(-40, -70, -33);
+    drive_var(-40, -70, -37);
 
     drive_const(-1500, 127, NULL, 0, 0, 450);
     RbackP.set(false);
@@ -123,15 +123,16 @@ void far_6b_a(){
     drive_const(1500, 127, NULL, 0, 0, 600);
     drive(-900, 600);
 
-    turn(-66, 1300);
+    turn_to(-64, 1500);
     intake.move(127);
     drive(2222, 1500);
-    drive(-200);
+    drive(-200, 300);
 
     //LfrontP.set(true);
     drive_var(137, 100, 0, 3000, LfrontP, 500,5000);
     intake.move(-127);
-    drive_const(2500, 800, NULL, 0, 0, 1000);
+    //LfrontP.set(true);
+    drive_const(2500, 80, NULL, 0, 0, 800);
     LfrontP.set(false);
     drive(-800);
 
@@ -154,21 +155,20 @@ void skills_lineup(){
     turn_to(45, 700);
     drive_const(-1100, 127, NULL, 0, 0, 1000);
     drive(600, 800);
-    turn_to(-54, 1000, 1.0, 100, 100, 0.3); /// we gotta find a way to get this good
+    turn_to(-60, 1000); /// we gotta find a way to get this good
     drive(-175, 600);
+    turn_to(-60, 600);
     RbackP.set(true);
     LbackP.set(true);
 }
 
 void skills_post_matchload(){
     cata_rest();
-
-    
     LbackP.set(false);
     RbackP.set(false);
-    delay(300);
+    //delay(300);
     drive(175);
-    turn_to(178, 950);
+    turn_to(178, 1000);
     drive(-1780, 1150);
     turn_to(146, 650);
 
@@ -191,7 +191,7 @@ void skills_post_matchload(){
     turn_to(-20);
 
 
-    drive(-1600, 1000, 1.0, 127.0, LbackP, 125, 3000);
+    drive(-1400, 1000, 1.0, 127.0, LbackP, 125, 3000);
     RbackP.set(true);
 
 
@@ -230,7 +230,7 @@ void skills_post_matchload(){
     drive_const(-2000, 127, NULL, 0, 0, 800);
     LbackP.set(false);
     // RbackP.set(false);
-    drive(1000, 2000, 1.0, 127.0, RbackP, 0, 200);
+    drive(1000, 2000, 1.0, 127.0, RbackP, 300, 200);
     turn_to(150, 500);
     RbackP.set(true);
     LbackP.set(true);
@@ -245,10 +245,10 @@ void skills_post_matchload(){
     //left push among us
     drive(-2500);
     LbackP.set(true);
-    RbackP.set(true);
+    //RbackP.set(true);
 
     //scoop for right
-    drive_var(120, -20, -90);
+    drive_var(120, -15, -90);
     RbackP.set(false);
 
     //drive(-530);
@@ -342,11 +342,13 @@ void skills_no_load(){
 }
 void skills_load(){
     skills_lineup();
-    int temp_heading = imu.get_heading();
+
     matchload(46);
-    imu.set_heading(temp_heading);
+    delay(200);
+    imu.tare();
+    delay(200);
     delay(500);
-    skills_post_matchload();  
+    skills_post_matchload(); 
 }
 
 
@@ -390,6 +392,7 @@ void test_all_drive(){
 }
 
 void test_all_turn(){
+    //matchload(46);
     turn(180, 2000);
     delay(1000);
     turn(-179.9, 2000);

@@ -11,9 +11,9 @@ using namespace std;
 namespace glb
 {
     // ports
-    #define P_IMU 21
+    #define P_IMU 19
     #define P_RF 10
-    #define P_RM 9
+    #define P_RM 20
     #define P_RB 8
     #define P_LF 7
     #define P_LM 6
