@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <cmath>
 #include <cstring>
+//#include "sylib/sylib.hpp"
 
 
 using namespace pros;
@@ -29,6 +30,8 @@ string names;
 void initialize() {
 	disp::setupUI();
 	//lcd::initialize();
+
+	sylib::initialize();
 	con.clear();
 	static Auton temp = auton_selector(autons);
 	names = temp.get_name();
@@ -40,6 +43,7 @@ void autonomous() {
 	
 	(*auton).run();
 }
+
 
 void opcontrol() 
 {
@@ -54,9 +58,12 @@ void opcontrol()
 	// if ((*auton).get_name() == "V1 skills" || (*auton).get_name() == "V2 skills") pid::global_heading = 337;
 
 	//eg::regMain(750, 15, 0.17);
+    //std::uint32_t clock = sylib::millis();
 
 	while(true)
 	{
+		//sylib::delay_until(&clock, 10);
+
 		if (time%2000==0) disp::updateMotorTemps();
 		if (time%100==0) disp::update_motor_stats();
 
