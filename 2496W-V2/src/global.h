@@ -30,7 +30,6 @@ namespace glb
     #define P_RWBACKP 'E'
     #define P_LWBACKP 'A'
 
-    // #define P_BLOCKERP 'D'
    
    
     //objects
@@ -46,12 +45,14 @@ namespace glb
 
     Piston hangP(P_HANGP);
     Piston pto(P_PTO);
-    // Piston blockerP(P_BLOCKERP);
-    // Distance dist(P_DISTANCE);
+
     Imu imu(P_IMU);
     Distance dist(P_DISTANCE);
     Controller con(E_CONTROLLER_MASTER);
 
+
+
+    // This is all jank stuff for display code, pls ignore it lol
     std::vector<pros::Motor> right_m = chas.get_right();
     std::vector<pros::Motor> left_m = chas.get_left();
     std::vector<pros::Motor> motorV = {

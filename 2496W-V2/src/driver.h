@@ -8,7 +8,6 @@
 #include <cmath>
 #include "../include/pros/misc.h"
 
-// #define TURN_K 2.2
 
 using namespace pros;
 using namespace glb;
@@ -20,10 +19,10 @@ void drive()
 {
     double left = abs(con.get_analog(E_CONTROLLER_ANALOG_LEFT_Y)) > 10 ? con.get_analog(E_CONTROLLER_ANALOG_LEFT_Y) : 0;
     double right = abs(con.get_analog(E_CONTROLLER_ANALOG_RIGHT_X)) > 10 ? con.get_analog(E_CONTROLLER_ANALOG_RIGHT_X) : 0;
+    
+    
     right /= 1.2275;
-    // right /= 1.236;
 
-    //right = ((127.0 / pow(127, TURN_K)) * pow(abs(right), TURN_K) * (right/127));
     if (pto.get_status() == true)
         chas.spin(left);
     else if(left || right)
@@ -111,15 +110,6 @@ void intakeCon()
         intake.move(0);
 }
 
-// void hangCon()
-// {
-//     if(con.get_digital(E_CONTROLLER_DIGITAL_Y)) 
-// 		hang.move(127);
-//     else if(con.get_digital(E_CONTROLLER_DIGITAL_RIGHT))
-//         hang.move(-127);
-//     else 
-//         hang.move(0);
-// }
 
 void updateTemps(){
     static int count = 0;
@@ -128,31 +118,6 @@ void updateTemps(){
     count++;
     if (count>7) count=0;
 }
-
-
-// void auto_wings(){
-//     //false for L, true for R
-//     if (intake.get_direction() < 0){
-//         if (pid::global_heading - imu.get_heading() < 0) facing_side = true;
-//         else facing_side = false;
-//     }
-    
-//     if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_Y)){
-//         if (facing_side) RfrontP.toggle();
-//         else LfrontP.toggle();
-//     }
-
-// }
-
-
-    // void driver_rumble(){
-    //     static int matchTime = 0;
-    //     if (pros::competition_is_connected()) matchTime++;
-
-    //     if (matchTime%15000 == 0 && matchTime >= 75000) con.rumble("-");
-    //     else if (matchTime%15000 == 0) con.rumble(".");
-    // }
-
 
 void piston_cont(bool skills)
 {

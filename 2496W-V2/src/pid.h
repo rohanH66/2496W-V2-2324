@@ -17,12 +17,6 @@ using namespace pros;
 using namespace std;
 using namespace glb;
 
-// #define DRIVE_KP 0.2
-
-// #define DRIVE_KI 0
-// #define DRIVE_KD 0
-// #define IMU_K 0
-
 namespace pid
 {
     double start_head = 0; 
@@ -92,17 +86,11 @@ namespace pid
         // 4.62646 * std::pow(fabs(target_dist), -0.689989) + 0.107432 for 0
         // 2.04035 * std::pow(fabs(target_dist), -0.534162) + 0.0949831 for 2.5
         
-        
-        
-        //((17.6647 * (pow(fabs(target_dist), -0.975028))) + 0.139685) //0.14, 0.16929
-        //500: 0.1777
-        //1000: 0.1685
-        //2000: 0.1429
         double drive_ki = 0.002;
         double drive_kd = 0; //0 for good
 
-
         double imu_k = 0.003;
+        // this changed nothing lmao 
 
         if (fabs(end_head) - fabs(imu.get_heading()) > 1) {
             start_head += end_head-imu.get_heading();
@@ -123,7 +111,6 @@ namespace pid
         double heading_error = 0;
         double error_range_time = 0;
         bool start_positive = target_dist >= 0 ? true : false;
-        double early_exit_time = 0;
 
         bool exit = false;
         bool same_error = false;
@@ -180,15 +167,6 @@ namespace pid
                     break;
             }
             
-            // if (fabs(error) < 20 && (std::round(prev_error * scaler) / scaler - std::round(error * scaler) / scaler < 0.2)) // 0.15
-            // {
-            //     if(!same_error)
-            //         same_error = true;
-            //     else
-            //         early_exit_time += 10;
-            //     if (exit_time <= early_exit_time)
-            //         break;
-            // }
 
             //Keep sides moving the same distances
             // chas.spin_left(speed + correction * speed / 127.0);
@@ -308,28 +286,6 @@ namespace pid
             TURN_KI = 0.36; 
             TURN_KD = 0.26; 
         }
-
-
-        //3/3 180deg good ig
-        // TURN_KP = 4.6; /
-        // TURN_KI = 0.55; 
-        // TURN_KD = 0.37;  
-
-        //3/3 135deg good enough?????????????????
-        // TURN_KP = 4.5; 
-        // TURN_KI = 0.36; //.36
-        // TURN_KD = 0.3;  //.26
-
-        //3/3 45deg tuned below
-        // TURN_KP = 4.5; 
-        // TURN_KI = 0.36; 
-        // TURN_KD = 0.26; 
-
-
-        // 3/3 90deg Tuned below
-        // TURN_KP = 4.75; 
-        // TURN_KI = 0.42; 
-        // TURN_KD = 0.33; 
 
         int starting;
 
@@ -522,69 +478,5 @@ namespace pid
 
 
 }
-//180
-
-// good work out there rohan ur like that ur that guy ur the rizzler keep it up
-// thanks aayush, you too :pray:
-
-//#define TURN_KP 0.9//((32.7676 * (pow(fabs(fabs(target_deg) > 1 ? target_deg : 1), -1.07131))) + 0.719255) //.7
-//define TURN_KI 0 //10
-//#define TURN_KD 0.2 //0.3 //.45
-
-//180
-/*
-TURN_KP = 3.299;
-TURN_KI = 0.09;
-TURN_KD = 0.32;
-*/
-
-
-//older
-/*double TURN_KP = 3.275;
-double TURN_KI = 0;
-double TURN_KD = 0.224;*/
-
-//better
-/*double TURN_KP = 3.275;
-double TURN_KI = 0.008;
-double TURN_KD = 0.224;*/
-/*
-
-//more better
-double TURN_KP = 3.275;
-double TURN_KI = 0.01;
-double TURN_KD = 0.224;*/
-
-/*if (target_deg < 135)
-{        
-    #define TURN_KP 2.2
-    #define TURN_KI 0
-    #define TURN_KD 1
-}
-else{
-    //180 vals here -- need to tune
-    #define TURN_KP 3.228
-    #define TURN_KI 0.25
-    #define TURN_KD 0.2
-}*/
-
-// 3.215, 0.2555, 0.214, integral < 2.65
-
-// old: 180: 0.9, 0, 0.2
-//0.15,-0.1, -1.72, 1.53, -0.02, -0.14, -0.54, -0.39, 0.08, 0.04, -1.69
-
-//90: 3.15, 0, .218
-
-//3.2, 0, .215
-
-/*
-errors:
-//0.4, -1.06, 0.45, -0.51, 1.2, -0.93
--0.41, 1.53, -0.09, 1.07, -0.9, 0.81, -0.09, 0.83
-*/
-
-// 3.21, 0.1, .215
 
 #endif
-
-

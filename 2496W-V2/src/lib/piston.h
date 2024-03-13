@@ -21,8 +21,8 @@ public:
 
     void set(bool extend)
     {
-            piston.set_value(extend);
-            status = extend;
+        piston.set_value(extend);
+        status = extend;
     } 
 
     void toggle()

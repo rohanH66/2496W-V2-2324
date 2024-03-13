@@ -20,12 +20,10 @@ using namespace glb;
 void matchload(int triballs){
     int time = 0;
     int timeout = 28000;
-    //cata.tare_position();
     while (cata.get_position()/900 < triballs){ 
         cata.move(100);
         time += 2;
         pros::delay(2);
-        //if (time%100==0) con.print(1,0,"%.2f", imu.get_heading());
     }
     cata.move(0);
 }

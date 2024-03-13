@@ -16,7 +16,6 @@
 #include <stdio.h>
 #include <cmath>
 #include <cstring>
-//#include "sylib/sylib.hpp"
 
 
 using namespace pros;
@@ -64,26 +63,19 @@ void opcontrol()
 	{
 		//sylib::delay_until(&clock, 10);
 
+		//display stuff
 		if (time%2000==0) disp::updateMotorTemps();
 		if (time%100==0) disp::update_motor_stats();
-
 		if (time%200==0) updateTemps();
 
 		if (chassis_on) drive();
 		intakeCon();
 		piston_cont(skillsb);
-		//hangCon();
+
 		//slapperCon();
 		distCon(time);
-		// if ((*auton).get_name() != "V1 skills" && (*auton).get_name() != "V2 skills"){
 		print_info(time, chassis_on);
-		// }
-		// if(time % 150 == 0) {
-		// 	if(hangP.get_status() == true){
-        // 		con.print(2, 0, "HANG");
-		// 	}
-		// }
-        // con.print(1, 0, "%.2f", imu.get_heading());
+
 		if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_LEFT)) chassis_on = !chassis_on;
 		if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_UP) && chassis_on){
 			if (names == "reg tuning") reg::regMain(750, 15, 0.17);
