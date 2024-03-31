@@ -28,33 +28,33 @@ void close_awp(){
     LbackP.set(false);
     turn_to(34);
     drive_const(200);
-    intake.move(-127);
+    spinIntake(-127);
     drive(1000, 1000);
-    intake.move(0);
+    spinIntake(0);
     drive(-600, 800);
 
-    intake.move(-127);
+    spinIntake(-127);
     drive(1000, 900);
-    intake.move(0);
+    spinIntake(0);
     drive(-900);
 
     turn_to(180);
     drive(950, 800);
     turn_to(137);
-    intake.move(-127);
+    spinIntake(-127);
     drive(1400);
     delay(1000);
-    intake.move(0);
+    spinIntake(0);
 
 
 }
 
 void close_rush(){
-    intake.move(127);
+    spinIntake(127);
     drive(2240, 1400, 1.0, 127, LfrontP, 0, 20000);
     LfrontP.set(false);
     //delay(300);
-    intake.move(0);
+    spinIntake(0);
     turn_to(-95, 900);
     RbackP.set(true);
     drive_const(-1200, 127, RbackP, 0, 460, 900);
@@ -73,7 +73,7 @@ void close_rush(){
 
    //  LfrontP.set(true);
 
-    intake.move(-127);
+    spinIntake(-127);
     drive(1770);
     delay(500);
     // turn_to(88);
@@ -88,21 +88,21 @@ void close_rush(){
 
 void far_6b_a(){
     // rush and come back
-    intake.move(127);
+    spinIntake(127);
     drive(2310, 1200, 1, 127, RfrontP, 0, 450);
     drive(-2600, 1550);
 
     // position near goal 
-    intake.move(0);
+    spinIntake(0);
     turn_to(80, 400);
-    intake.move(-127);
+    spinIntake(-127);
     delay(300);
     turn_to(-72);
-    intake.move(127);
+    spinIntake(127);
     drive(1360);
     //turn_to(-81);
     drive(-1450);
-    intake.move(0);
+    spinIntake(0);
     turn_to(-120, 400);
     drive(-600, 500, 1, 127, LbackP, 200, 20000);
     turn_to(-155, 350);
@@ -118,19 +118,19 @@ void far_6b_a(){
 
     // turn around to score next push
     turn(178, 1200);
-    intake.move(-127);
+    spinIntake(-127);
     delay(200);
     drive_const(1500, 127, NULL, 0, 0, 600);
     drive(-900, 600);
 
     turn_to(-64, 1500);
-    intake.move(127);
+    spinIntake(127);
     drive(2222, 1500);
     drive(-200, 300);
 
     //LfrontP.set(true);
     drive_var(137, 100, 0, 3000, LfrontP, 500,5000);
-    intake.move(-127);
+    spinIntake(-127);
     //LfrontP.set(true);
     drive_const(2500, 80, NULL, 0, 0, 800);
     LfrontP.set(false);
@@ -163,7 +163,7 @@ void skills_lineup(){
 }
 
 void skills_post_matchload(){
-    cata_rest();
+    
     LbackP.set(false);
     RbackP.set(false);
     //delay(300);
@@ -259,7 +259,7 @@ void skills_post_matchload(){
     drive(500);
     turn_to(-151, 1000);
     LbackP.set(true);
-    intake.move(-127);
+    spinIntake(-127);
 
     // edit this after if it's out of time
     drive_const(-2000, 127, NULL, 0, 0, 800);
@@ -269,7 +269,7 @@ void skills_post_matchload(){
 
     LbackP.set(true);
     RbackP.set(true);
-    intake.move(-127);
+    spinIntake(-127);
     drive_const(-2000, 127, NULL, 0, 0, 800);
     LbackP.set(false);
     RbackP.set(false);
@@ -343,7 +343,7 @@ void skills_no_load(){
 void skills_load(){
     skills_lineup();
 
-    matchload(46);
+    
     delay(200);
     imu.tare();
     delay(200);

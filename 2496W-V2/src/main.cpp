@@ -35,7 +35,7 @@ void initialize() {
 	static Auton temp = auton_selector(autons);
 	names = temp.get_name();
 	auton = &temp;
-	cata.tare_position();
+
 }
 
 void autonomous() {
@@ -73,7 +73,7 @@ void opcontrol()
 		piston_cont(skillsb);
 
 		//slapperCon();
-		distCon(time);
+		
 		print_info(time, chassis_on);
 
 		if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_LEFT)) chassis_on = !chassis_on;

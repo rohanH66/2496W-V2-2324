@@ -18,8 +18,8 @@ namespace glb
     #define P_LF 7
     #define P_LM 6
     #define P_LB 5
-    #define P_INTAKE 4
-    #define P_CATA 12
+    #define P_INTAKE1 4
+    #define P_INTAKE2 9
     #define P_DISTANCE 14
 
 
@@ -35,8 +35,8 @@ namespace glb
     //objects
     Chassis chas({P_LF, P_LM, P_LB}, {P_RF, P_RM, P_RB}, pros::E_MOTOR_GEARSET_06, false);
 
-    Motor intake(P_INTAKE, E_MOTOR_GEARSET_06);
-    Motor cata (P_CATA, E_MOTOR_GEARSET_18, true);
+    Motor intake1(P_INTAKE1, E_MOTOR_GEARSET_06);
+    Motor intake2(P_INTAKE2, E_MOTOR_GEARSET_06);
 
     Piston LfrontP(P_LWFRONTP);
     Piston RfrontP(P_RWFRONTP);
@@ -59,17 +59,18 @@ namespace glb
         right_m[0],
         right_m[1],
         right_m[2],
-        intake,
+        intake_1,
+        intake_2,
         left_m[0],
         left_m[1],
         left_m[2],
-        cata,
     };
     std::string motor_labels[] = {
         "R. Top",
         "R. Middle",
         "R. Bottom",
-        "Intake",
+        "Intake 1",
+        "Intake 2"
         "L. Top",
         "L. Middle",
         "L. Bottom",
@@ -80,11 +81,11 @@ namespace glb
         "100%",
         "R. Middle",
         "R. Bottom",
-        "Intake",
+        "Intake 1",
+        "Intake 2"
         "L. Top",
         "L. Middle",
-        "L. Bottom",
-        "Shooter",
+        "L. Bottom"
     };
 
     int temps_a[] = {

@@ -9,12 +9,19 @@
 #include "../include/pros/misc.h"
 
 
+
 using namespace pros;
 using namespace glb;
 using namespace std;
 
 bool intakeCooldown = false;
 bool facing_side = false;
+
+void spinIntake(int voltage){
+    intake1.move(voltage);
+    intake2.move(voltage);
+}
+
 void drive()
 {
     double left = abs(con.get_analog(E_CONTROLLER_ANALOG_LEFT_Y)) > 10 ? con.get_analog(E_CONTROLLER_ANALOG_LEFT_Y) : 0;
@@ -34,80 +41,84 @@ void drive()
         chas.stop();
 }
 
-void slapperCon()
-{
+// void slapperCon()
+// {
 
-    static bool matchload = false;
-    if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_DOWN)){
-        matchload = !matchload;
-    } 
+//     static bool matchload = false;
+//     if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_DOWN)){
+//         matchload = !matchload;
+//     } 
 
-    if (matchload) {
-        cata.move(100);
-    }
-    else {
-        cata.move(0);
-    }
-}
+//     if (matchload) {
+//         cata.move(100);
+//     }
+//     else {
+//         cata.move(0);
+//     }
+// }
 
-void distCon(int time){
-    int pos = ((int) cata.get_position() % 900);
-    static int deadzone = 270;
-    const int realDead = 270;
-    const int cutoff = 320;
-    const int delay = 160; //delay for after distance detects --> start firing, for human error
-    static bool isTri = false;
-    static bool shoot = false;
-    static int timeCount = 0;
-    static bool matchload = false;
+// void distCon(int time){
+//     int pos = ((int) cata.get_position() % 900);
+//     static int deadzone = 270;
+//     const int realDead = 270;
+//     const int cutoff = 320;
+//     const int delay = 160; //delay for after distance detects --> start firing, for human error
+//     static bool isTri = false;
+//     static bool shoot = false;
+//     static int timeCount = 0;
+//     static bool matchload = false;
 
-    if (isTri){
-        timeCount++;
-        if (timeCount>delay){
-            timeCount = 0;
-            isTri = false;
-            shoot = true;
-        }
+//     if (isTri){
+//         timeCount++;
+//         if (timeCount>delay){
+//             timeCount = 0;
+//             isTri = false;
+//             shoot = true;
+//         }
 
-    }
-    else if (shoot){
-        cata.move(127);
-        timeCount++;
-        if (timeCount>100) shoot = false;
-    }
-    else{
-        // if (dist.get() < 8 && shoot == false && pos>deadzone && pos<cutoff) isTri = true;
-        // Turn on when distance sensor is put back on!
-    }
+//     }
+//     else if (shoot){
+//         cata.move(127);
+//         timeCount++;
+//         if (timeCount>100) shoot = false;
+//     }
+//     else{
+//         // if (dist.get() < 8 && shoot == false && pos>deadzone && pos<cutoff) isTri = true;
+//         // Turn on when distance sensor is put back on!
+//     }
 
-    if (con.get_digital_new_press(E_CONTROLLER_DIGITAL_DOWN)){
-        matchload = !matchload;
-        //cata.move(100);
-    }
-    if (matchload){
-        cata.move(100);
-    }
-    else {
-        if (pos>deadzone && pos<cutoff){
-            deadzone = realDead - 50;
-            cata.move(0);
-        }
-        else {
-            deadzone = realDead;
-            cata.move(100);
-        }
-    }
+//     if (con.get_digital_new_press(E_CONTROLLER_DIGITAL_DOWN)){
+//         matchload = !matchload;
+//         //cata.move(100);
+//     }
+//     if (matchload){
+//         cata.move(100);
+//     }
+//     else {
+//         if (pos>deadzone && pos<cutoff){
+//             deadzone = realDead - 50;
+//             cata.move(0);
+//         }
+//         else {
+//             deadzone = realDead;
+//             cata.move(100);
+//         }
+//     }
 
-}
+// }
 
 void intakeCon()
 {
-    if(con.get_digital(E_CONTROLLER_DIGITAL_R1)) 
-		intake.move(127);
+    if(con.get_digital(E_CONTROLLER_DIGITAL_R1)){ 
+		spinIntake(127);
+    }
     else if(con.get_digital(E_CONTROLLER_DIGITAL_R2))
-        intake.move(-127);
-    else 
-        intake.move(0);
+    {
+        spinIntake(-127);
+    }
+    else{ 
+        spinIntake(0);
+    }
 }
 
 
@@ -210,7 +221,7 @@ void print_info(int time, bool chassis_on)
 {
 
     if(time % 50 == 0 && time % 100 != 0 && time % 150 != 0)
-        con.print(0, 0, !chassis_on ? "CHASSIS OFF (left)            " : "%.1lf | %.1lf | %.1lf", chas.temp(), intake.get_temperature(), cata.get_temperature());
+        con.print(0, 0, !chassis_on ? "CHASSIS OFF (left)            " : "%.1lf | %.1lf | %.1lf", chas.temp(), intake1.get_temperature(), intake2.get_temperature());
     if(time % 100 == 0 && time % 150 != 0)
         con.print(1, 0, "%.2f  | %.2f", chas.pos(), imu.get_heading());
     // if(time % 150 == 0)
