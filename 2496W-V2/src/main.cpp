@@ -50,8 +50,6 @@ void opcontrol()
 	long long time = 0;
 	bool chassis_on = true;
 	const bool skillsb = (names.find("skills")!= std::string::npos);
-	// cata.tare_position();
-	//hang.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	chas.set_brake();
 	pto.set(false);
 	// if ((*auton).get_name() == "V1 skills" || (*auton).get_name() == "V2 skills") pid::global_heading = 337;
@@ -72,8 +70,6 @@ void opcontrol()
 		intakeCon();
 		piston_cont(skillsb);
 
-		//slapperCon();
-		
 		print_info(time, chassis_on);
 
 		if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_LEFT)) chassis_on = !chassis_on;

@@ -260,9 +260,9 @@ namespace pid
         double TURN_KI;
         double TURN_KD;
 
-            TURN_KP = 4.6;
-            TURN_KI = 1.05; 
-            TURN_KD = 0.37;  
+        TURN_KP = 4.6;
+        TURN_KI = 1.05; 
+        TURN_KD = 0.37;  
 
         
         if (fabs(target_deg) <= 185) 
