@@ -28,10 +28,13 @@ void drive()
     double right = abs(con.get_analog(E_CONTROLLER_ANALOG_RIGHT_X)) > 10 ? con.get_analog(E_CONTROLLER_ANALOG_RIGHT_X) : 0;
     
     
-    right /= 1.2275;
+    //right /= 1.2275;
 
-    if (pto.get_status() == true)
+    right /= 1.22;
+
+    if (pto.get_status() == true){
         chas.spin(left);
+    }
     else if(left || right)
     {
         chas.spin_left(left + right);
@@ -189,6 +192,10 @@ void piston_cont(bool skills)
         }
 
     }
+
+    if (con.get_digital_new_press(E_CONTROLLER_DIGITAL_DOWN)){
+        hangP.toggle();
+    }
     // else{
     //     if (con.get_digital(E_CONTROLLER_DIGITAL_L1)){
     //         LfrontP.set(true);
@@ -224,8 +231,7 @@ void print_info(int time, bool chassis_on)
         con.print(0, 0, !chassis_on ? "CHASSIS OFF (left)            " : "%.1lf | %.1lf | %.1lf", chas.temp(), intake1.get_temperature(), intake2.get_temperature());
     if(time % 100 == 0 && time % 150 != 0)
         con.print(1, 0, "%.2f  | %.2f", chas.pos(), imu.get_heading());
-    // if(time % 150 == 0)
-    //     con.print(2, 0, "dis: %d     mm  ", abs((int) cata.get_position()) % 900);
+    
 }
 
 void print_info_auton(int time, double error, double speed)

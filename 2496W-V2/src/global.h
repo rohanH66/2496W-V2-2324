@@ -11,15 +11,15 @@ using namespace std;
 namespace glb
 {
     // ports
-    #define P_IMU 19
-    #define P_RF 10
-    #define P_RM 20
-    #define P_RB 8
-    #define P_LF 7
-    #define P_LM 6
-    #define P_LB 5
-    #define P_INTAKE1 4
-    #define P_INTAKE2 9
+    #define P_IMU 13
+    #define P_RF 14
+    #define P_RM 3
+    #define P_RB 2
+    #define P_LF 19
+    #define P_LM 8
+    #define P_LB 9
+    #define P_INTAKE1 20
+    #define P_INTAKE2 11
     #define P_DISTANCE 14
 
 
@@ -59,8 +59,8 @@ namespace glb
         right_m[0],
         right_m[1],
         right_m[2],
-        intake_1,
-        intake_2,
+        intake1,
+        intake2,
         left_m[0],
         left_m[1],
         left_m[2],

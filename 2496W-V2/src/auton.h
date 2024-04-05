@@ -455,17 +455,19 @@ void blank(){}
 
 std::vector<Auton> autons
 {   
-    Auton("skills no load", skills_no_load, ""),
-    Auton("skills load", skills_load, ""),
-    Auton("skills driver", skills_lineup, "For lineup"),
-    Auton("close half-awp", close_awp, ""),
-    Auton("close rush", close_rush, ""),
-    Auton("far 6-ball", far_6b_a, ""),
-    Auton("far 6-b safe", far_6bsafe_a, ""),
-    
     Auton("reg tuning", regr, "Linear model"),
     Auton("test", test, "For testing"),
+
+    Auton("close safe", close_awp, ""),
+    Auton("close rush", close_rush, ""),
+    Auton("far rush", far_6b_a, ""),
+    Auton("far safe", far_6bsafe_a, ""),
+    
+    
     Auton("no auton", blank, "blank"),
+    Auton("skills driver", skills_lineup, "For lineup"),
+    Auton("skills no load", skills_no_load, ""),
+    Auton("skills load", skills_load, "")
 };
 
 #endif
