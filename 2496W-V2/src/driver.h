@@ -28,7 +28,7 @@ void drive()
     
     //right /= 1.2275; // old 
 
-    right /= 1.22; // new sensitivity for turning stick
+    right /= 1.22; // new sensitivity for turning stick // very very good yes yes yes
 
     if (pto.get_status() == true){
         chas.spin(left);

@@ -23,12 +23,12 @@ namespace glb
     #define P_DISTANCE 14
 
 
-    #define P_HANGP 'F'
-    #define P_PTO 'B'
+    #define P_HANGP 'C'
+    #define P_PTO 'G'
     #define P_RWFRONTP 'D'
-    #define P_LWFRONTP 'C'
-    #define P_RWBACKP 'E'
-    #define P_LWBACKP 'A'
+    #define P_LWFRONTP 'E'
+    #define P_RWBACKP 'H'
+    #define P_LWBACKP 'F'
 
    
    
