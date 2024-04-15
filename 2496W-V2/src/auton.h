@@ -62,7 +62,7 @@ void close_rush(){
     RbackP.set(false);
 
     //coming bsck
-    drive(2700, 1200);
+    drive(2635, 1200);
     turn_to(-30, 800);
     LbackP.set(true);
     drive(-400, 600);
@@ -97,11 +97,11 @@ void far_6b_a(){
     turn_to(80, 400);
     spinIntake(-127);
     delay(300);
-    turn_to(-72);
+    turn_to(-75);
     spinIntake(127);
     drive(1360);
     //turn_to(-81);
-    drive(-1450);
+    drive(-1550);
     spinIntake(0);
     turn_to(-120, 400);
     drive(-600, 500, 1, 127, LbackP, 200, 20000);
@@ -117,13 +117,13 @@ void far_6b_a(){
     drive(400, 500);
 
     // turn around to score next push
-    turn(178, 1200);
+    turn(180, 2000);
     spinIntake(-127);
     delay(200);
     drive_const(1500, 127, NULL, 0, 0, 600);
     drive(-900, 600);
 
-    turn_to(-64, 1500);
+    turn_to(-60, 1500);
     spinIntake(127);
     drive(2222, 1500);
     drive(-200, 300);
