@@ -27,7 +27,7 @@ string names;
 
 
 void initialize() {
-	disp::setupUI();
+	// disp::setupUI();
 	//lcd::initialize();
 
 	sylib::initialize();
@@ -62,9 +62,9 @@ void opcontrol()
 		//sylib::delay_until(&clock, 10);
 
 		//display stuff
-		if (time%2000==0) disp::updateMotorTemps();
-		if (time%100==0) disp::update_motor_stats();
-		if (time%200==0) updateTemps();
+		// if (time%2000==0) disp::updateMotorTemps();
+		// if (time%100==0) disp::update_motor_stats();
+		// if (time%200==0) updateTemps();
 
 		if (chassis_on) drive();
 		intakeCon();

@@ -19,91 +19,74 @@ using namespace pros;
 using namespace std;
 using namespace pid;
 
-void close_awp(){
-
-    drive(400);
-    LbackP.set(true);
-    delay(400);
-    turn(-30);
-    LbackP.set(false);
-    turn_to(34);
-    drive_const(200);
-    spinIntake(-127);
-    drive(1000, 1000);
-    spinIntake(0);
-    drive(-600, 800);
-
-    spinIntake(-127);
-    drive(1000, 900);
-    spinIntake(0);
-    drive(-900);
-
-    turn_to(180);
-    drive(950, 800);
-    turn_to(137);
-    spinIntake(-127);
-    drive(1400);
-    delay(1000);
-    spinIntake(0);
+void close_safe(){
 
 
 }
 
 void close_rush(){
     spinIntake(127);
-    drive(2240, 1400, 1.0, 127, LfrontP, 0, 20000);
+    drive(2240, 1200, 1.0, 127);
     LfrontP.set(false);
-    //delay(300);
     spinIntake(0);
-    turn_to(-95, 900);
-    RbackP.set(true);
-    drive_const(-1200, 127, RbackP, 0, 460, 900);
-    turn_to(-147, 700);
-    RbackP.set(false);
-
-    //coming bsck
-    drive(2635, 1200);
-    turn_to(-30, 800);
-    LbackP.set(true);
-    drive(-400, 600);
-    turn_to(-60, 700);
-    delay(400);
-    LbackP.set(false);
-    turn_to(95.5);
-
-   //  LfrontP.set(true);
-
+    drive(-1000, 600);
+    turn_to(30, 500);
+    drive(-1050, 1200);
+    
+    drive_var(-110, -100, -15, 1000, LbackP, 0, 650);
+    delay(150);
+    turn_to(82, 600);
     spinIntake(-127);
-    drive(1770);
-    delay(500);
-    // turn_to(88);
-    LfrontP.set(false);
-    // drive(-1700);
-    // turn_to(130);
-    // drive(-450);
-
-    //RbackP.set(true);
+    RfrontP.set(true);
+    delay(10);
+    drive(1275, 2000, 1, 100);
+    RfrontP.set(false);   
 
 }
 
-void far_6b_a(){
-    // rush and come back
+void close_rush_elims(){
     spinIntake(127);
-    drive(2310, 1200, 1, 127, RfrontP, 0, 450);
-    drive(-2600, 1550);
-
-    // position near goal 
+    drive(2240, 1200, 1.0, 127);
+    LfrontP.set(false);
     spinIntake(0);
-    turn_to(80, 400);
+    drive(-1000, 600);
+    turn_to(30, 500);
+    drive(-1050, 1200);
+    
+    drive_var(-110, -100, -15, 1000, LbackP, 0, 650);
+    delay(150);
+    turn_to(82, 600);
     spinIntake(-127);
-    delay(300);
-    turn_to(-75);
+    RfrontP.set(true);
+    delay(10);
+    drive(1275, 2000, 1, 100);
+    RfrontP.set(false);
+    drive(-1400);
+    turn_to(135, 600);
+    drive(-900, 600);
+    delay(200);
+    LbackP.set(true);
+    RbackP.set(true);
+}
+
+void far_safe(){
+
+}
+
+
+void far_rush(){
     spinIntake(127);
-    drive(1360);
-    //turn_to(-81);
-    drive(-1550);
-    spinIntake(0);
-    turn_to(-120, 400);
+    drive(2675, 1200, 1, 127, RfrontP, 0, 450);
+    drive(-2700, 1550);
+    turn_to(90, 600);
+    spinIntake(-127);
+    delay(100);
+    turn_to(-70,600);
+    spinIntake(127);
+    drive(1350, 900);
+    drive(-1450, 900);
+    
+    turn_to(-115, 600);
     drive(-600, 500, 1, 127, LbackP, 200, 20000);
     turn_to(-155, 350);
     LbackP.set(false);
@@ -114,40 +97,17 @@ void far_6b_a(){
 
     drive_const(-1500, 127, NULL, 0, 0, 450);
     RbackP.set(false);
-    drive(400, 500);
-
-    // turn around to score next push
-    turn(180, 2000);
-    spinIntake(-127);
-    delay(200);
-    drive_const(1500, 127, NULL, 0, 0, 600);
-    drive(-900, 600);
-
-    turn_to(-60, 1500);
-    spinIntake(127);
-    drive(2222, 1500);
-    drive(-200, 300);
-
-    //LfrontP.set(true);
-    drive_var(137, 100, 0, 3000, LfrontP, 500,5000);
-    spinIntake(-127);
-    //LfrontP.set(true);
-    drive_const(2500, 80, NULL, 0, 0, 800);
-    LfrontP.set(false);
-    drive(-800);
-
-    turn_to(-78);
-
 
     
 
-}
 
-void far_6bsafe_a(){
-    // drive_var(-20, -40, 0);
-    // turn_to(0);
 
 }
+
+void far_rush_elims(){
+    
+}
+
 
 
 void skills_lineup(){
@@ -167,7 +127,7 @@ void skills_post_matchload(){
     LbackP.set(false);
     RbackP.set(false);
     //delay(300);
-    drive(175);
+    drive(175); 
     turn_to(178, 1000);
     drive(-1780, 1150);
     turn_to(146, 650);
@@ -453,21 +413,106 @@ void regr(){
 void blank(){}
 
 
+
+
 std::vector<Auton> autons
 {   
+    Auton("close safe", close_safe, ""),
+    Auton("close rush", close_rush, ""),
+    Auton("close elims", close_rush_elims, ""),
+    
+    Auton("far safe", far_safe, ""),
+    Auton("far rush", far_rush, ""),
+    Auton("far elims", far_rush_elims, ""),
+    
     Auton("reg tuning", regr, "Linear model"),
     Auton("test", test, "For testing"),
-
-    Auton("close safe", close_awp, ""),
-    Auton("close rush", close_rush, ""),
-    Auton("far rush", far_6b_a, ""),
-    Auton("far safe", far_6bsafe_a, ""),
-    
-    
     Auton("no auton", blank, "blank"),
+
     Auton("skills driver", skills_lineup, "For lineup"),
     Auton("skills no load", skills_no_load, ""),
     Auton("skills load", skills_load, "")
 };
+
+void old_close_safe(){
+    drive(400);
+    LbackP.set(true);
+    delay(400);
+    turn(-30);
+    LbackP.set(false);
+    turn_to(34);
+    drive_const(200);
+    spinIntake(-127);
+    drive(1000, 1000);
+    spinIntake(0);
+    drive(-600, 800);
+
+    spinIntake(-127);
+    drive(1000, 900);
+    spinIntake(0);
+    drive(-900);
+
+    turn_to(180);
+    drive(950, 800);
+    turn_to(137);
+    spinIntake(-127);
+    drive(1400);
+    delay(1000);
+    spinIntake(0);
+}
+
+void old_far_rush_elims(){
+    // rush and come back
+    spinIntake(127);
+    drive(2310, 1200, 1, 127, RfrontP, 0, 450);
+    drive(-2600, 1550);
+
+    // position near goal 
+    spinIntake(0);
+    turn_to(80, 400);
+    spinIntake(-127);
+    delay(300);
+    turn_to(-75);
+    spinIntake(127);
+    drive(1360);
+    //turn_to(-81);
+    drive(-1550);
+    spinIntake(0);
+    turn_to(-120, 400);
+    drive(-600, 500, 1, 127, LbackP, 200, 20000);
+    turn_to(-155, 350);
+    LbackP.set(false);
+    turn_to(-115, 350);
+    
+    RbackP.set(true);
+    drive_var(-40, -70, -37);
+
+    drive_const(-1500, 127, NULL, 0, 0, 450);
+    RbackP.set(false);
+    drive(400, 500);
+
+    // turn around to score next push
+    turn(180, 2000);
+    spinIntake(-127);
+    delay(200);
+    drive_const(1500, 127, NULL, 0, 0, 600);
+    drive(-900, 600);
+
+    turn_to(-60, 1500);
+    spinIntake(127);
+    drive(2222, 1500);
+    drive(-200, 300);
+
+    //LfrontP.set(true);
+    drive_var(137, 100, 0, 3000, LfrontP, 500,5000);
+    spinIntake(-127);
+    //LfrontP.set(true);
+    drive_const(2500, 80, NULL, 0, 0, 800);
+    LfrontP.set(false);
+    drive(-800);
+
+    turn_to(-78);
+
+}
 
 #endif
