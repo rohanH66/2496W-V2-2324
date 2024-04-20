@@ -39,7 +39,7 @@ void close_rush(){
     spinIntake(-127);
     RfrontP.set(true);
     delay(10);
-    drive(1275, 2000, 1, 100);
+    drive(1285, 2000, 1, 100);
     RfrontP.set(false);   
 
 }
