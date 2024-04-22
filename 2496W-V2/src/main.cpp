@@ -8,7 +8,7 @@
 #include "lib/chassis.h"
 #include "lib/piston.h"
 #include "regression.h"
-#include "displayC.h"
+// #include "displayC.h"
 
 #include <vector> 
 #include <numeric>
@@ -28,9 +28,9 @@ string names;
 
 void initialize() {
 	// disp::setupUI();
-	//lcd::initialize();
+	lcd::initialize();
 
-	sylib::initialize();
+	//sylib::initialize();
 	con.clear();
 	static Auton temp = auton_selector(autons);
 	names = temp.get_name();
@@ -64,7 +64,7 @@ void opcontrol()
 		//display stuff
 		// if (time%2000==0) disp::updateMotorTemps();
 		// if (time%100==0) disp::update_motor_stats();
-		// if (time%200==0) updateTemps();
+		if (time%200==0) updateTemps();
 
 		if (chassis_on) drive();
 		intakeCon();

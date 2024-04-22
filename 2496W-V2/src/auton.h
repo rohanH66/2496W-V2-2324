@@ -76,28 +76,27 @@ void far_safe(){
 
 void far_rush(){
     spinIntake(127);
-    drive(2675, 1200, 1, 127, RfrontP, 0, 450);
-    drive(-2700, 1550);
-    turn_to(90, 600);
+    drive(2100, 1500, 1, 127, RfrontP, 0, 2000);
+    RfrontP.set(false);
+    drive(-2200, 1500);
+    turn(45, 400);
     spinIntake(-127);
-    delay(100);
-    turn_to(-70,600);
+    delay(200);
+    turn_to(-88, 500);
     spinIntake(127);
-    drive(1350, 900);
-    drive(-1450, 900);
+    drive(1320, 1000);
+    drive(-1700, 1000);
+    turn_to(-128, 300);
+    drive(-800, 2000, 1, 127, LbackP, 200, 20000);
     
-    turn_to(-115, 600);
-    drive(-600, 500, 1, 127, LbackP, 200, 20000);
-    turn_to(-155, 350);
+    turn_to(-155, 300);
     LbackP.set(false);
-    turn_to(-115, 350);
-    
+    turn_to(-115, 300);
     RbackP.set(true);
-    drive_var(-40, -70, -37);
+    drive_var_to(-170, -100, -50, 300);
+   
 
-    drive_const(-1500, 127, NULL, 0, 0, 450);
-    RbackP.set(false);
-
+    
     
 
 
@@ -514,5 +513,90 @@ void old_far_rush_elims(){
     turn_to(-78);
 
 }
+
+void old_rush_elims_far_2(){
+    
+    spinIntake(127);
+    drive(2650, 1500);
+    RfrontP.set(true);
+    turn_to(-4, 100);
+    drive(-2715, 1550);
+    RfrontP.set(false);
+    turn_to(75, 600);
+    spinIntake(-127);
+    delay(250);
+    turn_to(-63,700);
+    spinIntake(127);
+    drive(1570, 900);
+    // delay(10);
+    // drive(-1450, 900);
+    
+    // turn_to(-92, 600);
+    // drive(-850, 600, 1, 127, LbackP, 200, 20000);
+    // turn_to(-155, 350);
+    // LbackP.set(false);
+    // turn_to(-110, 350);
+    // //drive(-200, 200);
+    
+    // RbackP.set(true);
+    // drive_var(-125, -110, -50, 400);
+
+    // drive_const(-1000, 127, NULL, 0, 0, 450);
+    // drive(400, 400);
+    // delay(10);
+    // RbackP.set(false);
+    // turn_to(45, 600);
+    // spinIntake(-127);
+    // delay(00);
+    // drive_const(800, 127, NULL, 0, 0, 600);
+    // delay(50);
+    // drive(-500, 400);
+    // delay(100);
+    // turn_to(-39, 600);
+    // spinIntake(127);
+    // drive(2110, 1300);
+    // drive(-300, 300);
+    // drive_var(140, 127, 20, 3000);
+    // LfrontP.set(true);
+    // RfrontP.set(true);
+    // spinIntake(-127);
+    // drive_const(900, 127, NULL, 0, 0, 500);
+    
+    // drive(-300, 300);
+    // LfrontP.set(false);
+    // RfrontP.set(false);
+    // turn(180);
+    // delay(10);
+   
+
+    
+
+
+
+}
+
+void old_old_rush_far(){
+    spinIntake(127);
+    drive(800, 700, 1, 127, RfrontP, 0, 2000);
+    drive_var(-56, 70, 127, 1500, RfrontP, 0, 4000);
+    delay(100);
+    RfrontP.set(false);
+    turn_to(-42, 200);
+   
+    drive(-3000, 2000);
+    turn_to(45, 500);
+    spinIntake(-127);
+    delay(300);
+    turn_to(-90, 600);
+    spinIntake(127);
+    
+
+    drive_var_to(-140, 80, 127, 400);
+    drive_var_to(-90, 127, 80, 600);
+    // turn_to(-90, 200);
+    drive(-1500, 1000);
+    // // chas.stop();
+}
+
 
 #endif
