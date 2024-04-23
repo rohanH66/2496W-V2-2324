@@ -35,11 +35,11 @@ void close_rush(){
     
     drive_var(-110, -100, -15, 1000, LbackP, 0, 650);
     delay(150);
-    turn_to(82, 600);
+    turn_to(83, 600);
     spinIntake(-127);
     RfrontP.set(true);
     delay(10);
-    drive(1285, 2000, 1, 100);
+    drive(1276, 2000, 1, 100);
     RfrontP.set(false);   
 
 }
@@ -55,11 +55,11 @@ void close_rush_elims(){
     
     drive_var(-110, -100, -15, 1000, LbackP, 0, 650);
     delay(150);
-    turn_to(82, 600);
+    turn_to(83, 600);
     spinIntake(-127);
     RfrontP.set(true);
     delay(10);
-    drive(1275, 2000, 1, 100);
+    drive(1270, 2000, 1, 100);
     RfrontP.set(false);
     drive(-1400);
     turn_to(135, 600);
@@ -75,25 +75,78 @@ void far_safe(){
 
 
 void far_rush(){
+    //rush
     spinIntake(127);
-    drive(2100, 1500, 1, 127, RfrontP, 0, 2000);
-    RfrontP.set(false);
-    drive(-2200, 1500);
-    turn(45, 400);
-    spinIntake(-127);
+    drive(2175, 1350, 1, 127);
+    drive(-2400, 1500);
+    spinIntake(0);
+    //RfrontP.set(true);
     delay(200);
-    turn_to(-88, 500);
-    spinIntake(127);
-    drive(1320, 1000);
-    drive(-1700, 1000);
-    turn_to(-128, 300);
-    drive(-800, 2000, 1, 127, LbackP, 200, 20000);
+    //RfrontP.set(false);
+    delay(10);
     
+    //turn to outtake
+    turn(55, 400);
+    spinIntake(-127);
+    RfrontP.set(true);
+    delay(200);
+    
+    //turn to align with ball under elevation bar
+    turn_to(-73, 500);
+    RfrontP.set(false);
+    spinIntake(127);
+    drive(1350, 1000);
+    turn_to(-74, 300);
+    drive(-1560, 1000);
+    spinIntake(0);
+    
+    //turn to angle with the matchload bar
+    turn_to(-124, 300);
+    RbackP.set(true);
+    drive(-770, 2000, 1, 127, LbackP, 0, 2000);
+    
+    // //scoop
     turn_to(-155, 300);
     LbackP.set(false);
-    turn_to(-115, 300);
+    
+    //align for arc turn
+    turn_to(-116, 300);
     RbackP.set(true);
-    drive_var_to(-170, -100, -50, 300);
+    drive_var_to(-147, -90, -35, 1000);
+    turn_to(-151, 300);
+    drive_const(-775, 127, RbackP, 0, 900, 800);
+    drive(700, 600);
+    RbackP.set(false);
+    turn_to(29, 800);
+    spinIntake(-127);
+    delay(250);
+    drive_const(500, 127, NULL, 0, 0, 900);
+    turn_to(29, 400);
+    drive(-400, 400);
+    spinIntake(127);
+    turn_to(-54, 600);
+    drive(2150, 1000);
+    drive(-210, 400);
+    turn_to(70, 500);
+    chas.stop();
+    spinIntake(-80);
+    delay(500);
+    turn_to(-12, 400);
+    chas.stop();
+    spinIntake(127);
+    drive(900, 500);
+    turn_to(100, 600);
+    LfrontP.set(true);
+    RfrontP.set(true);
+    drive_const(800, 127, NULL, 0, 0, 900);
+    spinIntake(-127);
+    drive_const(700, 127, NULL, 0, 0, 600);
+    drive(-500, 500);
+
+    chas.stop();
+    
+
+
    
 
     
@@ -103,9 +156,7 @@ void far_rush(){
 
 }
 
-void far_rush_elims(){
-    
-}
+
 
 
 
@@ -416,13 +467,12 @@ void blank(){}
 
 std::vector<Auton> autons
 {   
-    Auton("close safe", close_safe, ""),
-    Auton("close rush", close_rush, ""),
-    Auton("close elims", close_rush_elims, ""),
+    Auton("close safe", close_safe, "make if have time, after hang done"),
+    Auton("close rush", close_rush, "done"),
+    Auton("close elims", close_rush_elims, "done"),
     
-    Auton("far safe", far_safe, ""),
-    Auton("far rush", far_rush, ""),
-    Auton("far elims", far_rush_elims, ""),
+    Auton("far safe", far_safe, "need to make fs"),
+    Auton("far rush", far_rush, "need to make"),
     
     Auton("reg tuning", regr, "Linear model"),
     Auton("test", test, "For testing"),
