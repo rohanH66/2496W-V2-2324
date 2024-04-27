@@ -20,7 +20,23 @@ using namespace std;
 using namespace pid;
 
 void close_safe(){
-
+    drive(400, 600);
+    LbackP.set(true);
+    drive(-275, 400);
+    turn_to(-25, 800);
+    delay(200);
+    LbackP.set(false);
+    turn_to(0, 600);
+    drive(-200, 400);
+    turn_to(135, 600);
+    //RfrontP.set(true);
+    spinIntake(-127);
+    delay(100);
+    drive(1525, 600);
+    //RfrontP.set(false);
+    drive(320, 1000, 1, 70);
+    chas.stop();
+    
 
 }
 
@@ -33,14 +49,18 @@ void close_rush(){
     turn_to(30, 500);
     drive(-1050, 1200);
     
-    drive_var(-110, -100, -15, 1000, LbackP, 0, 650);
+    // drive_var(-110, -100, -15, 1000, LbackP, 0, 650);
+    drive_var(-110, -90, -13.5, 1000, LbackP, 0, 650);
+
     delay(150);
-    turn_to(83, 600);
+    turn_to(85, 600);
     spinIntake(-127);
     RfrontP.set(true);
     delay(10);
-    drive(1276, 2000, 1, 100);
+    drive(1293, 2000, 1, 100);
     RfrontP.set(false);   
+   
+    chas.stop();
 
 }
 
@@ -77,11 +97,10 @@ void far_safe(){
 void far_rush(){
     //rush
     spinIntake(127);
-    drive(2175, 1350, 1, 127);
-    drive(-2400, 1500);
+    drive(2175, 1250, 1, 127);
+    drive(-2400, 1300);
     spinIntake(0);
     //RfrontP.set(true);
-    delay(200);
     //RfrontP.set(false);
     delay(10);
     
@@ -92,7 +111,7 @@ void far_rush(){
     delay(200);
     
     //turn to align with ball under elevation bar
-    turn_to(-73, 500);
+    turn_to(-74, 500);
     RfrontP.set(false);
     spinIntake(127);
     drive(1350, 1000);
@@ -110,7 +129,7 @@ void far_rush(){
     LbackP.set(false);
     
     //align for arc turn
-    turn_to(-116, 300);
+    turn_to(-117, 300);
     RbackP.set(true);
     drive_var_to(-147, -90, -35, 1000);
     turn_to(-151, 300);
@@ -124,34 +143,29 @@ void far_rush(){
     turn_to(29, 400);
     drive(-400, 400);
     spinIntake(127);
-    turn_to(-54, 600);
+    turn_to(-56, 600);
     drive(2150, 1000);
     drive(-210, 400);
-    turn_to(70, 500);
+    turn_to(65, 500);
     chas.stop();
-    spinIntake(-80);
-    delay(500);
-    turn_to(-12, 400);
-    chas.stop();
-    spinIntake(127);
-    drive(900, 500);
-    turn_to(100, 600);
-    LfrontP.set(true);
-    RfrontP.set(true);
-    drive_const(800, 127, NULL, 0, 0, 900);
-    spinIntake(-127);
-    drive_const(700, 127, NULL, 0, 0, 600);
+    spinIntake(-90);
+    drive_const(975, 127, NULL, 0, 0, 1000);
     drive(-500, 500);
+    // delay(500);
+    // turn_to(-12, 400);
+    // chas.stop();
+    // spinIntake(127);
+    // drive(900, 500);
+    // turn_to(100, 600);
+    // LfrontP.set(true);
+    // RfrontP.set(true);
+    // drive_const(800, 127, NULL, 0, 0, 900);
+    // spinIntake(-127);
+    // drive_const(700, 127, NULL, 0, 0, 600);
+    // 
 
     chas.stop();
     
-
-
-   
-
-    
-    
-
 
 
 }
