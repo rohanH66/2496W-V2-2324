@@ -73,17 +73,20 @@ void close_rush_elims(){
     turn_to(30, 500);
     drive(-1050, 1200);
     
-    drive_var(-110, -100, -15, 1000, LbackP, 0, 650);
+    // drive_var(-110, -100, -15, 1000, LbackP, 0, 650);
+    drive_var(-110, -90, -13.5, 1000, LbackP, 0, 650);
+
     delay(150);
-    turn_to(83, 600);
+    turn_to(85, 600);
     spinIntake(-127);
     RfrontP.set(true);
     delay(10);
-    drive(1270, 2000, 1, 100);
-    RfrontP.set(false);
+    drive(1293, 2000, 1, 100);
+    RfrontP.set(false);   
     drive(-1400);
     turn_to(135, 600);
-    drive(-900, 600);
+    drive(-700, 600);
+    turn(-2);
     delay(200);
     LbackP.set(true);
     RbackP.set(true);
